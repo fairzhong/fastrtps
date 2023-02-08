@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TYPES_DYNAMIC_PUB_SUB_TYPE_H
-#define TYPES_DYNAMIC_PUB_SUB_TYPE_H
+#ifndef FASTRTPS_TYPES_DYNAMIC_PUB_SUB_TYPE_H
+#define FASTRTPS_TYPES_DYNAMIC_PUB_SUB_TYPE_H
 
 #include <fastrtps/types/TypesBase.h>
 #include <fastdds/dds/topic/TopicDataType.hpp>
@@ -25,7 +25,7 @@ namespace eprosima {
 namespace fastrtps {
 namespace types {
 
-class DynamicPubSubType : public eprosima::fastdds::dds::TopicDataType
+class DynamicPubSubType : public virtual eprosima::fastdds::dds::TopicDataType
 {
 protected:
 
@@ -103,4 +103,4 @@ public:
 } // namespace fastrtps
 } // namespace eprosima
 
-#endif // TYPES_DYNAMIC_PUB_SUB_TYPE_H
+#endif // FASTRTPS_TYPES_DYNAMIC_PUB_SUB_TYPE_H

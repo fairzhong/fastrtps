@@ -27,8 +27,7 @@
 #include <fastrtps/subscriber/SampleInfo.h>
 #include <fastrtps/rtps/common/Types.h>
 
-#include <fastrtps/types/DynamicPubSubType.h>
-#include <fastrtps/types/DynamicTypePtr.h>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicPubSubType.hpp>
 
 #include <fastrtps/attributes/SubscriberAttributes.h>
 
@@ -60,9 +59,9 @@ private:
 
     std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastdds::dds::Topic*> topics_;
 
-    std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastrtps::types::DynamicType_ptr> readers_;
+    std::map<eprosima::fastdds::dds::DataReader*, const eprosima::fastdds::dds::DynamicType*> readers_;
 
-    std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastrtps::types::DynamicData_ptr> datas_;
+    std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastdds::dds::DynamicData*> datas_;
 
     eprosima::fastrtps::SubscriberAttributes att_;
 
@@ -105,10 +104,6 @@ public:
         eprosima::fastrtps::types::TypeInformation type_info_;
     }
     m_listener;
-
-private:
-
-    eprosima::fastrtps::types::DynamicPubSubType m_type;
 };
 
 #endif /* HELLOWORLDSUBSCRIBER_H_ */

@@ -21,11 +21,9 @@
 #include "TestSubscriber.h"
 
 #include <fastrtps/Domain.h>
-#include <fastrtps/types/TypeObjectFactory.h>
 #include <fastrtps/qos/QosPolicies.h>
 #include <fastdds/dds/log/Log.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
-#include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 
 #include <thread>
 #include <memory>
@@ -44,6 +42,10 @@
 
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps::rtps;
+using namespace eprosima::fastdds::dds::xtypes;
+
+using eprosima::fastrtps::types::TypeIdentifier;
+using eprosima::fastrtps::types::TypeObject;
 
 static int DOMAIN_ID_ = 10;
 
@@ -231,7 +233,7 @@ TEST_F(xtypestests, TypeDiscoverySubs)
     // Wait for discovery.
     sub.waitTypeDiscovery(true, 3);
 
-    eprosima::fastrtps::types::DynamicType_ptr disc_type = sub.discovered_type();
+    const DynamicType* disc_type = sub.discovered_type();
     ASSERT_TRUE(disc_type != nullptr);
 
     sub.register_discovered_type();
@@ -277,7 +279,7 @@ TEST_F(xtypestests, TypeDiscoveryPubs)
     // Wait for discovery.
     pub.waitTypeDiscovery(true, 3);
 
-    eprosima::fastrtps::types::DynamicType_ptr disc_type = pub.discovered_type();
+    const DynamicType* disc_type = pub.discovered_type();
     ASSERT_TRUE(disc_type != nullptr);
 
     pub.register_discovered_type();

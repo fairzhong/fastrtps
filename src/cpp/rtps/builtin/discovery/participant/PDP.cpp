@@ -17,6 +17,11 @@
  *
  */
 
+#include <fastdds/dds/core/ReturnCode.hpp>
+
+#include <fastdds/dds/xtypes/dynamic_types/DynamicPubSubType.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
+
 #include <fastdds/rtps/builtin/discovery/participant/PDP.h>
 #include <fastdds/rtps/builtin/discovery/participant/PDPListener.h>
 
@@ -63,19 +68,17 @@
 #include <mutex>
 #include <chrono>
 
-namespace eprosima {
-namespace fastrtps {
-namespace rtps {
-
+using namespace eprosima::fastrtps;
+using namespace eprosima::fastrtps::rtps;
 
 // Default configuration values for PDP reliable entities.
 
-const Duration_t pdp_heartbeat_period{ 0, 350 * 1000000  }; // 350 milliseconds
-const Duration_t pdp_nack_response_delay{ 0, 100 * 1000000  }; // 100 milliseconds
-const Duration_t pdp_nack_supression_duration{ 0, 11 * 1000000 }; // 11 milliseconds
-const Duration_t pdp_heartbeat_response_delay{ 0, 11 * 1000000 }; // 11 milliseconds
+const Duration_t eprosima::fastrtps::rtps::pdp_heartbeat_period{ 0, 350 * 1000000  }; // 350 milliseconds
+const Duration_t eprosima::fastrtps::rtps::pdp_nack_response_delay{ 0, 100 * 1000000  }; // 100 milliseconds
+const Duration_t eprosima::fastrtps::rtps::pdp_nack_supression_duration{ 0, 11 * 1000000 }; // 11 milliseconds
+const Duration_t eprosima::fastrtps::rtps::pdp_heartbeat_response_delay{ 0, 11 * 1000000 }; // 11 milliseconds
 
-const int32_t pdp_initial_reserved_caches = 20;
+const int32_t eprosima::fastrtps::rtps::pdp_initial_reserved_caches = 20;
 
 
 PDP::PDP (
@@ -94,14 +97,14 @@ PDP::PDP (
     , m_hasChangedLocalPDP(true)
     , mp_listener(nullptr)
     , temp_reader_proxies_({
-                allocation.locators.max_unicast_locators,
-                allocation.locators.max_multicast_locators,
-                allocation.data_limits,
-                allocation.content_filter})
+    allocation.locators.max_unicast_locators,
+    allocation.locators.max_multicast_locators,
+    allocation.data_limits,
+    allocation.content_filter})
     , temp_writer_proxies_({
-                allocation.locators.max_unicast_locators,
-                allocation.locators.max_multicast_locators,
-                allocation.data_limits})
+    allocation.locators.max_unicast_locators,
+    allocation.locators.max_multicast_locators,
+    allocation.data_limits})
     , mp_mutex(new std::recursive_mutex())
     , resend_participant_info_event_(nullptr)
 {
@@ -1245,7 +1248,3 @@ void PDP::set_external_participant_properties_(
         }
     }
 }
-
-} /* namespace rtps */
-} /* namespace fastrtps */
-} /* namespace eprosima */

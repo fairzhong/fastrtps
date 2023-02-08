@@ -36,15 +36,14 @@
 #include <fastdds/dds/topic/TypeSupport.hpp>
 #include <fastrtps/fastrtps_fwd.h>
 #include <fastrtps/rtps/attributes/PropertyPolicy.h>
-#include <fastrtps/types/DynamicTypeBuilderFactory.h>
-#include <fastrtps/types/DynamicDataFactory.h>
-#include <fastrtps/types/DynamicTypeBuilder.h>
-#include <fastrtps/types/DynamicTypeBuilderPtr.h>
-#include <fastrtps/types/TypeDescriptor.h>
-#include <fastrtps/types/MemberDescriptor.h>
-#include <fastrtps/types/DynamicType.h>
-#include <fastrtps/types/DynamicData.h>
-#include <fastrtps/types/DynamicPubSubType.h>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicTypeBuilderFactory.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicDataFactory.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicTypeBuilder.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/TypeDescriptor.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/MemberDescriptor.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicData.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicPubSubType.hpp>
 #include "ThroughputTypes.hpp"
 
 #include "../optionarg.hpp"
@@ -135,7 +134,7 @@ private:
     ThroughputType* throughput_data_ = nullptr;
     eprosima::fastdds::dds::TypeSupport throughput_data_type_;
     // Dynamic Data
-    eprosima::fastrtps::types::DynamicData* dynamic_data_ = nullptr;
+    eprosima::fastdds::dds::DynamicData* dynamic_data_ {nullptr};
     eprosima::fastdds::dds::TypeSupport dynamic_pub_sub_type_;
     // QoS Profiles
     eprosima::fastdds::dds::DataWriterQos dw_qos_;

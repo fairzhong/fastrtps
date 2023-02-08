@@ -1,4 +1,4 @@
-// Copyright 2018 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+﻿// Copyright 2018 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ namespace fastrtps {
 namespace types {
 
 static std::string get_type_name(
-        TypeKind kind)
+        octet kind)
 {
     switch (kind)
     {
@@ -640,7 +640,7 @@ DynamicTypeBuilder* DynamicTypeBuilderFactory::create_custom_builder(
 {
     if (descriptor != nullptr)
     {
-        TypeKind kind = descriptor->get_kind();
+        octet kind = descriptor->get_kind();
         if (kind == TK_BOOLEAN || kind == TK_BYTE || kind == TK_INT16 || kind == TK_INT32 ||
                 kind == TK_INT64 || kind == TK_UINT16 || kind == TK_UINT32 || kind == TK_UINT64 ||
                 kind == TK_FLOAT32 || kind == TK_FLOAT64 || kind == TK_FLOAT128 || kind == TK_CHAR8 ||
@@ -824,7 +824,7 @@ ReturnCode_t DynamicTypeBuilderFactory::delete_type(
 }
 
 DynamicType_ptr DynamicTypeBuilderFactory::get_primitive_type(
-        TypeKind kind)
+        octet kind)
 {
     TypeDescriptor pDescriptor;
     pDescriptor.kind_ = kind;
@@ -882,7 +882,7 @@ void DynamicTypeBuilderFactory::build_type_identifier(
             case TK_CHAR8:
             case TK_CHAR16:
             {
-                identifier._d(descriptor->kind_);
+                identifier._d(static_cast<TypeKind>(descriptor->kind_));
             }
             break;
             // String TKs

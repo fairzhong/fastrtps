@@ -15,10 +15,10 @@
 /**
  * @file DDSFilterExpressionParser.cpp
  */
-
-#include "DDSFilterExpressionParser.hpp"
-
 #include <memory>
+
+#include "pegtl.hpp"
+#include "pegtl/contrib/parse_tree.hpp"
 
 #include <fastdds/dds/log/Log.hpp>
 
@@ -26,14 +26,11 @@
 #include <fastrtps/types/TypeObject.h>
 #include <fastrtps/types/TypeObjectFactory.h>
 
-#include "pegtl.hpp"
-#include "pegtl/contrib/parse_tree.hpp"
-
+#include "DDSFilterExpressionParser.hpp"
+#include "DDSFilterField.hpp"
 #include "DDSFilterGrammar.hpp"
 #include "DDSFilterParseNode.hpp"
-
 #include "DDSFilterValue.hpp"
-#include "DDSFilterField.hpp"
 
 namespace eprosima {
 namespace fastdds {

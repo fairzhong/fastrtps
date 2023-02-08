@@ -37,7 +37,8 @@
 #endif // defined(min)
 
 #endif // if _MSC_VER
-
+       //
+#include <algorithm>
 #include <array>
 #include <stdint.h>
 #include <vector>
@@ -216,19 +217,19 @@ public:
      * @exception eprosima::fastcdr::BadParamException This exception is thrown if the new value doesn't correspond to the selected union member.
      */
     RTPS_DllAPI void _d(
-            char __d);
+            TypeKind __d);
 
     /*!
      * @brief This function returns the value of the discriminator.
      * @return Value of the discriminator
      */
-    RTPS_DllAPI char _d() const;
+    RTPS_DllAPI TypeKind _d() const;
 
     /*!
      * @brief This function returns a reference to the discriminator.
      * @return Reference to the discriminator.
      */
-    RTPS_DllAPI char& _d();
+    RTPS_DllAPI TypeKind& _d();
 
     /*!
      * @brief This function sets a value in member boolean_value
@@ -801,7 +802,7 @@ public:
 
 private:
 
-    char m__d;
+    TypeKind m__d;
 
     bool m_boolean_value;
     uint8_t m_byte_value;

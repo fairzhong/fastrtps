@@ -76,9 +76,11 @@ struct identifier_processor
                 out_type = ti.seq_ldefn().element_identifier();
                 max_size = process_bound(ti.seq_ldefn().bound());
                 return true;
+
+            default:
+                out_type = &ti;
         }
 
-        out_type = &ti;
         return false;
     }
 
@@ -141,56 +143,64 @@ struct identifier_processor
             const TypeIdentifier& ti,
             const position& pos)
     {
+        DDSFilterValue::ValueKind res;
+
         switch (ti._d())
         {
             case TK_BOOLEAN:
-                return DDSFilterValue::ValueKind::BOOLEAN;
+                res = DDSFilterValue::ValueKind::BOOLEAN;
+                break;
 
             case TK_CHAR8:
-                return DDSFilterValue::ValueKind::CHAR;
+                res = DDSFilterValue::ValueKind::CHAR;
+                break;
 
             case TK_STRING8:
             case TI_STRING8_SMALL:
             case TI_STRING8_LARGE:
-                return DDSFilterValue::ValueKind::STRING;
+                res = DDSFilterValue::ValueKind::STRING;
+                break;
 
             case TK_INT16:
             case TK_INT32:
             case TK_INT64:
-                return DDSFilterValue::ValueKind::SIGNED_INTEGER;
+                res = DDSFilterValue::ValueKind::SIGNED_INTEGER;
+                break;
 
             case TK_BYTE:
             case TK_UINT16:
             case TK_UINT32:
             case TK_UINT64:
-                return DDSFilterValue::ValueKind::UNSIGNED_INTEGER;
+                res = DDSFilterValue::ValueKind::UNSIGNED_INTEGER;
+                break;
 
             case TK_FLOAT32:
-                return DDSFilterValue::ValueKind::FLOAT_FIELD;
+                res = DDSFilterValue::ValueKind::FLOAT_FIELD;
+                break;
 
             case TK_FLOAT64:
-                return DDSFilterValue::ValueKind::DOUBLE_FIELD;
+                res = DDSFilterValue::ValueKind::DOUBLE_FIELD;
+                break;
 
             case TK_FLOAT128:
-                return DDSFilterValue::ValueKind::LONG_DOUBLE_FIELD;
+                res = DDSFilterValue::ValueKind::LONG_DOUBLE_FIELD;
+                break;
 
             case EK_COMPLETE:
+            {
                 const TypeObject* type_object = TypeObjectFactory::get_instance()->get_type_object(&ti);
                 if (TK_ENUM == type_object->complete()._d())
                 {
-                    return DDSFilterValue::ValueKind::ENUM;
+                    res = DDSFilterValue::ValueKind::ENUM;
+                    break;
                 }
-                if (TK_ALIAS == type_object->complete()._d())
-                {
-                    const TypeIdentifier& aliasedId =
-                            type_object->complete().alias_type().body().common().related_type();
-                    return get_value_kind(aliasedId, pos);
-                }
-                break;
-
+            }
+                FASTRTPS_FALLTHROUGH
+            default:
+                throw parse_error("type is not primitive", pos);
         }
 
-        throw parse_error("type is not primitive", pos);
+        return res;
     }
 
     template< typename ... States >

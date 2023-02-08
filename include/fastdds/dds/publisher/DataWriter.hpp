@@ -21,6 +21,7 @@
 
 #include <fastdds/dds/builtin/topic/SubscriptionBuiltinTopicData.hpp>
 #include <fastdds/dds/core/Entity.hpp>
+#include <fastdds/dds/core/ReturnCode.hpp>
 #include <fastdds/dds/core/status/BaseStatus.hpp>
 #include <fastdds/dds/core/status/IncompatibleQosStatus.hpp>
 #include <fastdds/dds/core/status/PublicationMatchedStatus.hpp>
@@ -33,7 +34,6 @@
 #include <fastrtps/fastrtps_dll.h>
 
 #include <fastrtps/qos/DeadlineMissedStatus.h>
-#include <fastrtps/types/TypesBase.h>
 
 namespace eprosima {
 namespace fastrtps {

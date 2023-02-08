@@ -1,4 +1,4 @@
-// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+// Copyright 2023 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -383,17 +383,17 @@ AnnotationParameterValue& AnnotationParameterValue::operator =(
 }
 
 void AnnotationParameterValue::_d(
-        char __d)                           // Special case to ease, sets the current active member.
+        TypeKind __d)                           // Special case to ease, sets the current active member.
 {
     m__d = __d;
 }
 
-char AnnotationParameterValue::_d() const
+TypeKind AnnotationParameterValue::_d() const
 {
     return m__d;
 }
 
-char& AnnotationParameterValue::_d()
+TypeKind& AnnotationParameterValue::_d()
 {
     return m__d;
 }

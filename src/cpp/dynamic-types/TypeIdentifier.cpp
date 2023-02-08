@@ -1,4 +1,4 @@
-// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+// Copyright 2023 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ namespace types {
 
 TypeIdentifier::TypeIdentifier()
 {
-    m__d = 0x00; // Default
+    m__d = TK_NONE; // Default
     memset(&m_equivalence_hash, 0, 14);
 }
 
@@ -238,7 +238,7 @@ TypeIdentifier& TypeIdentifier::operator =(
 }
 
 void TypeIdentifier::_d(
-        octet __d)                 // Special case to ease... sets the current active member
+        TypeKind __d)                 // Special case to ease... sets the current active member
 {
     bool b = false;
     m__d = __d;
@@ -383,12 +383,12 @@ void TypeIdentifier::_d(
     m__d = __d;
 }
 
-octet TypeIdentifier::_d() const
+TypeKind TypeIdentifier::_d() const
 {
     return m__d;
 }
 
-octet& TypeIdentifier::_d()
+TypeKind& TypeIdentifier::_d()
 {
     return m__d;
 }
@@ -892,7 +892,7 @@ octet* TypeIdentifier::equivalence_hash()
 std::string TypeIdentifier::equivalence_hash_to_string() const
 {
     std::stringstream ss;
-    if (m__d >= EK_MINIMAL)
+    if ((octet)m__d >= (octet)EK_MINIMAL)
     {
         ss << std::hex << m_equivalence_hash[0];
         for (uint8_t i = 1; i < 14; ++i)
@@ -907,7 +907,7 @@ void TypeIdentifier::extended_defn(
         ExtendedTypeDefn _extended_defn)
 {
     m_extended_defn = _extended_defn;
-    m__d = 0x00; // Default
+    m__d = TK_NONE; // Default
 }
 
 const ExtendedTypeDefn& TypeIdentifier::extended_defn() const

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TYPES_DYNAMIC_DATA_FACTORY_H
-#define TYPES_DYNAMIC_DATA_FACTORY_H
+#ifndef FASTRTPS_TYPES_DYNAMIC_DATA_FACTORY_H
+#define FASTRTPS_TYPES_DYNAMIC_DATA_FACTORY_H
 
 #include <fastrtps/types/TypesBase.h>
 #include <fastrtps/types/DynamicTypePtr.h>
@@ -22,8 +22,6 @@
 #include <fastrtps/types/DynamicData.h>
 #include <mutex>
 
-//#define DISABLE_DYNAMIC_MEMORY_CHECK
-
 namespace eprosima {
 namespace fastrtps {
 namespace types {
@@ -31,6 +29,7 @@ namespace types {
 class DynamicDataFactory
 {
 protected:
+
     DynamicDataFactory();
 
     ReturnCode_t create_members(
@@ -40,29 +39,33 @@ protected:
 #ifndef DISABLE_DYNAMIC_MEMORY_CHECK
     std::vector<DynamicData*> dynamic_datas_;
     mutable std::recursive_mutex mutex_;
-#endif
+#endif // ifndef DISABLE_DYNAMIC_MEMORY_CHECK
 
 public:
+
     ~DynamicDataFactory();
 
     RTPS_DllAPI static DynamicDataFactory* get_instance();
 
     RTPS_DllAPI static ReturnCode_t delete_instance();
 
-    RTPS_DllAPI DynamicData* create_data(DynamicTypeBuilder* pBuilder);
+    RTPS_DllAPI DynamicData* create_data(
+            DynamicTypeBuilder* pBuilder);
 
-    RTPS_DllAPI DynamicData* create_data(DynamicType_ptr pType);
+    RTPS_DllAPI DynamicData* create_data(
+            DynamicType_ptr pType);
 
-    RTPS_DllAPI DynamicData* create_copy(const DynamicData* pData);
+    RTPS_DllAPI DynamicData* create_copy(
+            const DynamicData* pData);
 
-    RTPS_DllAPI ReturnCode_t delete_data(DynamicData* pData);
+    RTPS_DllAPI ReturnCode_t delete_data(
+            DynamicData* pData);
 
     RTPS_DllAPI bool is_empty() const;
 };
-
 
 } // namespace types
 } // namespace fastrtps
 } // namespace eprosima
 
-#endif // TYPES_DYNAMIC_DATA_FACTORY_H
+#endif // FASTRTPS_TYPES_DYNAMIC_DATA_FACTORY_H

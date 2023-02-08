@@ -19,7 +19,6 @@
 #include <cstdint>
 
 #include <fastrtps/types/AnnotationParameterValue.h>
-#include <fastrtps/types/TypeIdentifier.h>
 #include <fastrtps/types/TypeObjectHashId.h>
 #include <fastrtps/types/TypesBase.h>
 
@@ -56,23 +55,23 @@ public:
             CommonStructMember&& x);
 
     RTPS_DllAPI inline void member_id(
-            const MemberId& _member_id)
+            const fastdds::dds::MemberId& _member_id)
     {
         m_member_id = _member_id;
     }
 
     RTPS_DllAPI inline void member_id(
-            MemberId&& _member_id)
+            fastdds::dds::MemberId&& _member_id)
     {
         m_member_id = std::move(_member_id);
     }
 
-    RTPS_DllAPI inline const MemberId& member_id() const
+    RTPS_DllAPI inline const fastdds::dds::MemberId& member_id() const
     {
         return m_member_id;
     }
 
-    RTPS_DllAPI inline MemberId& member_id()
+    RTPS_DllAPI inline fastdds::dds::MemberId& member_id()
     {
         return m_member_id;
     }
@@ -146,7 +145,7 @@ public:
 
 private:
 
-    MemberId m_member_id;
+    fastdds::dds::MemberId m_member_id;
     StructMemberFlag m_member_flags;
     TypeIdentifier m_member_type_id;
 };
@@ -1204,23 +1203,23 @@ public:
             CommonUnionMember&& x);
 
     RTPS_DllAPI inline void member_id(
-            const MemberId& _member_id)
+            const fastdds::dds::MemberId& _member_id)
     {
         m_member_id = _member_id;
     }
 
     RTPS_DllAPI inline void member_id(
-            MemberId&& _member_id)
+            fastdds::dds::MemberId&& _member_id)
     {
         m_member_id = std::move(_member_id);
     }
 
-    RTPS_DllAPI inline const MemberId& member_id() const
+    RTPS_DllAPI inline const fastdds::dds::MemberId& member_id() const
     {
         return m_member_id;
     }
 
-    RTPS_DllAPI inline MemberId& member_id()
+    RTPS_DllAPI inline fastdds::dds::MemberId& member_id()
     {
         return m_member_id;
     }
@@ -1316,7 +1315,7 @@ public:
 
 private:
 
-    MemberId m_member_id;
+    fastdds::dds::MemberId m_member_id;
     UnionMemberFlag m_member_flags;
     TypeIdentifier m_type_id;
     UnionCaseLabelSeq m_label_seq;
@@ -6472,15 +6471,9 @@ public:
     }
 
     RTPS_DllAPI inline void holder_type(
-            const TypeKind& _holder_type)
+            const TypeKind _holder_type)
     {
         m_holder_type = _holder_type;
-    }
-
-    RTPS_DllAPI inline void holder_type(
-            TypeKind&& _holder_type)
-    {
-        m_holder_type = std::move(_holder_type);
     }
 
     RTPS_DllAPI inline const TypeKind& holder_type() const
@@ -7215,9 +7208,9 @@ public:
     RTPS_DllAPI CompleteTypeObject& operator =(
             CompleteTypeObject&& x);
     RTPS_DllAPI void _d(
-            octet __d);
-    RTPS_DllAPI octet _d() const;
-    RTPS_DllAPI octet& _d();
+            TypeKind __d);
+    RTPS_DllAPI TypeKind _d() const;
+    RTPS_DllAPI TypeKind& _d();
 
     RTPS_DllAPI void alias_type(
             CompleteAliasType _alias_type);
@@ -7299,7 +7292,7 @@ public:
 
 private:
 
-    octet m__d;
+    TypeKind m__d;
 
     CompleteAliasType m_alias_type;
     CompleteAnnotationType m_annotation_type;
@@ -7329,9 +7322,9 @@ public:
     RTPS_DllAPI MinimalTypeObject& operator =(
             MinimalTypeObject&& x);
     RTPS_DllAPI void _d(
-            octet __d);
-    RTPS_DllAPI octet _d() const;
-    RTPS_DllAPI octet& _d();
+            TypeKind __d);
+    RTPS_DllAPI TypeKind _d() const;
+    RTPS_DllAPI TypeKind& _d();
 
     RTPS_DllAPI void alias_type(
             MinimalAliasType _alias_type);
@@ -7413,7 +7406,7 @@ public:
 
 private:
 
-    octet m__d;
+    TypeKind m__d;
 
     MinimalAliasType m_alias_type;
     MinimalAnnotationType m_annotation_type;
@@ -7475,19 +7468,19 @@ public:
      * @exception eprosima::fastcdr::BadParamException This exception is thrown if the new value doesn't correspond to the selected union member.
      */
     RTPS_DllAPI void _d(
-            uint8_t __d);
+            TypeKind __d);
 
     /*!
      * @brief This function returns the value of the discriminator.
      * @return Value of the discriminator
      */
-    RTPS_DllAPI uint8_t _d() const;
+    RTPS_DllAPI TypeKind _d() const;
 
     /*!
      * @brief This function returns a reference to the discriminator.
      * @return Reference to the discriminator.
      */
-    RTPS_DllAPI uint8_t& _d();
+    RTPS_DllAPI TypeKind& _d();
 
     /*!
      * @brief This function copies the value in member complete
@@ -7589,7 +7582,7 @@ public:
 
 private:
 
-    uint8_t m__d;
+    TypeKind m__d;
 
     CompleteTypeObject m_complete;
     MinimalTypeObject m_minimal;

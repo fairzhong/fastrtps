@@ -1,4 +1,4 @@
-// Copyright 2018 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+// Copyright 2023 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,7 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
+#include <fastdds/dds/xtypes/dynamic_types/AnnotationDescriptor.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
 
+#include <cassert>
 #include <sstream>
 
 #include <fastdds/dds/log/Log.hpp>
@@ -29,9 +33,7 @@
 #include <fastrtps/types/TypeObjectFactory.h>
 #include <fastrtps/utils/md5.h>
 
-namespace eprosima {
-namespace fastrtps {
-namespace types {
+using namespace eprosima::fastrtps::types;
 
 class TypeObjectFactoryReleaser
 {
@@ -82,16 +84,9 @@ TypeObjectFactory::TypeObjectFactory()
     identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_BYTE);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_BYTE, auxIdent));
-    // TK_BYTE:
-    auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
+    // TK_BYTE alias
     auxIdent->_d(TK_BYTE);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_UINT8, auxIdent));
-    // TK_BYTE:
-    auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
-    auxIdent->_d(TK_BYTE);
-    identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_INT8, auxIdent));
     // TK_INT16:
     auxIdent = new TypeIdentifier();
     identifiers_created_.push_back(auxIdent);
@@ -322,25 +317,23 @@ void TypeObjectFactory::fill_minimal_information(
 
     switch (ident->_d())
     {
-        /*
-           case TK_BOOLEAN:
-           case TK_BYTE:
-           case TK_INT16:
-           case TK_INT32:
-           case TK_INT64:
-           case TK_UINT16:
-           case TK_UINT32:
-           case TK_UINT64:
-           case TK_FLOAT32:
-           case TK_FLOAT64:
-           case TK_FLOAT128:
-           case TK_CHAR8:
-           case TK_CHAR16:
-           case TK_STRING8:
-           case TK_STRING16:
-            info->minimal().dependent_typeid_count(0);
+        case TK_BOOLEAN:
+        case TK_BYTE:
+        case TK_INT16:
+        case TK_INT32:
+        case TK_INT64:
+        case TK_UINT16:
+        case TK_UINT32:
+        case TK_UINT64:
+        case TK_FLOAT32:
+        case TK_FLOAT64:
+        case TK_FLOAT128:
+        case TK_CHAR8:
+        case TK_CHAR16:
+        case TK_STRING8:
+        case TK_STRING16:
+            // primitives lack dependendants
             break;
-         */
         case TK_SEQUENCE:
         {
             info->minimal().dependent_typeid_count(1);
@@ -491,10 +484,28 @@ void TypeObjectFactory::fill_minimal_information(
                 case TK_ANNOTATION:
                     // TODO To implement
                     break;
+                default:
+                    // TODO:BARRO check the missing cases
+                    break;
             }
             break;
         case EK_COMPLETE:
             // Cannot happen
+            break;
+        case TI_STRING8_SMALL:
+        case TI_STRING8_LARGE:
+        case TI_STRING16_SMALL:
+        case TI_STRING16_LARGE:
+        case TI_PLAIN_SEQUENCE_SMALL:
+        case TI_PLAIN_SEQUENCE_LARGE:
+        case TI_PLAIN_ARRAY_SMALL:
+        case TI_PLAIN_ARRAY_LARGE:
+        case TI_PLAIN_MAP_SMALL:
+        case TI_PLAIN_MAP_LARGE:
+            break; // lack dependencies
+        default:
+            // TODO:BARRO check the missing cases
+            assert(0);
             break;
     }
     std::lock_guard<std::recursive_mutex> lock(m_MutexInformations);
@@ -592,25 +603,23 @@ void TypeObjectFactory::fill_complete_information(
 
     switch (ident->_d())
     {
-        /*
-           case TK_BOOLEAN:
-           case TK_BYTE:
-           case TK_INT16:
-           case TK_INT32:
-           case TK_INT64:
-           case TK_UINT16:
-           case TK_UINT32:
-           case TK_UINT64:
-           case TK_FLOAT32:
-           case TK_FLOAT64:
-           case TK_FLOAT128:
-           case TK_CHAR8:
-           case TK_CHAR16:
-           case TK_STRING8:
-           case TK_STRING16:
-            info->complete().dependent_typeid_count(0);
+        case TK_BOOLEAN:
+        case TK_BYTE:
+        case TK_INT16:
+        case TK_INT32:
+        case TK_INT64:
+        case TK_UINT16:
+        case TK_UINT32:
+        case TK_UINT64:
+        case TK_FLOAT32:
+        case TK_FLOAT64:
+        case TK_FLOAT128:
+        case TK_CHAR8:
+        case TK_CHAR16:
+        case TK_STRING8:
+        case TK_STRING16:
+            // lack dependents
             break;
-         */
         case TK_SEQUENCE:
         {
             info->complete().dependent_typeid_count(1);
@@ -763,6 +772,10 @@ void TypeObjectFactory::fill_complete_information(
                 case TK_ANNOTATION:
                     // TODO To implement (already fully defined? Fields are primitives.)
                     break;
+                default:
+                    // TODO:BARRO check the missing cases
+                    assert(0);
+                    break;
             }
             break;
         case EK_COMPLETE:
@@ -853,7 +866,26 @@ void TypeObjectFactory::fill_complete_information(
                 case TK_ANNOTATION:
                     // TODO To implement (already fully defined? Fields are primitives.)
                     break;
+                default:
+                    // TODO:BARRO check the missing cases
+                    assert(0);
+                    break;
             }
+            break;
+        case TI_STRING8_SMALL:
+        case TI_STRING8_LARGE:
+        case TI_STRING16_SMALL:
+        case TI_STRING16_LARGE:
+        case TI_PLAIN_SEQUENCE_SMALL:
+        case TI_PLAIN_SEQUENCE_LARGE:
+        case TI_PLAIN_ARRAY_SMALL:
+        case TI_PLAIN_ARRAY_LARGE:
+        case TI_PLAIN_MAP_SMALL:
+        case TI_PLAIN_MAP_LARGE:
+            break; // lack dependencies
+        default:
+            // TODO:BARRO check the missing cases
+            assert(0);
             break;
     }
     std::lock_guard<std::recursive_mutex> lock(m_MutexInformations);
@@ -948,7 +980,7 @@ TypeKind TypeObjectFactory::get_type_kind(
     {
         return TK_CHAR8;
     }
-    else if (type_name == TKNAME_BYTE || type_name == TKNAME_INT8 || type_name == TKNAME_UINT8)
+    else if (type_name == TKNAME_BYTE || type_name == TKNAME_UINT8)
     {
         return TK_BYTE;
     }
@@ -1726,8 +1758,178 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
         const TypeIdentifier* identifier,
         const TypeObject* object) const
 {
+    // delegate into the generic API
+    DynamicType_ptr ret;
+    build_dynamic_type(ret, name, identifier, object);
+    return ret;
+}
+
+ReturnCode_t TypeObjectFactory::build_dynamic_type(
+        const fastdds::dds::DynamicType*& ret,
+        const std::string& name,
+        const TypeIdentifier* identifier,
+        const TypeObject* object) const
+{
     TypeKind kind = GetTypeKindFromIdentifier(identifier);
-    TypeDescriptor descriptor(name, kind);
+    fastdds::dds::TypeDescriptor descriptor(name.c_str(), kind);
+    switch (kind)
+    {
+        // Basic types goes as default!
+        /*
+           case TK_NONE:
+           case TK_BOOLEAN:
+           case TK_BYTE:
+           case TK_INT16:
+           case TK_INT32:
+           case TK_INT64:
+           case TK_UINT16:
+           case TK_UINT32:
+           case TK_UINT64:
+           case TK_FLOAT32:
+           case TK_FLOAT64:
+           case TK_FLOAT128:
+           case TK_CHAR8:
+           case TK_CHAR16:
+            break;
+         */
+        case TK_STRING8:
+        {
+            if (identifier->_d() == TI_STRING8_SMALL)
+            {
+                uint32_t len = identifier->string_sdefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+            else
+            {
+                uint32_t len = identifier->string_ldefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+
+            descriptor.set_element_type(fastdds::dds::DynamicTypeBuilderFactory::get_instance().get_char8_type());
+            break;
+        }
+        case TK_STRING16:
+        {
+            if (identifier->_d() == TI_STRING16_SMALL)
+            {
+                uint32_t len = identifier->string_sdefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+            else
+            {
+                uint32_t len = identifier->string_ldefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+            descriptor.set_element_type(
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().get_char16_type());
+            break;
+        }
+        case TK_SEQUENCE:
+        {
+            const TypeIdentifier* aux = nullptr;
+
+            if (identifier->_d() == TI_PLAIN_SEQUENCE_SMALL)
+            {
+                aux = try_get_complete(identifier->seq_sdefn().element_identifier());
+
+                uint32_t len = identifier->seq_sdefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+            else
+            {
+                aux = try_get_complete(identifier->seq_ldefn().element_identifier());
+
+                uint32_t len = identifier->seq_ldefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+
+            descriptor.set_element_type(build_dynamic_type_v1_3(get_type_name(aux), aux,
+                    get_type_object(aux)));
+            break;
+        }
+        case TK_ARRAY:
+        {
+            const TypeIdentifier* aux = nullptr;
+
+            if (identifier->_d() == TI_PLAIN_ARRAY_SMALL)
+            {
+                aux = try_get_complete(identifier->array_sdefn().element_identifier());
+                auto& sb = identifier->array_sdefn().array_bound_seq();
+                std::vector<uint32_t> bounds(sb.begin(), sb.end());
+                descriptor.set_bounds(bounds.data(), static_cast<uint32_t>(bounds.size()));
+            }
+            else
+            {
+                aux = identifier->array_ldefn().element_identifier();
+                auto& bounds = identifier->array_ldefn().array_bound_seq();
+                descriptor.set_bounds(bounds.data(), static_cast<uint32_t>(bounds.size()));
+            }
+
+            descriptor.set_element_type(build_dynamic_type_v1_3(get_type_name(aux), aux,
+                    get_type_object(aux)));
+            break;
+        }
+        case TK_MAP:
+        {
+            const TypeIdentifier* aux = nullptr, * aux2 = nullptr;
+
+            if (identifier->_d() == TI_PLAIN_MAP_SMALL)
+            {
+                aux = try_get_complete(identifier->map_sdefn().element_identifier());
+                aux2 = try_get_complete(identifier->map_sdefn().key_identifier());
+
+                uint32_t len = identifier->map_sdefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+            else
+            {
+                aux = try_get_complete(identifier->map_ldefn().element_identifier());
+                aux2 = try_get_complete(identifier->map_ldefn().key_identifier());
+
+                uint32_t len = identifier->map_ldefn().bound();
+                descriptor.set_bounds(&len, 1);
+            }
+
+            descriptor.set_element_type(build_dynamic_type_v1_3(get_type_name(aux), aux,
+                    get_type_object(aux)));
+            descriptor.set_key_element_type(build_dynamic_type_v1_3(get_type_name(aux2), aux2,
+                    get_type_object(aux2)));
+            break;
+        }
+        case EK_MINIMAL:
+        case EK_COMPLETE:
+            // A MinimalTypeObject cannot instantiate a valid TypeDescriptor, but maybe the object isn't minimal
+            if (object != nullptr && object->_d() == EK_COMPLETE)
+            {
+                // delegate
+                return build_dynamic_type(ret, descriptor, object);
+            }
+            break;
+        case TK_NONE:
+            return eprosima::fastdds::dds::RETCODE_ERROR;
+        default:
+            break;
+    }
+
+    fastdds::dds::DynamicTypeBuilder* outputType(fastdds::dds::DynamicTypeBuilderFactory::
+                    get_instance().create_type(descriptor));
+    //outputType->set_name(name);
+    if (outputType)
+    {
+        ret = outputType->build();
+        return eprosima::fastdds::dds::RETCODE_OK;
+    }
+    return eprosima::fastdds::dds::RETCODE_ERROR;
+}
+
+ReturnCode_t TypeObjectFactory::build_dynamic_type(
+        DynamicType_ptr& ret,
+        const std::string& name,
+        const TypeIdentifier* identifier,
+        const TypeObject* object) const
+{
+    TypeKind kind = GetTypeKindFromIdentifier(identifier);
+    TypeDescriptor descriptor(name, static_cast<octet>(kind));
     switch (kind)
     {
         // Basic types goes as default!
@@ -1834,11 +2036,11 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
             // A MinimalTypeObject cannot instantiate a valid TypeDescriptor, but maybe the object isn't minimal
             if (object != nullptr && object->_d() == EK_COMPLETE)
             {
-                return build_dynamic_type(descriptor, object);
+                return build_dynamic_type(ret, descriptor, object);
             }
             break;
         case TK_NONE:
-            return DynamicType_ptr(nullptr); // Maybe in discovery, return nullptr quietly.
+            return eprosima::fastdds::dds::RETCODE_ERROR;
         default:
             break;
     }
@@ -1847,24 +2049,344 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
     //outputType->set_name(name);
     if (outputType != nullptr)
     {
-        return outputType->build();
+        ret = outputType->build();
+        return eprosima::fastdds::dds::RETCODE_OK;
     }
-    return DynamicType_ptr(nullptr);
+
+    return eprosima::fastdds::dds::RETCODE_ERROR;
+}
+
+DynamicType_ptr TypeObjectFactory::build_dynamic_type(
+        TypeDescriptor& descriptor,
+        const TypeObject* object,
+        const DynamicType_ptr annotation_member_type) const
+{
+    DynamicType_ptr ret;
+    build_dynamic_type(ret, descriptor, object, annotation_member_type);
+    return ret;
 }
 
 // TODO annotations
-DynamicType_ptr TypeObjectFactory::build_dynamic_type(
+ReturnCode_t TypeObjectFactory::build_dynamic_type(
+        const fastdds::dds::DynamicType*& ret,
+        fastdds::dds::TypeDescriptor& descriptor,
+        const TypeObject* object,
+        const fastdds::dds::DynamicType* annotation_member_type) const
+{
+    if (object == nullptr || object->_d() != EK_COMPLETE)
+    {
+        return eprosima::fastdds::dds::RETCODE_ERROR;
+    }
+
+    // Change descriptor's kind
+    descriptor.set_kind(object->complete()._d());
+
+    switch (object->complete()._d())
+    {
+        // From here, we need TypeObject
+        case TK_ALIAS:
+        {
+            const TypeIdentifier* aux =
+                    get_stored_type_identifier(&object->complete().alias_type().body().common().related_type());
+            descriptor.set_base_type(build_dynamic_type_v1_3(get_type_name(aux), aux,
+                    get_type_object(aux)));
+            descriptor.set_name(object->complete().alias_type().header().detail().type_name().c_str());
+            fastdds::dds::DynamicTypeBuilder* alias_type{
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().create_type(descriptor)};
+
+            // Apply type's annotations
+            apply_type_annotations(*alias_type, object->complete().alias_type().header().detail().ann_custom());
+
+            ret = alias_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
+        }
+        case TK_STRUCTURE:
+        {
+            const TypeIdentifier* aux = &object->complete().struct_type().header().base_type();
+            if (aux->_d() == EK_COMPLETE)
+            {
+                descriptor.set_base_type(build_dynamic_type_v1_3(get_type_name(aux), aux,
+                        get_type_object(aux)));
+            }
+
+            fastdds::dds::DynamicTypeBuilder* struct_type{
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().create_type(descriptor)};
+
+            // Apply type's annotations
+            apply_type_annotations(*struct_type, object->complete().struct_type().header().detail().ann_custom());
+
+            const CompleteStructMemberSeq& structVector = object->complete().struct_type().member_seq();
+            for (auto member = structVector.begin(); member != structVector.end(); ++member)
+            {
+                //const TypeIdentifier* auxMem = &member.common().member_type_id();
+                const TypeIdentifier* auxMem = get_stored_type_identifier(&member->common().member_type_id());
+                if (auxMem == nullptr)
+                {
+                    EPROSIMA_LOG_WARNING(DYNAMIC_TYPES, "(Struct) auxMem is nullptr, but original member has "
+                            << (int)member->common().member_type_id()._d());
+                }
+
+                fastdds::dds::MemberDescriptor memDesc;
+                memDesc.set_id(member->common().member_id());
+                memDesc.set_type(build_dynamic_type_v1_3(get_type_name(auxMem), auxMem,
+                        get_type_object(auxMem)));
+                memDesc.set_name(member->detail().name().c_str());
+
+                struct_type->add_member(memDesc);
+
+                if (MEMBER_ID_INVALID == memDesc.get_id())
+                {
+                    memDesc.set_id(struct_type->get_member_by_name(memDesc.get_name())->get_id());
+                }
+
+                apply_member_annotations(*struct_type, memDesc.get_id(), member->detail().ann_custom());
+            }
+            ret = struct_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
+        }
+        case TK_ENUM:
+        {
+            fastdds::dds::DynamicTypeBuilder* enum_type{
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().create_type(descriptor)};
+
+            // bit_bound annotation effect!
+            enum_type->annotation_set_bit_bound(object->complete().enumerated_type().header().common().bit_bound());
+
+            // Apply type's annotations
+            apply_type_annotations(*enum_type, object->complete().enumerated_type().header().detail().ann_custom());
+            /*
+               {
+                const AppliedAnnotationSeq& annotations =
+                    object->complete().enumerated_type().header().detail().ann_custom();
+                for (const AppliedAnnotation& annotation : annotations)
+                {
+                    const TypeIdentifier* anno_id = get_stored_type_identifier(&annotation.annotation_typeid());
+                    if (anno_id == nullptr)
+                    {
+                        EPROSIMA_LOG_WARNING(DYNAMIC_TYPES, "(Annotation) anno_id is nullptr, but original member has "
+                            << (int)annotation.annotation_typeid()._d());
+                    }
+                    AnnotationDescriptor anno_desc;
+                    anno_desc.set_type(build_dynamic_type(get_type_name(anno_id), anno_id, get_type_object(anno_id)));
+                    const AppliedAnnotationParameterSeq& anno_params = annotation.param_seq();
+                    for (const AppliedAnnotationParameter a_param : anno_params)
+                    {
+                        std::string param_key = get_key_from_hash(anno_desc.type(), a_param.paramname_hash());
+                        anno_desc.set_value(param_key, a_param.value().to_string());
+                    }
+                    enum_type->apply_annotation(anno_desc);
+                }
+               }
+             */
+
+            const CompleteEnumeratedLiteralSeq& enumVector = object->complete().enumerated_type().literal_seq();
+            for (auto member = enumVector.begin(); member != enumVector.end(); ++member)
+            {
+                fastdds::dds::MemberDescriptor m;
+                fastdds::dds::MemberId id{member->common().value()};
+                m.set_id(id);
+                m.set_name(member->detail().name().c_str());
+
+                enum_type->add_member(m);
+
+                apply_member_annotations(*enum_type,
+                        id,
+                        member->detail().ann_custom());
+
+                if (member->common().flags().IS_DEFAULT())
+                {
+                    fastdds::dds::AnnotationDescriptor def_flag;
+                    def_flag.set_value(ANNOTATION_DEFAULT_LITERAL_ID, CONST_TRUE);
+                    enum_type->apply_annotation_to_member(id, def_flag);
+                }
+            }
+            ret = enum_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
+        }
+        case TK_BITMASK:
+        {
+            descriptor.set_element_type(fastdds::dds::DynamicTypeBuilderFactory::get_instance().get_bool_type());
+            uint32_t len = object->complete().bitmask_type().header().common().bit_bound();
+            descriptor.set_bounds(&len, 1);
+
+            fastdds::dds::DynamicTypeBuilder* bitmask_type{
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().create_type(descriptor)};
+
+            bitmask_type->annotation_set_bit_bound(object->complete().bitmask_type().header().common().bit_bound());
+
+            // Apply type's annotations
+            apply_type_annotations(*bitmask_type, object->complete().bitmask_type().header().detail().ann_custom());
+
+            const CompleteBitflagSeq& seq = object->complete().bitmask_type().flag_seq();
+            for (auto member = seq.begin(); member != seq.end(); ++member)
+            {
+                fastdds::dds::MemberDescriptor m;
+                fastdds::dds::MemberId id{member->common().position()};
+                m.set_id(id);
+                m.set_name(member->detail().name().c_str());
+
+                bitmask_type->add_member(m);
+                // member->common().position() should be already an annotation
+                apply_member_annotations(*bitmask_type, id, member->detail().ann_custom());
+            }
+
+            ret = bitmask_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
+        }
+        case TK_BITSET:
+        {
+            const TypeIdentifier* aux = &object->complete().bitset_type().header().base_type();
+            if (aux->_d() == EK_COMPLETE)
+            {
+                descriptor.set_base_type(build_dynamic_type_v1_3(get_type_name(aux), aux,
+                        get_type_object(aux)));
+            }
+
+            fastdds::dds::DynamicTypeBuilder* bitsetType{
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().create_type(descriptor)};
+
+            // Apply type's annotations
+            apply_type_annotations(*bitsetType, object->complete().bitset_type().header().detail().ann_custom());
+
+            //uint32_t order = 0;
+            const CompleteBitfieldSeq& fields = object->complete().bitset_type().field_seq();
+            for (auto member = fields.begin(); member != fields.end(); ++member)
+            {
+                //const TypeIdentifier* auxMem = &member.common().member_type_id();
+                const TypeIdentifier* auxMem = get_primitive_type_identifier(member->common().holder_type());
+                if (auxMem == nullptr)
+                {
+                    EPROSIMA_LOG_WARNING(DYNAMIC_TYPES, "(Bitset) auxMem is nullptr, but original member has "
+                            << (int)member->common().holder_type());
+                }
+
+                fastdds::dds::MemberDescriptor memDesc;
+                //memDesc.id_ = order++;
+                memDesc.set_type(build_dynamic_type_v1_3(get_type_name(auxMem), auxMem,
+                        get_type_object(auxMem)));
+                memDesc.set_name(member->detail().name().c_str());
+                // bounds are meant for string, arrays, sequences, maps, but not for bitset!
+                // Lack in the standard?
+                bitsetType->add_member(memDesc);
+
+                // member->common().position() and member->common().bitcount() should be annotations
+                apply_member_annotations(
+                    *bitsetType,
+                    bitsetType->get_member_by_name(memDesc.get_name())->get_id(),
+                    member->detail().ann_custom());
+            }
+            ret = bitsetType->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
+        }
+        case TK_UNION:
+        {
+            const TypeIdentifier* aux =
+                    get_stored_type_identifier(&object->complete().union_type().discriminator().common().type_id());
+
+            const fastdds::dds::DynamicType* disc{build_dynamic_type_v1_3(get_type_name(
+                                                              aux), aux, get_type_object(aux))};
+            descriptor.set_discriminator_type(*disc);
+
+            fastdds::dds::DynamicTypeBuilder* union_type{
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().create_type(descriptor)};
+
+            // Apply type's annotations
+            apply_type_annotations(*union_type, object->complete().union_type().header().detail().ann_custom());
+
+            //uint32_t order = 0;
+            const CompleteUnionMemberSeq& unionVector = object->complete().union_type().member_seq();
+            for (auto member = unionVector.begin(); member != unionVector.end(); ++member)
+            {
+                const TypeIdentifier* auxMem = get_stored_type_identifier(&member->common().type_id());
+                if (auxMem == nullptr)
+                {
+                    EPROSIMA_LOG_WARNING(DYNAMIC_TYPES, "(Union) auxMem is nullptr, but original member has "
+                            << (int)member->common().type_id()._d());
+                }
+
+                const fastdds::dds::DynamicType* type {
+                    build_dynamic_type_v1_3(get_type_name(auxMem), auxMem, get_type_object(auxMem))};
+
+                fastdds::dds::MemberId id{member->common().member_id()};
+                fastdds::dds::MemberDescriptor memDesc;
+                memDesc.set_type(*type);
+                //memDesc.set_index(order++);
+                memDesc.set_id(id);
+                memDesc.set_name(member->detail().name().c_str());
+                memDesc.set_default_label(member->common().member_flags().IS_DEFAULT());
+
+                if (type->get_kind() == TK_ENUM)
+                {
+                    memDesc.set_default_value(disc->get_member(id)->get_name());
+                }
+                else
+                {
+                    memDesc.set_default_value(std::to_string(id).c_str());
+                }
+
+                auto& slabels = member->common().label_seq();
+                std::vector<uint32_t> labels(slabels.begin(), slabels.end());
+                memDesc.set_labels(labels.data(), static_cast<uint32_t>(labels.size()));
+
+                union_type->add_member(memDesc);
+                apply_member_annotations(*union_type, member->common().member_id(), member->detail().ann_custom());
+            }
+
+            ret = union_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
+        }
+        case TK_ANNOTATION:
+        {
+            fastdds::dds::DynamicTypeBuilder* annotation_type{
+                fastdds::dds::DynamicTypeBuilderFactory::get_instance().create_type(descriptor)};
+
+            for (const CompleteAnnotationParameter& member : object->complete().annotation_type().member_seq())
+            {
+                const TypeIdentifier* aux_mem = get_stored_type_identifier(&member.common().member_type_id());
+                if (aux_mem == nullptr)
+                {
+                    EPROSIMA_LOG_WARNING(DYNAMIC_TYPES, "(Annotation) aux_mem is nullptr, but original member has "
+                            << (int)member.common().member_type_id()._d());
+                }
+
+                fastdds::dds::MemberDescriptor mem_desc;
+                mem_desc.set_name(member.name().c_str());
+                if (annotation_member_type != nullptr)
+                {
+                    mem_desc.set_type(annotation_member_type);
+                }
+                else
+                {
+                    mem_desc.set_type(build_dynamic_type_v1_3(get_type_name(aux_mem), aux_mem,
+                            get_type_object(aux_mem)));
+                }
+                mem_desc.set_default_value(member.default_value().to_string().c_str());
+                annotation_type->add_member(mem_desc);
+            }
+            // Annotation inner definitions?
+
+            ret = annotation_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
+        }
+        default:
+            break;
+    }
+    return eprosima::fastdds::dds::RETCODE_ERROR;
+}
+
+ReturnCode_t TypeObjectFactory::build_dynamic_type(
+        DynamicType_ptr& ret,
         TypeDescriptor& descriptor,
         const TypeObject* object,
         const DynamicType_ptr annotation_member_type) const
 {
     if (object == nullptr || object->_d() != EK_COMPLETE)
     {
-        return DynamicType_ptr(nullptr);
+        return eprosima::fastdds::dds::RETCODE_ERROR;
     }
 
     // Change descriptor's kind
-    descriptor.set_kind(object->complete()._d());
+    descriptor.set_kind(static_cast<octet>(object->complete()._d()));
 
     switch (object->complete()._d())
     {
@@ -1881,7 +2403,8 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
             // Apply type's annotations
             apply_type_annotations(alias_type, object->complete().alias_type().header().detail().ann_custom());
 
-            return alias_type->build();
+            ret = alias_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
         }
         case TK_STRUCTURE:
         {
@@ -1916,7 +2439,8 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
                 struct_type->add_member(&memDesc);
                 apply_member_annotations(struct_type, member->common().member_id(), member->detail().ann_custom());
             }
-            return struct_type->build();
+            ret = struct_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
         }
         case TK_ENUM:
         {
@@ -1965,7 +2489,8 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
                     enum_type->apply_annotation_to_member(member->common().value(), def_flag);
                 }
             }
-            return enum_type->build();
+            ret = enum_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
         }
         case TK_BITMASK:
         {
@@ -1988,7 +2513,8 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
                 // member->common().position() should be already an annotation
                 apply_member_annotations(bitmask_type, m_id, member->detail().ann_custom());
             }
-            return bitmask_type->build();
+            ret = bitmask_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
         }
         case TK_BITSET:
         {
@@ -2026,10 +2552,8 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
                 // member->common().position() and member->common().bitcount() should be annotations
                 apply_member_annotations(bitsetType, m_id, member->detail().ann_custom());
             }
-            return bitsetType->build();
-
-            //EPROSIMA_LOG_ERROR(XTYPES, "Bitset isn't supported by DynamicType");
-            //return nullptr;
+            ret = bitsetType->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
         }
         case TK_UNION:
         {
@@ -2081,7 +2605,8 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
                 apply_member_annotations(union_type, member->common().member_id(), member->detail().ann_custom());
             }
 
-            return union_type->build();
+            ret = union_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
         }
         case TK_ANNOTATION:
         {
@@ -2112,12 +2637,14 @@ DynamicType_ptr TypeObjectFactory::build_dynamic_type(
             }
             // Annotation inner definitions?
 
-            return annotation_type->build();
+            ret = annotation_type->build();
+            return eprosima::fastdds::dds::RETCODE_OK;
         }
         default:
             break;
     }
-    return DynamicType_ptr(nullptr);
+
+    return eprosima::fastdds::dds::RETCODE_ERROR;
 }
 
 void TypeObjectFactory::apply_type_annotations(
@@ -2141,6 +2668,35 @@ void TypeObjectFactory::apply_type_annotations(
             anno_desc.set_value(param_key, a_param.value().to_string());
         }
         type_builder->apply_annotation(anno_desc);
+    }
+}
+
+void TypeObjectFactory::apply_type_annotations(
+        fastdds::dds::DynamicTypeBuilder& type_builder,
+        const AppliedAnnotationSeq& annotations) const
+{
+    for (const AppliedAnnotation& annotation : annotations)
+    {
+        const TypeIdentifier* anno_id = get_stored_type_identifier(&annotation.annotation_typeid());
+        if (anno_id == nullptr)
+        {
+            EPROSIMA_LOG_WARNING(DYNAMIC_TYPES, "(Annotation) anno_id is nullptr, but original member has "
+                    << (int)annotation.annotation_typeid()._d());
+        }
+
+        const fastdds::dds::DynamicType* type {
+            build_dynamic_type_v1_3(get_type_name(anno_id), anno_id, get_type_object(anno_id))};
+
+        fastdds::dds::AnnotationDescriptor anno_desc;
+        anno_desc.set_type(*type);
+
+        const AppliedAnnotationParameterSeq& anno_params = annotation.param_seq();
+        for (const AppliedAnnotationParameter& a_param : anno_params)
+        {
+            std::string param_key = get_key_from_hash(*type, a_param.paramname_hash());
+            anno_desc.set_value(param_key.c_str(), a_param.value().to_string().c_str());
+        }
+        type_builder.apply_annotation(anno_desc);
     }
 }
 
@@ -2169,6 +2725,36 @@ void TypeObjectFactory::apply_member_annotations(
     }
 }
 
+void TypeObjectFactory::apply_member_annotations(
+        fastdds::dds::DynamicTypeBuilder& parent_type_builder,
+        fastdds::dds::MemberId member_id,
+        const AppliedAnnotationSeq& annotations) const
+{
+    for (const AppliedAnnotation& annotation : annotations)
+    {
+        const TypeIdentifier* anno_id = get_stored_type_identifier(&annotation.annotation_typeid());
+        if (anno_id == nullptr)
+        {
+            EPROSIMA_LOG_WARNING(DYNAMIC_TYPES, "(Annotation) anno_id is nullptr, but original member has "
+                    << (int)annotation.annotation_typeid()._d());
+        }
+
+        const fastdds::dds::DynamicType* type {
+            build_dynamic_type_v1_3(get_type_name(anno_id), anno_id, get_type_object(anno_id))};
+
+        fastdds::dds::AnnotationDescriptor anno_desc;
+        anno_desc.set_type(*type);
+
+        const AppliedAnnotationParameterSeq& anno_params = annotation.param_seq();
+        for (const AppliedAnnotationParameter& a_param : anno_params)
+        {
+            std::string param_key = get_key_from_hash(*type, a_param.paramname_hash());
+            anno_desc.set_value(param_key.c_str(), a_param.value().to_string().c_str());
+        }
+        parent_type_builder.apply_annotation_to_member(member_id, anno_desc);
+    }
+}
+
 std::string TypeObjectFactory::get_key_from_hash(
         const DynamicType_ptr annotation_descriptor_type,
         const NameHash& hash) const
@@ -2190,6 +2776,34 @@ std::string TypeObjectFactory::get_key_from_hash(
         }
     }
     return "";
+}
+
+std::string TypeObjectFactory::get_key_from_hash(
+        const fastdds::dds::DynamicType& annotation_descriptor_type,
+        const NameHash& hash) const
+{
+    auto members = annotation_descriptor_type.get_all_members();
+    fastdds::dds::MemberId id;
+
+    while (!!id)
+    {
+        std::string name = members[id]->get_name();
+
+        NameHash memberHash;
+        MD5 message_hash(name);
+        for (int i = 0; i < 4; ++i)
+        {
+            memberHash[i] = message_hash.digest[i];
+        }
+        if (memberHash == hash)
+        {
+            return name;
+        }
+
+        id = members.next_key(id);
+    }
+
+    return {};
 }
 
 TypeIdentifierWithSizeSeq TypeObjectFactory::typelookup_get_type_dependencies(
@@ -2304,7 +2918,7 @@ bool TypeObjectFactory::typelookup_check_type_identifier(
 const TypeObject* TypeObjectFactory::typelookup_get_type_object_from_information(
         const TypeInformation& information) const
 {
-    if (information.complete().typeid_with_size().type_id()._d() != 0)
+    if (information.complete().typeid_with_size().type_id()._d() != TK_NONE)
     {
         const TypeIdentifier* local_id =
                 get_stored_type_identifier(&information.complete().typeid_with_size().type_id());
@@ -2317,6 +2931,12 @@ const TypeObject* TypeObjectFactory::typelookup_get_type_object_from_information
     return nullptr;
 }
 
-} // namespace types
-} // namespace fastrtps
-} // namespace eprosima
+const eprosima::fastdds::dds::DynamicType* TypeObjectFactory::build_dynamic_type_v1_3(
+        const std::string& name,
+        const TypeIdentifier* identifier,
+        const TypeObject* object /*= nullptr*/) const
+{
+    const fastdds::dds::DynamicType* element_type = nullptr;
+    build_dynamic_type(element_type, name, identifier, object);
+    return element_type;
+}

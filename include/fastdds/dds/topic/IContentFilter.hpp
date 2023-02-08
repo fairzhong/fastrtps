@@ -27,8 +27,8 @@
 #include <fastdds/rtps/common/SampleIdentity.h>
 #include <fastdds/rtps/common/SerializedPayload.h>
 
-#include <fastrtps/types/TypesBase.h>
-#include <fastrtps/types/TypeDescriptor.h>
+#include <fastdds/dds/xtypes/Types.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/TypeDescriptor.hpp>
 
 namespace eprosima {
 namespace fastdds {

@@ -24,6 +24,9 @@
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/qos/DomainParticipantFactoryQos.hpp>
 #include <fastdds/dds/log/Log.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicDataFactory.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicTypeBuilderFactory.hpp>
+#include <fastdds/domain/DomainParticipantImpl.hpp>
 #include <fastdds/rtps/participant/RTPSParticipant.h>
 #include <fastdds/rtps/RTPSDomain.h>
 #include <fastdds/utils/QosConverters.hpp>
@@ -33,8 +36,6 @@
 #include <fastrtps/xmlparser/XMLEndpointParser.h>
 #include <fastrtps/xmlparser/XMLProfileManager.h>
 
-#include <fastdds/domain/DomainParticipantImpl.hpp>
-#include <fastdds/log/LogResources.hpp>
 #include <rtps/history/TopicPayloadPoolRegistry.hpp>
 #include <rtps/RTPSDomainImpl.hpp>
 #include <statistics/fastdds/domain/DomainParticipantImpl.hpp>
@@ -80,6 +81,8 @@ DomainParticipantFactory::~DomainParticipantFactory()
     // Deletes DynamicTypes and TypeObject factories
     fastrtps::types::DynamicTypeBuilderFactory::delete_instance();
     fastrtps::types::DynamicDataFactory::delete_instance();
+    DynamicTypeBuilderFactory::delete_instance();
+    DynamicDataFactory::delete_instance();
     fastrtps::types::TypeObjectFactory::delete_instance();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));

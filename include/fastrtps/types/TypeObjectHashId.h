@@ -96,19 +96,19 @@ public:
      * @exception eprosima::fastcdr::BadParamException This exception is thrown if the new value doesn't correspond to the selected union member.
      */
     void _d(
-            uint8_t __d);
+            TypeKind __d);
 
     /*!
      * @brief This function returns the value of the discriminator.
      * @return Value of the discriminator
      */
-    uint8_t _d() const;
+    TypeKind _d() const;
 
     /*!
      * @brief This function returns a reference to the discriminator.
      * @return Reference to the discriminator.
      */
-    uint8_t& _d();
+    TypeKind& _d();
 
     /*!
      * @brief This function copies the value in member hash
@@ -175,7 +175,7 @@ public:
 
 private:
 
-    uint8_t m__d;
+    TypeKind m__d;
 
     EquivalenceHash m_hash;
 };

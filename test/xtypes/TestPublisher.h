@@ -30,7 +30,6 @@
 #include <fastdds/dds/topic/TypeSupport.hpp>
 #include <fastrtps/subscriber/SampleInfo.h>
 #include <condition_variable>
-#include <fastrtps/types/TypeObjectFactory.h>
 #include <fastrtps/rtps/common/Types.h>
 #include <string>
 
@@ -86,7 +85,7 @@ public:
         waitDiscovery(); publish();
     }
 
-    eprosima::fastrtps::types::DynamicType_ptr discovered_type() const
+    const eprosima::fastdds::dds::DynamicType* discovered_type() const
     {
         return disc_type_;
     }
@@ -136,7 +135,7 @@ private:
 
     eprosima::fastdds::dds::DataWriter* writer_;
 
-    eprosima::fastrtps::types::DynamicType_ptr disc_type_;
+    const eprosima::fastdds::dds::DynamicType* disc_type_ {nullptr};
 
     eprosima::fastdds::dds::DataWriterQos writer_qos;
 
@@ -154,9 +153,6 @@ private:
         ~PartListener() override
         {
         }
-
-        //TODO(Xtypes)
-        // Add new discovery methods
 
         TestPublisher* parent_;
         std::atomic<bool> discovered_;

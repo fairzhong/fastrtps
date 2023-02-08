@@ -34,7 +34,6 @@ set(BUILTIN_DATA_SERIALIZATION_TESTS_SOURCE BuiltinDataSerializationTests.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/dynamic-types/TypeObject.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/dynamic-types/TypeObjectFactory.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/dynamic-types/TypeObjectHashId.cpp
-    ${PROJECT_SOURCE_DIR}/src/cpp/dynamic-types/TypesBase.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/core/policy/ParameterList.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/log/Log.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/log/OStreamConsumer.cpp
@@ -89,6 +88,7 @@ target_include_directories(BuiltinDataSerializationTests PRIVATE
     )
 target_link_libraries(BuiltinDataSerializationTests foonathan_memory
     GTest::gmock
+    fastdds::xtypes
     ${CMAKE_DL_LIBS})
 if(QNX)
     target_link_libraries(BuiltinDataSerializationTests socket)

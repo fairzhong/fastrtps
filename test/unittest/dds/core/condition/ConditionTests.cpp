@@ -24,11 +24,8 @@
 #include <fastdds/dds/core/Entity.hpp>
 #include <fastdds/dds/log/Log.hpp>
 #include <fastdds/rtps/common/Time_t.h>
-#include <fastrtps/types/TypesBase.h>
 
 #include "../../../logging/mock/MockConsumer.h"
-
-using eprosima::fastrtps::types::ReturnCode_t;
 
 using namespace eprosima::fastdds::dds;
 using namespace std;

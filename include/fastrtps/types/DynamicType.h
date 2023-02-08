@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TYPES_DYNAMIC_TYPE_H
-#define TYPES_DYNAMIC_TYPE_H
+#ifndef FASTRTPS_TYPES_DYNAMIC_TYPE_H
+#define FASTRTPS_TYPES_DYNAMIC_TYPE_H
+
+#include <map>
 
 #include <fastrtps/types/TypesBase.h>
 #include <fastrtps/types/DynamicTypePtr.h>
@@ -28,6 +30,9 @@ class DomainParticipantImpl;
 
 namespace fastrtps {
 namespace types {
+
+class DynamicDataHelper;
+class TypeObjectFactory;
 
 class AnnotationDescriptor;
 class TypeDescriptor;
@@ -45,9 +50,9 @@ protected:
     friend class DynamicData;
     friend class DynamicDataFactory;
     friend class AnnotationDescriptor;
-    friend class TypeObjectFactory;
     friend class DynamicTypeMember;
-    friend class DynamicDataHelper;
+    friend class types::DynamicDataHelper;
+    friend class types::TypeObjectFactory;
     friend class fastdds::dds::DomainParticipantImpl;
 
     DynamicType();
@@ -117,7 +122,7 @@ protected:
     std::map<MemberId, DynamicTypeMember*> member_by_id_;         // Aggregated members
     std::map<std::string, DynamicTypeMember*> member_by_name_;    // Uses the pointers from "member_by_id_".
     std::string name_;
-    TypeKind kind_;
+    octet kind_;
     bool is_key_defined_;
 
 public:
@@ -145,7 +150,7 @@ public:
 
     RTPS_DllAPI bool key_annotation() const;
 
-    RTPS_DllAPI inline TypeKind get_kind() const
+    RTPS_DllAPI inline octet get_kind() const
     {
         return kind_;
     }
@@ -177,4 +182,4 @@ public:
 } // namespace fastrtps
 } // namespace eprosima
 
-#endif // TYPES_DYNAMIC_TYPE_H
+#endif // FASTRTPS_TYPES_DYNAMIC_TYPE_H

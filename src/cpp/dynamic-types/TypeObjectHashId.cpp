@@ -1,4 +1,4 @@
-// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+// Copyright 2023 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -113,41 +113,25 @@ TypeObjectHashId& TypeObjectHashId::operator =(
 }
 
 void TypeObjectHashId::_d(
-        uint8_t __d)                   // Special case to ease... sets the current active member
+        TypeKind __d)                   // Special case to ease... sets the current active member
 {
-    bool b = false;
-    m__d = __d;
-
-    switch (m__d)
+    switch (__d)
     {
         case EK_COMPLETE:
         case EK_MINIMAL:
-            switch (__d)
-            {
-                case EK_COMPLETE:
-                case EK_MINIMAL:
-                    b = true;
-                    break;
-                default:
-                    break;
-            }
+            m__d = __d;
             break;
+        default:
+            throw BadParamException("Discriminator doesn't correspond with the selected union member");
     }
-
-    if (!b)
-    {
-        throw BadParamException("Discriminator doesn't correspond with the selected union member");
-    }
-
-    m__d = __d;
 }
 
-uint8_t TypeObjectHashId::_d() const
+TypeKind TypeObjectHashId::_d() const
 {
     return m__d;
 }
 
-uint8_t& TypeObjectHashId::_d()
+TypeKind& TypeObjectHashId::_d()
 {
     return m__d;
 }

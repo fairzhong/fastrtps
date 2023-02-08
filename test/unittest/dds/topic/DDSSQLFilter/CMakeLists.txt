@@ -20,7 +20,6 @@ file(GLOB DDSSQLFILTER_SOURCES
     )
 
 file(GLOB DDSSQLFILTER_LIB_SOURCES
-    ${PROJECT_SOURCE_DIR}/src/cpp/dynamic-types/*.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/log/*.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/rtps/common/Time_t.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/utils/md5.cpp
@@ -49,5 +48,6 @@ target_include_directories(DDSSQLFilterTests PRIVATE
     )
 target_link_libraries(DDSSQLFilterTests fastcdr foonathan_memory
     GTest::gmock
+    fastdds::xtypes
     ${CMAKE_DL_LIBS})
 gtest_discover_tests(DDSSQLFilterTests)

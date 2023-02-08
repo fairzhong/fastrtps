@@ -1,4 +1,4 @@
-// Copyright 2016 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+// Copyright 2023 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -187,7 +187,7 @@ bool StringLTypeDefn::consistent(
 
 PlainCollectionHeader::PlainCollectionHeader()
 {
-    m_equiv_kind = 0;
+    m_equiv_kind = TK_NONE;
 }
 
 PlainCollectionHeader::~PlainCollectionHeader()

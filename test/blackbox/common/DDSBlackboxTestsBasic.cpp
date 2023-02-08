@@ -22,6 +22,7 @@
 #include <gmock/gmock.h>
 
 #include <fastdds/core/policy/ParameterSerializer.hpp>
+#include <fastdds/dds/core/ReturnCode.hpp>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/qos/DomainParticipantFactoryQos.hpp>
@@ -39,7 +40,6 @@
 #include <fastdds/dds/topic/TypeSupport.hpp>
 #include <fastdds/rtps/participant/ParticipantDiscoveryInfo.h>
 #include <fastrtps/transport/test_UDPv4TransportDescriptor.h>
-#include <fastrtps/types/TypesBase.h>
 
 #include "BlackboxTests.hpp"
 #include "../api/dds-pim/CustomPayloadPool.hpp"

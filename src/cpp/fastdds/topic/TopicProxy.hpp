@@ -33,8 +33,6 @@
 #include <fastdds/topic/TopicDescriptionImpl.hpp>
 #include <fastdds/topic/TopicImpl.hpp>
 
-using eprosima::fastrtps::types::ReturnCode_t;
-
 namespace eprosima {
 namespace fastdds {
 namespace dds {

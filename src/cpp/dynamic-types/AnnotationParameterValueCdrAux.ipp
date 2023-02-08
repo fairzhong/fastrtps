@@ -136,81 +136,81 @@ size_t calculate_serialized_size(
 
     switch (data._d())
     {
-        case eprosima::fastrtps::types::TK_BOOLEAN:
+        case eprosima::fastdds::dds::TK_BOOLEAN:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 1), data.boolean_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_BYTE:
+        case eprosima::fastdds::dds::TK_BYTE:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 2), data.byte_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_INT16:
+        case eprosima::fastdds::dds::TK_INT16:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 3), data.int16_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_UINT16:
+        case eprosima::fastdds::dds::TK_UINT16:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 4), data.uint_16_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_INT32:
+        case eprosima::fastdds::dds::TK_INT32:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 5), data.int32_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_UINT32:
+        case eprosima::fastdds::dds::TK_UINT32:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 6), data.uint32_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_INT64:
+        case eprosima::fastdds::dds::TK_INT64:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 7), data.int64_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_UINT64:
+        case eprosima::fastdds::dds::TK_UINT64:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 8), data.uint64_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_FLOAT32:
+        case eprosima::fastdds::dds::TK_FLOAT32:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 9), data.float32_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_FLOAT64:
+        case eprosima::fastdds::dds::TK_FLOAT64:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 10), data.float64_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_FLOAT128:
+        case eprosima::fastdds::dds::TK_FLOAT128:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 11), data.float128_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_CHAR8:
+        case eprosima::fastdds::dds::TK_CHAR8:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 12), data.char_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_CHAR16:
+        case eprosima::fastdds::dds::TK_CHAR16:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 13), data.wchar_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case eprosima::fastdds::dds::TK_ENUM:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 14), data.enumerated_value(), current_alignment);
 
             break;
-        case eprosima::fastrtps::types::TK_STRING8:
+        case eprosima::fastdds::dds::TK_STRING8:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 15), data.string8_value(), current_alignment);
             break;
-        case eprosima::fastrtps::types::TK_STRING16:
+        case eprosima::fastdds::dds::TK_STRING16:
             calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(
                                 16), data.string16_value(), current_alignment);
             break;
@@ -237,52 +237,52 @@ void serialize(
 
     switch (data._d())
     {
-        case eprosima::fastrtps::types::TK_BOOLEAN:
+        case eprosima::fastdds::dds::TK_BOOLEAN:
             scdr << data.boolean_value();
             break;
-        case eprosima::fastrtps::types::TK_BYTE:
+        case eprosima::fastdds::dds::TK_BYTE:
             scdr << data.byte_value();
             break;
-        case eprosima::fastrtps::types::TK_INT16:
+        case eprosima::fastdds::dds::TK_INT16:
             scdr << data.int16_value();
             break;
-        case eprosima::fastrtps::types::TK_UINT16:
+        case eprosima::fastdds::dds::TK_UINT16:
             scdr << data.uint_16_value();
             break;
-        case eprosima::fastrtps::types::TK_INT32:
+        case eprosima::fastdds::dds::TK_INT32:
             scdr << data.int32_value();
             break;
-        case eprosima::fastrtps::types::TK_UINT32:
+        case eprosima::fastdds::dds::TK_UINT32:
             scdr << data.uint32_value();
             break;
-        case eprosima::fastrtps::types::TK_INT64:
+        case eprosima::fastdds::dds::TK_INT64:
             scdr << data.int64_value();
             break;
-        case eprosima::fastrtps::types::TK_UINT64:
+        case eprosima::fastdds::dds::TK_UINT64:
             scdr << data.uint64_value();
             break;
-        case eprosima::fastrtps::types::TK_FLOAT32:
+        case eprosima::fastdds::dds::TK_FLOAT32:
             scdr << data.float32_value();
             break;
-        case eprosima::fastrtps::types::TK_FLOAT64:
+        case eprosima::fastdds::dds::TK_FLOAT64:
             scdr << data.float64_value();
             break;
-        case eprosima::fastrtps::types::TK_FLOAT128:
+        case eprosima::fastdds::dds::TK_FLOAT128:
             scdr << data.float128_value();
             break;
-        case eprosima::fastrtps::types::TK_CHAR8:
+        case eprosima::fastdds::dds::TK_CHAR8:
             scdr << data.char_value();
             break;
-        case eprosima::fastrtps::types::TK_CHAR16:
+        case eprosima::fastdds::dds::TK_CHAR16:
             scdr << data.wchar_value();
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case eprosima::fastdds::dds::TK_ENUM:
             scdr << data.enumerated_value();
             break;
-        case eprosima::fastrtps::types::TK_STRING8:
+        case eprosima::fastdds::dds::TK_STRING8:
             scdr << data.string8_value();
             break;
-        case eprosima::fastrtps::types::TK_STRING16:
+        case eprosima::fastdds::dds::TK_STRING16:
             scdr << data.string16_value();
             break;
         default:
@@ -300,52 +300,52 @@ void deserialize(
 
     switch (data._d())
     {
-        case eprosima::fastrtps::types::TK_BOOLEAN:
+        case eprosima::fastdds::dds::TK_BOOLEAN:
             dcdr >> data.boolean_value();
             break;
-        case eprosima::fastrtps::types::TK_BYTE:
+        case eprosima::fastdds::dds::TK_BYTE:
             dcdr >> data.byte_value();
             break;
-        case eprosima::fastrtps::types::TK_INT16:
+        case eprosima::fastdds::dds::TK_INT16:
             dcdr >> data.int16_value();
             break;
-        case eprosima::fastrtps::types::TK_UINT16:
+        case eprosima::fastdds::dds::TK_UINT16:
             dcdr >> data.uint_16_value();
             break;
-        case eprosima::fastrtps::types::TK_INT32:
+        case eprosima::fastdds::dds::TK_INT32:
             dcdr >> data.int32_value();
             break;
-        case eprosima::fastrtps::types::TK_UINT32:
+        case eprosima::fastdds::dds::TK_UINT32:
             dcdr >> data.uint32_value();
             break;
-        case eprosima::fastrtps::types::TK_INT64:
+        case eprosima::fastdds::dds::TK_INT64:
             dcdr >> data.int64_value();
             break;
-        case eprosima::fastrtps::types::TK_UINT64:
+        case eprosima::fastdds::dds::TK_UINT64:
             dcdr >> data.uint64_value();
             break;
-        case eprosima::fastrtps::types::TK_FLOAT32:
+        case eprosima::fastdds::dds::TK_FLOAT32:
             dcdr >> data.float32_value();
             break;
-        case eprosima::fastrtps::types::TK_FLOAT64:
+        case eprosima::fastdds::dds::TK_FLOAT64:
             dcdr >> data.float64_value();
             break;
-        case eprosima::fastrtps::types::TK_FLOAT128:
+        case eprosima::fastdds::dds::TK_FLOAT128:
             dcdr >> data.float128_value();
             break;
-        case eprosima::fastrtps::types::TK_CHAR8:
+        case eprosima::fastdds::dds::TK_CHAR8:
             dcdr >> data.char_value();
             break;
-        case eprosima::fastrtps::types::TK_CHAR16:
+        case eprosima::fastdds::dds::TK_CHAR16:
             dcdr >> data.wchar_value();
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case eprosima::fastdds::dds::TK_ENUM:
             dcdr >> data.enumerated_value();
             break;
-        case eprosima::fastrtps::types::TK_STRING8:
+        case eprosima::fastdds::dds::TK_STRING8:
             dcdr >> data.string8_value();
             break;
-        case eprosima::fastrtps::types::TK_STRING16:
+        case eprosima::fastdds::dds::TK_STRING16:
             dcdr >> data.string16_value();
             break;
         default:

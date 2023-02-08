@@ -1,4 +1,4 @@
-// Copyright 2018 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+// Copyright 2023 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -6711,7 +6711,7 @@ void TypeIdentifierWithDependencies::deserialize(
 
 CompleteTypeObject::CompleteTypeObject()
 {
-    m__d = 0x00;
+    m__d = TK_NONE;
 }
 
 CompleteTypeObject::~CompleteTypeObject()
@@ -6725,34 +6725,34 @@ CompleteTypeObject::CompleteTypeObject(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -6768,34 +6768,34 @@ CompleteTypeObject::CompleteTypeObject(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -6811,34 +6811,34 @@ CompleteTypeObject& CompleteTypeObject::operator =(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -6855,34 +6855,34 @@ CompleteTypeObject& CompleteTypeObject::operator =(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -6893,7 +6893,7 @@ CompleteTypeObject& CompleteTypeObject::operator =(
 }
 
 void CompleteTypeObject::_d(
-        octet __d)                     // Special case to ease... sets the current active member
+        TypeKind __d)                     // Special case to ease... sets the current active member
 {
     m__d = __d;
     if (m__d != __d)
@@ -6902,12 +6902,12 @@ void CompleteTypeObject::_d(
     }
 }
 
-octet CompleteTypeObject::_d() const
+TypeKind CompleteTypeObject::_d() const
 {
     return m__d;
 }
 
-octet& CompleteTypeObject::_d()
+TypeKind& CompleteTypeObject::_d()
 {
     return m__d;
 }
@@ -6925,7 +6925,7 @@ const CompleteAliasType& CompleteTypeObject::alias_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             b = true;
             break;
         default:
@@ -6945,7 +6945,7 @@ CompleteAliasType& CompleteTypeObject::alias_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             b = true;
             break;
         default:
@@ -6973,7 +6973,7 @@ const CompleteAnnotationType& CompleteTypeObject::annotation_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             b = true;
             break;
         default:
@@ -6994,7 +6994,7 @@ CompleteAnnotationType& CompleteTypeObject::annotation_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             b = true;
             break;
         default:
@@ -7022,7 +7022,7 @@ const CompleteStructType& CompleteTypeObject::struct_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             b = true;
             break;
         default:
@@ -7043,7 +7043,7 @@ CompleteStructType& CompleteTypeObject::struct_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             b = true;
             break;
         default:
@@ -7071,7 +7071,7 @@ const CompleteUnionType& CompleteTypeObject::union_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             b = true;
             break;
         default:
@@ -7092,7 +7092,7 @@ CompleteUnionType& CompleteTypeObject::union_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             b = true;
             break;
         default:
@@ -7120,7 +7120,7 @@ const CompleteBitsetType& CompleteTypeObject::bitset_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             b = true;
             break;
         default:
@@ -7141,7 +7141,7 @@ CompleteBitsetType& CompleteTypeObject::bitset_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             b = true;
             break;
         default:
@@ -7169,7 +7169,7 @@ const CompleteSequenceType& CompleteTypeObject::sequence_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             b = true;
             break;
         default:
@@ -7190,7 +7190,7 @@ CompleteSequenceType& CompleteTypeObject::sequence_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             b = true;
             break;
         default:
@@ -7218,7 +7218,7 @@ const CompleteArrayType& CompleteTypeObject::array_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             b = true;
             break;
         default:
@@ -7239,7 +7239,7 @@ CompleteArrayType& CompleteTypeObject::array_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             b = true;
             break;
         default:
@@ -7267,7 +7267,7 @@ const CompleteMapType& CompleteTypeObject::map_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             b = true;
             break;
         default:
@@ -7288,7 +7288,7 @@ CompleteMapType& CompleteTypeObject::map_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             b = true;
             break;
         default:
@@ -7316,7 +7316,7 @@ const CompleteEnumeratedType& CompleteTypeObject::enumerated_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             b = true;
             break;
         default:
@@ -7337,7 +7337,7 @@ CompleteEnumeratedType& CompleteTypeObject::enumerated_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             b = true;
             break;
         default:
@@ -7365,7 +7365,7 @@ const CompleteBitmaskType& CompleteTypeObject::bitmask_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             b = true;
             break;
         default:
@@ -7386,7 +7386,7 @@ CompleteBitmaskType& CompleteTypeObject::bitmask_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             b = true;
             break;
         default:
@@ -7405,7 +7405,7 @@ void CompleteTypeObject::extended_type(
         CompleteExtendedType _extended_type)
 {
     m_extended_type = _extended_type;
-    m__d = 0x00; // Default
+    m__d = TK_NONE; // Default
 }
 
 const CompleteExtendedType& CompleteTypeObject::extended_type() const
@@ -7414,16 +7414,16 @@ const CompleteExtendedType& CompleteTypeObject::extended_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
-        case eprosima::fastrtps::types::TK_ANNOTATION:
-        case eprosima::fastrtps::types::TK_STRUCTURE:
-        case eprosima::fastrtps::types::TK_UNION:
-        case eprosima::fastrtps::types::TK_BITSET:
-        case eprosima::fastrtps::types::TK_SEQUENCE:
-        case eprosima::fastrtps::types::TK_ARRAY:
-        case eprosima::fastrtps::types::TK_MAP:
-        case eprosima::fastrtps::types::TK_ENUM:
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_ALIAS:
+        case TK_ANNOTATION:
+        case TK_STRUCTURE:
+        case TK_UNION:
+        case TK_BITSET:
+        case TK_SEQUENCE:
+        case TK_ARRAY:
+        case TK_MAP:
+        case TK_ENUM:
+        case TK_BITMASK:
             break;
         default:
             b = true;
@@ -7444,16 +7444,16 @@ CompleteExtendedType& CompleteTypeObject::extended_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
-        case eprosima::fastrtps::types::TK_ANNOTATION:
-        case eprosima::fastrtps::types::TK_STRUCTURE:
-        case eprosima::fastrtps::types::TK_UNION:
-        case eprosima::fastrtps::types::TK_BITSET:
-        case eprosima::fastrtps::types::TK_SEQUENCE:
-        case eprosima::fastrtps::types::TK_ARRAY:
-        case eprosima::fastrtps::types::TK_MAP:
-        case eprosima::fastrtps::types::TK_ENUM:
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_ALIAS:
+        case TK_ANNOTATION:
+        case TK_STRUCTURE:
+        case TK_UNION:
+        case TK_BITSET:
+        case TK_SEQUENCE:
+        case TK_ARRAY:
+        case TK_MAP:
+        case TK_ENUM:
+        case TK_BITMASK:
             break;
         default:
             b = true;
@@ -7496,25 +7496,25 @@ bool CompleteTypeObject::operator ==(
     {
         switch (m__d)
         {
-            case eprosima::fastrtps::types::TK_ALIAS:
+            case TK_ALIAS:
                 return m_alias_type == other.m_alias_type;
-            case eprosima::fastrtps::types::TK_ANNOTATION:
+            case TK_ANNOTATION:
                 return m_annotation_type == other.m_annotation_type;
-            case eprosima::fastrtps::types::TK_STRUCTURE:
+            case TK_STRUCTURE:
                 return m_struct_type == other.m_struct_type;
-            case eprosima::fastrtps::types::TK_UNION:
+            case TK_UNION:
                 return m_union_type == other.m_union_type;
-            case eprosima::fastrtps::types::TK_BITSET:
+            case TK_BITSET:
                 return m_bitset_type == other.m_bitset_type;
-            case eprosima::fastrtps::types::TK_SEQUENCE:
+            case TK_SEQUENCE:
                 return m_sequence_type == other.m_sequence_type;
-            case eprosima::fastrtps::types::TK_ARRAY:
+            case TK_ARRAY:
                 return m_array_type == other.m_array_type;
-            case eprosima::fastrtps::types::TK_MAP:
+            case TK_MAP:
                 return m_map_type == other.m_map_type;
-            case eprosima::fastrtps::types::TK_ENUM:
+            case TK_ENUM:
                 return m_enumerated_type == other.m_enumerated_type;
-            case eprosima::fastrtps::types::TK_BITMASK:
+            case TK_BITMASK:
                 return m_bitmask_type == other.m_bitmask_type;
             default:
                 return m_extended_type == other.m_extended_type;
@@ -7559,25 +7559,25 @@ bool CompleteTypeObject::consistent(
 
     switch (m__d)
     {
-        //case eprosima::fastrtps::types::TK_ALIAS:
+        //case TK_ALIAS:
         //    return m_alias_type.consistent(x.m_alias_type, consistency);
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             return m_annotation_type.consistent(x.m_annotation_type, consistency);
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             return m_struct_type.consistent(x.m_struct_type, consistency);
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             return m_union_type.consistent(x.m_union_type, consistency);
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             return m_bitset_type.consistent(x.m_bitset_type, consistency);
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             return m_sequence_type.consistent(x.m_sequence_type, consistency);
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             return m_array_type.consistent(x.m_array_type, consistency);
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             return m_map_type.consistent(x.m_map_type, consistency);
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             return m_enumerated_type.consistent(x.m_enumerated_type, consistency);
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             return m_bitmask_type.consistent(x.m_bitmask_type, consistency);
         default:
             return m_extended_type.consistent(x.m_extended_type, consistency);
@@ -7589,7 +7589,7 @@ bool CompleteTypeObject::consistent(
 
 MinimalTypeObject::MinimalTypeObject()
 {
-    m__d = 0x00;
+    m__d = TK_NONE;
 }
 
 MinimalTypeObject::~MinimalTypeObject()
@@ -7603,34 +7603,34 @@ MinimalTypeObject::MinimalTypeObject(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -7646,34 +7646,34 @@ MinimalTypeObject::MinimalTypeObject(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -7689,34 +7689,34 @@ MinimalTypeObject& MinimalTypeObject::operator =(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -7733,34 +7733,34 @@ MinimalTypeObject& MinimalTypeObject::operator =(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             m_alias_type = x.m_alias_type;
             break;
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             m_annotation_type = x.m_annotation_type;
             break;
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             m_struct_type = x.m_struct_type;
             break;
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             m_union_type = x.m_union_type;
             break;
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             m_bitset_type = x.m_bitset_type;
             break;
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             m_sequence_type = x.m_sequence_type;
             break;
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             m_array_type = x.m_array_type;
             break;
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             m_map_type = x.m_map_type;
             break;
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             m_enumerated_type = x.m_enumerated_type;
             break;
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             m_bitmask_type = x.m_bitmask_type;
             break;
         default:
@@ -7771,7 +7771,7 @@ MinimalTypeObject& MinimalTypeObject::operator =(
 }
 
 void MinimalTypeObject::_d(
-        octet __d)                    // Special case to ease... sets the current active member
+        TypeKind __d)                    // Special case to ease... sets the current active member
 {
     m__d = __d;
     if (m__d != __d)
@@ -7780,12 +7780,12 @@ void MinimalTypeObject::_d(
     }
 }
 
-octet MinimalTypeObject::_d() const
+TypeKind MinimalTypeObject::_d() const
 {
     return m__d;
 }
 
-octet& MinimalTypeObject::_d()
+TypeKind& MinimalTypeObject::_d()
 {
     return m__d;
 }
@@ -7803,7 +7803,7 @@ const MinimalAliasType& MinimalTypeObject::alias_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             b = true;
             break;
         default:
@@ -7824,7 +7824,7 @@ MinimalAliasType& MinimalTypeObject::alias_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
+        case TK_ALIAS:
             b = true;
             break;
         default:
@@ -7852,7 +7852,7 @@ const MinimalAnnotationType& MinimalTypeObject::annotation_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             b = true;
             break;
         default:
@@ -7873,7 +7873,7 @@ MinimalAnnotationType& MinimalTypeObject::annotation_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             b = true;
             break;
         default:
@@ -7901,7 +7901,7 @@ const MinimalStructType& MinimalTypeObject::struct_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             b = true;
             break;
         default:
@@ -7922,7 +7922,7 @@ MinimalStructType& MinimalTypeObject::struct_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             b = true;
             break;
         default:
@@ -7950,7 +7950,7 @@ const MinimalUnionType& MinimalTypeObject::union_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             b = true;
             break;
         default:
@@ -7971,7 +7971,7 @@ MinimalUnionType& MinimalTypeObject::union_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             b = true;
             break;
         default:
@@ -7999,7 +7999,7 @@ const MinimalBitsetType& MinimalTypeObject::bitset_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             b = true;
             break;
         default:
@@ -8020,7 +8020,7 @@ MinimalBitsetType& MinimalTypeObject::bitset_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             b = true;
             break;
         default:
@@ -8048,7 +8048,7 @@ const MinimalSequenceType& MinimalTypeObject::sequence_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             b = true;
             break;
         default:
@@ -8069,7 +8069,7 @@ MinimalSequenceType& MinimalTypeObject::sequence_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             b = true;
             break;
         default:
@@ -8097,7 +8097,7 @@ const MinimalArrayType& MinimalTypeObject::array_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             b = true;
             break;
         default:
@@ -8118,7 +8118,7 @@ MinimalArrayType& MinimalTypeObject::array_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             b = true;
             break;
         default:
@@ -8146,7 +8146,7 @@ const MinimalMapType& MinimalTypeObject::map_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             b = true;
             break;
         default:
@@ -8167,7 +8167,7 @@ MinimalMapType& MinimalTypeObject::map_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             b = true;
             break;
         default:
@@ -8195,7 +8195,7 @@ const MinimalEnumeratedType& MinimalTypeObject::enumerated_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             b = true;
             break;
         default:
@@ -8216,7 +8216,7 @@ MinimalEnumeratedType& MinimalTypeObject::enumerated_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             b = true;
             break;
         default:
@@ -8244,7 +8244,7 @@ const MinimalBitmaskType& MinimalTypeObject::bitmask_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             b = true;
             break;
         default:
@@ -8265,7 +8265,7 @@ MinimalBitmaskType& MinimalTypeObject::bitmask_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             b = true;
             break;
         default:
@@ -8284,7 +8284,7 @@ void MinimalTypeObject::extended_type(
         MinimalExtendedType _extended_type)
 {
     m_extended_type = _extended_type;
-    m__d = 0x00; // Default
+    m__d = TK_NONE; // Default
 }
 
 const MinimalExtendedType& MinimalTypeObject::extended_type() const
@@ -8293,16 +8293,16 @@ const MinimalExtendedType& MinimalTypeObject::extended_type() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
-        case eprosima::fastrtps::types::TK_ANNOTATION:
-        case eprosima::fastrtps::types::TK_STRUCTURE:
-        case eprosima::fastrtps::types::TK_UNION:
-        case eprosima::fastrtps::types::TK_BITSET:
-        case eprosima::fastrtps::types::TK_SEQUENCE:
-        case eprosima::fastrtps::types::TK_ARRAY:
-        case eprosima::fastrtps::types::TK_MAP:
-        case eprosima::fastrtps::types::TK_ENUM:
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_ALIAS:
+        case TK_ANNOTATION:
+        case TK_STRUCTURE:
+        case TK_UNION:
+        case TK_BITSET:
+        case TK_SEQUENCE:
+        case TK_ARRAY:
+        case TK_MAP:
+        case TK_ENUM:
+        case TK_BITMASK:
             break;
         default:
             b = true;
@@ -8323,16 +8323,16 @@ MinimalExtendedType& MinimalTypeObject::extended_type()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::TK_ALIAS:
-        case eprosima::fastrtps::types::TK_ANNOTATION:
-        case eprosima::fastrtps::types::TK_STRUCTURE:
-        case eprosima::fastrtps::types::TK_UNION:
-        case eprosima::fastrtps::types::TK_BITSET:
-        case eprosima::fastrtps::types::TK_SEQUENCE:
-        case eprosima::fastrtps::types::TK_ARRAY:
-        case eprosima::fastrtps::types::TK_MAP:
-        case eprosima::fastrtps::types::TK_ENUM:
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_ALIAS:
+        case TK_ANNOTATION:
+        case TK_STRUCTURE:
+        case TK_UNION:
+        case TK_BITSET:
+        case TK_SEQUENCE:
+        case TK_ARRAY:
+        case TK_MAP:
+        case TK_ENUM:
+        case TK_BITMASK:
             break;
         default:
             b = true;
@@ -8375,25 +8375,25 @@ bool MinimalTypeObject::operator ==(
     {
         switch (m__d)
         {
-            case eprosima::fastrtps::types::TK_ALIAS:
+            case TK_ALIAS:
                 return m_alias_type == other.m_alias_type;
-            case eprosima::fastrtps::types::TK_ANNOTATION:
+            case TK_ANNOTATION:
                 return m_annotation_type == other.m_annotation_type;
-            case eprosima::fastrtps::types::TK_STRUCTURE:
+            case TK_STRUCTURE:
                 return m_struct_type == other.m_struct_type;
-            case eprosima::fastrtps::types::TK_UNION:
+            case TK_UNION:
                 return m_union_type == other.m_union_type;
-            case eprosima::fastrtps::types::TK_BITSET:
+            case TK_BITSET:
                 return m_bitset_type == other.m_bitset_type;
-            case eprosima::fastrtps::types::TK_SEQUENCE:
+            case TK_SEQUENCE:
                 return m_sequence_type == other.m_sequence_type;
-            case eprosima::fastrtps::types::TK_ARRAY:
+            case TK_ARRAY:
                 return m_array_type == other.m_array_type;
-            case eprosima::fastrtps::types::TK_MAP:
+            case TK_MAP:
                 return m_map_type == other.m_map_type;
-            case eprosima::fastrtps::types::TK_ENUM:
+            case TK_ENUM:
                 return m_enumerated_type == other.m_enumerated_type;
-            case eprosima::fastrtps::types::TK_BITMASK:
+            case TK_BITMASK:
                 return m_bitmask_type == other.m_bitmask_type;
             default:
                 return m_extended_type == other.m_extended_type;
@@ -8438,25 +8438,25 @@ bool MinimalTypeObject::consistent(
 
     switch (m__d)
     {
-        //case eprosima::fastrtps::types::TK_ALIAS:
+        //case TK_ALIAS:
         //    return m_alias_type.consistent(x.m_alias_type, consistency);
-        case eprosima::fastrtps::types::TK_ANNOTATION:
+        case TK_ANNOTATION:
             return m_annotation_type.consistent(x.m_annotation_type, consistency);
-        case eprosima::fastrtps::types::TK_STRUCTURE:
+        case TK_STRUCTURE:
             return m_struct_type.consistent(x.m_struct_type, consistency);
-        case eprosima::fastrtps::types::TK_UNION:
+        case TK_UNION:
             return m_union_type.consistent(x.m_union_type, consistency);
-        case eprosima::fastrtps::types::TK_BITSET:
+        case TK_BITSET:
             return m_bitset_type.consistent(x.m_bitset_type, consistency);
-        case eprosima::fastrtps::types::TK_SEQUENCE:
+        case TK_SEQUENCE:
             return m_sequence_type.consistent(x.m_sequence_type, consistency);
-        case eprosima::fastrtps::types::TK_ARRAY:
+        case TK_ARRAY:
             return m_array_type.consistent(x.m_array_type, consistency);
-        case eprosima::fastrtps::types::TK_MAP:
+        case TK_MAP:
             return m_map_type.consistent(x.m_map_type, consistency);
-        case eprosima::fastrtps::types::TK_ENUM:
+        case TK_ENUM:
             return m_enumerated_type.consistent(x.m_enumerated_type, consistency);
-        case eprosima::fastrtps::types::TK_BITMASK:
+        case TK_BITMASK:
             return m_bitmask_type.consistent(x.m_bitmask_type, consistency);
         default:
             return m_extended_type.consistent(x.m_extended_type, consistency);
@@ -8466,7 +8466,7 @@ bool MinimalTypeObject::consistent(
 
 TypeObject::TypeObject()
 {
-    m__d = 0x00; // Default
+    m__d = TK_NONE; // Default
 }
 
 TypeObject::~TypeObject()
@@ -8480,10 +8480,10 @@ TypeObject::TypeObject(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             m_complete = x.m_complete;
             break;
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             m_minimal = x.m_minimal;
             break;
         default:
@@ -8498,10 +8498,10 @@ TypeObject::TypeObject(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             m_complete = std::move(x.m_complete);
             break;
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             m_minimal = std::move(x.m_minimal);
             break;
         default:
@@ -8516,10 +8516,10 @@ TypeObject& TypeObject::operator =(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             m_complete = x.m_complete;
             break;
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             m_minimal = x.m_minimal;
             break;
         default:
@@ -8536,10 +8536,10 @@ TypeObject& TypeObject::operator =(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             m_complete = std::move(x.m_complete);
             break;
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             m_minimal = std::move(x.m_minimal);
             break;
         default:
@@ -8550,14 +8550,14 @@ TypeObject& TypeObject::operator =(
 }
 
 void TypeObject::_d(
-        uint8_t __d)             // Special case to ease... sets the current active member
+        TypeKind __d)             // Special case to ease... sets the current active member
 {
     bool b = false;
     m__d = __d;
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             switch (__d)
             {
                 case eprosima::fastrtps::types::EK_COMPLETE:
@@ -8567,7 +8567,7 @@ void TypeObject::_d(
                     break;
             }
             break;
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             switch (__d)
             {
                 case eprosima::fastrtps::types::EK_MINIMAL:
@@ -8587,12 +8587,12 @@ void TypeObject::_d(
     m__d = __d;
 }
 
-uint8_t TypeObject::_d() const
+TypeKind TypeObject::_d() const
 {
     return m__d;
 }
 
-uint8_t& TypeObject::_d()
+TypeKind& TypeObject::_d()
 {
     return m__d;
 }
@@ -8617,7 +8617,7 @@ const CompleteTypeObject& TypeObject::complete() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             b = true;
             break;
         default:
@@ -8638,7 +8638,7 @@ CompleteTypeObject& TypeObject::complete()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             b = true;
             break;
         default:
@@ -8678,9 +8678,9 @@ bool TypeObject::consistent(
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_COMPLETE:
+        case EK_COMPLETE:
             return m_complete.consistent(x.m_complete, consistency);
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             return m_minimal.consistent(x.m_minimal, consistency);
         default:
             return false;
@@ -8703,7 +8703,7 @@ const MinimalTypeObject& TypeObject::minimal() const
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             b = true;
             break;
         default:
@@ -8724,7 +8724,7 @@ MinimalTypeObject& TypeObject::minimal()
 
     switch (m__d)
     {
-        case eprosima::fastrtps::types::EK_MINIMAL:
+        case EK_MINIMAL:
             b = true;
             break;
         default:
@@ -8767,9 +8767,9 @@ bool TypeObject::operator ==(
     {
         switch (m__d)
         {
-            case eprosima::fastrtps::types::EK_COMPLETE:
+            case EK_COMPLETE:
                 return m_complete == other.m_complete;
-            case eprosima::fastrtps::types::EK_MINIMAL:
+            case EK_MINIMAL:
                 return m_minimal == other.m_minimal;
             default:
                 break;

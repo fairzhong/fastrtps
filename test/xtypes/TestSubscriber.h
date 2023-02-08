@@ -29,7 +29,6 @@
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
 #include <fastrtps/subscriber/SampleInfo.h>
-#include <fastrtps/types/TypeObjectFactory.h>
 #include <fastrtps/rtps/common/Types.h>
 
 #include <condition_variable>
@@ -83,7 +82,7 @@ public:
         return m_subListener.n_samples;
     }
 
-    eprosima::fastrtps::types::DynamicType_ptr discovered_type() const
+    const eprosima::fastdds::dds::DynamicType* discovered_type() const
     {
         return disc_type_;
     }
@@ -112,7 +111,7 @@ private:
     std::condition_variable m_cvDiscovery;
     std::condition_variable cv_type_discovery_;
     std::condition_variable cv_;
-    eprosima::fastrtps::types::DynamicType_ptr disc_type_;
+    const eprosima::fastdds::dds::DynamicType* disc_type_;
     eprosima::fastdds::dds::DataReaderQos reader_qos;
     bool using_typelookup_;
     std::string topic_name_;
@@ -135,9 +134,6 @@ public:
         ~PartListener() override
         {
         }
-
-        //TODO(Xtypes)
-        // Add new discovery methods
 
         TestSubscriber* parent_;
         std::atomic<bool> discovered_;

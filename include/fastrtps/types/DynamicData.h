@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TYPES_DYNAMIC_DATA_H
-#define TYPES_DYNAMIC_DATA_H
+#ifndef FASTRTPS_TYPES_DYNAMIC_DATA_H
+#define FASTRTPS_TYPES_DYNAMIC_DATA_H
+
+#include <map>
 
 #include <fastrtps/types/TypesBase.h>
 #include <fastrtps/types/DynamicDataPtr.h>
@@ -37,8 +39,14 @@ namespace eprosima {
 namespace fastrtps {
 namespace types {
 
+class DynamicDataHelper;
+
 class DynamicType;
 class MemberDescriptor;
+
+namespace internal {
+class DynamicPubSubType;
+} // namespace internal
 
 class DynamicData
 {
@@ -53,7 +61,7 @@ protected:
     ~DynamicData();
 
     void add_value(
-            TypeKind kind,
+            octet kind,
             MemberId id);
 
     void create_members(
@@ -68,10 +76,10 @@ protected:
 
     void* clone_value(
             MemberId id,
-            TypeKind kind) const;
+            octet kind) const;
 
     bool compare_values(
-            TypeKind kind,
+            octet kind,
             void* left,
             void* right) const;
 
@@ -197,7 +205,7 @@ public:
     RTPS_DllAPI bool equals(
             const DynamicData* other) const;
 
-    RTPS_DllAPI TypeKind get_kind() const;
+    RTPS_DllAPI octet get_kind() const;
 
     RTPS_DllAPI uint32_t get_item_count() const;
 
@@ -785,4 +793,4 @@ public:
 } // namespace fastrtps
 } // namespace eprosima
 
-#endif // TYPES_DYNAMIC_DATA_H
+#endif // FASTRTPS_TYPES_DYNAMIC_DATA_H

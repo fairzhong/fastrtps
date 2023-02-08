@@ -1,4 +1,4 @@
-// Copyright 2018 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+﻿// Copyright 2018 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -376,7 +376,7 @@ bool DynamicData::equals(
                 }
                 else if (get_kind() == TK_BITMASK)
                 {
-                    TypeKind bitmask_kind = TK_BYTE;
+                    octet bitmask_kind = TK_BYTE;
                     size_t type_size = type_->get_size();
                     switch (type_size)
                     {
@@ -455,7 +455,7 @@ MemberId DynamicData::get_member_id_at_index(
     return MEMBER_ID_INVALID;
 }
 
-TypeKind DynamicData::get_kind() const
+octet DynamicData::get_kind() const
 {
     return type_->get_kind();
 }
@@ -490,7 +490,7 @@ std::string DynamicData::get_name()
 }
 
 void DynamicData::add_value(
-        TypeKind kind,
+        octet kind,
         MemberId id)
 {
     switch (kind)
@@ -920,7 +920,7 @@ ReturnCode_t DynamicData::clear_value(
 
 void* DynamicData::clone_value(
         MemberId id,
-        TypeKind kind) const
+        octet kind) const
 {
     switch (kind)
     {
@@ -1049,7 +1049,7 @@ void* DynamicData::clone_value(
 }
 
 bool DynamicData::compare_values(
-        TypeKind kind,
+        octet kind,
         void* left,
         void* right) const
 {

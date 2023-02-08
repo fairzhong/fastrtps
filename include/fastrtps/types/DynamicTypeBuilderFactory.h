@@ -12,29 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TYPES_DYNAMIC_TYPE_BUILDER_FACTORY_H
-#define TYPES_DYNAMIC_TYPE_BUILDER_FACTORY_H
+#ifndef FASTRTPS_TYPES_DYNAMIC_TYPE_BUILDER_FACTORY_H
+#define FASTRTPS_TYPES_DYNAMIC_TYPE_BUILDER_FACTORY_H
 
 #include <fastrtps/types/TypesBase.h>
 #include <fastrtps/types/AnnotationParameterValue.h>
 #include <fastrtps/types/DynamicTypePtr.h>
 #include <mutex>
 
-//#define DISABLE_DYNAMIC_MEMORY_CHECK
-
 namespace eprosima {
 namespace fastrtps {
 namespace types {
 
+class TypeIdentifier;
+class TypeObject;
+class AnnotationParameterValue;
+
 class AnnotationDescriptor;
 class DynamicTypeBuilder;
 class TypeDescriptor;
-class TypeIdentifier;
 class MemberDescriptor;
-class TypeObject;
 class DynamicType;
 class DynamicType_ptr;
-class AnnotationParameterValue;
 
 class DynamicTypeBuilderFactory
 {
@@ -132,7 +131,7 @@ public:
     ~DynamicTypeBuilderFactory();
 
     RTPS_DllAPI DynamicType_ptr get_primitive_type(
-            TypeKind kind);
+            octet kind);
 
     RTPS_DllAPI ReturnCode_t delete_builder(
             DynamicTypeBuilder* builder);
@@ -314,4 +313,4 @@ public:
 } // namespace fastrtps
 } // namespace eprosima
 
-#endif // TYPES_DYNAMIC_TYPE_BUILDER_FACTORY_H
+#endif // FASTRTPS_TYPES_DYNAMIC_TYPE_BUILDER_FACTORY_H
