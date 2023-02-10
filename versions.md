@@ -1,6 +1,8 @@
 Forthcoming
 -----------
 
+* Enabled secure communications on Discovery Server
+
 Version 2.6.6
 -------------
 
