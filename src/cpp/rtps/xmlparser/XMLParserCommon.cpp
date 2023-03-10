@@ -69,6 +69,9 @@ const char* FAIL = "FAIL";
 const char* RTPS_DUMP_FILE = "rtps_dump_file";
 const char* ON = "ON";
 const char* AUTO = "AUTO";
+const char* CHAINING_LIBRARY = "library";
+const char* CHAINING_SYMBOL = "create_function";
+const char* CHAINING_LOW_LEVEL_TRANSPORT = "low_level_transport";
 
 const char* OFF = "OFF";
 const char* USER_DATA_ONLY = "USER_DATA_ONLY";
@@ -160,6 +163,7 @@ const char* UDPv6 = "UDPv6";
 const char* TCPv4 = "TCPv4";
 const char* TCPv6 = "TCPv6";
 const char* SHM = "SHM";
+const char* CHAINING_TRANSPORT = "ChainingTransport";
 const char* INIT_ACKNACK_DELAY = "initialAcknackDelay";
 const char* HEARTB_RESP_DELAY = "heartbeatResponseDelay";
 const char* INIT_HEARTB_DELAY = "initialHeartbeatDelay";
