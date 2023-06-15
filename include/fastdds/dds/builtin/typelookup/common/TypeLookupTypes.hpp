@@ -32,8 +32,8 @@ namespace fastdds {
 namespace dds {
 namespace builtin {
 
-const int32_t TypeLookup_getTypes_Hash = static_cast<int32_t>(0xd35282d1);
-const int32_t TypeLookup_getDependencies_Hash = static_cast<int32_t>(0x31fbaa35);
+const int32_t TypeLookup_getTypes_Hash = static_cast<int32_t>(0x018252d3);
+const int32_t TypeLookup_getDependencies_Hash = static_cast<int32_t>(0x05aafb31);
 
 struct TypeLookup_getTypes_In
 {
