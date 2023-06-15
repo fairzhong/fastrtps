@@ -21,6 +21,7 @@
 #define TYPELOOKUPTYPES_HPP
 
 #include <fastrtps/types/TypeObject.h>
+#include <fastdds/dds/builtin/common/ReplyHeader.hpp>
 #include <fastdds/dds/builtin/common/RequestHeader.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
 
@@ -306,7 +307,7 @@ private:
 class TypeLookup_Reply
 {
 public:
-    rpc::RequestHeader header;
+    rpc::ReplyHeader header;
 
     TypeLookup_Return return_value;
 

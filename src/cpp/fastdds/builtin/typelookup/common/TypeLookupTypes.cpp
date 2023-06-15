@@ -1256,7 +1256,7 @@ size_t TypeLookup_Reply::getCdrSerializedSize(
     size_t initial_alignment = current_alignment;
 
 
-    current_alignment += rpc::RequestHeader::getCdrSerializedSize(data.header, current_alignment);
+    current_alignment += rpc::ReplyHeader::getCdrSerializedSize(data.header, current_alignment);
     current_alignment += TypeLookup_Return::getCdrSerializedSize(data.return_value, current_alignment);
 
     return current_alignment - initial_alignment;

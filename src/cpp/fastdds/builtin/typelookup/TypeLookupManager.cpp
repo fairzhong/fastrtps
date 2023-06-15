@@ -580,8 +580,6 @@ bool TypeLookupManager::send_request(
 bool TypeLookupManager::send_reply(
         TypeLookup_Reply& rep) const
 {
-    rep.header.instanceName = get_instanceName();
-
     CacheChange_t* change = builtin_reply_writer_->new_change(
         [&rep]()
         {

@@ -115,7 +115,9 @@ void TypeLookupRequestListener::onNewCacheChangeAdded(
                 TypeLookup_getTypes_Result result;
                 result.result(out);
                 reply->return_value.getType(result);
-                reply->header.requestId = request.header.requestId;
+                reply->header.relatedRequestId = request.header.requestId;
+                // TODO(jlbueno): correctly set RemoteExceptionCode_t
+                reply->header.remoteEx = rpc::RemoteExceptionCode_t::REMOTE_EX_OK;
 
                 tlm_->send_reply(*reply);
                 tlm_->reply_type_.delete_data(reply);
@@ -136,7 +138,9 @@ void TypeLookupRequestListener::onNewCacheChangeAdded(
                 TypeLookup_getTypeDependencies_Result result;
                 result.result(out);
                 reply->return_value.getTypeDependencies(result);
-                reply->header.requestId = request.header.requestId;
+                reply->header.relatedRequestId = request.header.requestId;
+                // TODO(jlbueno): correctly set RemoteExceptionCode_t
+                reply->header.remoteEx = rpc::RemoteExceptionCode_t::REMOTE_EX_OK;
 
                 tlm_->send_reply(*reply);
                 tlm_->reply_type_.delete_data(reply);

@@ -70,7 +70,7 @@ void TypeLookupReplyListener::onNewCacheChangeAdded(
     TypeLookup_Reply reply;
     if (tlm_->recv_reply(*change, reply))
     {
-        if (reply.header.requestId.writer_guid() != tlm_->get_builtin_request_writer_guid())
+        if (reply.header.relatedRequestId.writer_guid() != tlm_->get_builtin_request_writer_guid())
         {
             // This message isn't for us.
             return;
@@ -88,7 +88,7 @@ void TypeLookupReplyListener::onNewCacheChangeAdded(
                         // If build_dynamic_type failed, just sent the nullptr already contained on it.
                         tlm_->participant_->getListener()->on_type_discovery(
                             tlm_->participant_->getUserRTPSParticipant(),
-                            reply.header.requestId,
+                            reply.header.relatedRequestId,
                             "", // No topic_name available
                             &pair.type_identifier(),
                             &pair.type_object(),
@@ -105,7 +105,7 @@ void TypeLookupReplyListener::onNewCacheChangeAdded(
 
                 tlm_->get_RTPS_participant()->getListener()->on_type_dependencies_reply(
                     tlm_->builtin_protocols_->mp_participantImpl->getUserRTPSParticipant(),
-                    reply.header.requestId,
+                    reply.header.relatedRequestId,
                     reply.return_value.getTypeDependencies().result().dependent_typeids);
                 break;
             }

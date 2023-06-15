@@ -296,7 +296,7 @@ std::string instance_name(
 }
 
 //! Check RequestHeader
-void check_message_header(
+void check_request_header(
         const rpc::RequestHeader& header,
         const GUID_t& request_writer_guid,
         const GUID_t& participant_guid)
@@ -308,6 +308,16 @@ void check_message_header(
     // TODO: this check fails because current implementation is including character `|` separating the guidPrefix from
     //       the EntityId.
     EXPECT_EQ(header.instanceName, instance);
+}
+
+//! Check ReplyHeader
+void check_reply_header(
+        const rpc::ReplyHeader& header,
+        const SampleIdentity& request_id)
+{
+    // The related request Id must be the received request Id
+    EXPECT_EQ(header.relatedRequestId, request_id);
+    // TODO: check remote exception code.
 }
 
 /**
@@ -414,7 +424,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_type_dependencies_request_cl
 
     StatefulWriter* request_writer = typelookup_manager->get_builtin_request_writer();
     ASSERT_NE(nullptr, request_writer);
-    check_message_header(request.header, request_writer->getGuid(), participant->guid());
+    check_request_header(request.header, request_writer->getGuid(), participant->guid());
     // Check correct discriminator
     // TODO: this check fails because the hash algorithm is updated in XTYPES v1.3 in clause 7.3.1.2.1.1
     //       Fast DDS is using the XTYPES v1.2 hash which is 0x31fbaa35
@@ -511,7 +521,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_types_request_client)
 
     StatefulWriter* request_writer = typelookup_manager->get_builtin_request_writer();
     ASSERT_NE(nullptr, request_writer);
-    check_message_header(request.header, request_writer->getGuid(), participant->guid());
+    check_request_header(request.header, request_writer->getGuid(), participant->guid());
     // Check correct discriminator
     // TODO: this check fails because the hash algorithm is updated in XTYPES v1.3 in clause 7.3.1.2.1.1
     //       Fast DDS is using the XTYPES v1.2 hash which is 0x31fbaa35
@@ -632,7 +642,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_type_dependencies)
             minimal_type_objects);
 
     // Client call getTypeDependencies operation
-    participant_client->get_type_dependencies(types);
+    SampleIdentity request_id = participant_client->get_type_dependencies(types);
 
     // Wait for sample reception
     test.join();
@@ -657,7 +667,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_type_dependencies)
 
     // Analyze generated reply
     // TODO: wrong instance name
-    check_message_header(reply.header, request_writer->getGuid(), participant_server->guid());
+    check_reply_header(reply.header, request_id);
     // Operation discriminator
     // TODO: wrong hash (updated in XTYPES v1.3)
     EXPECT_EQ(reply.return_value._d(), 0x05aafb31);
@@ -810,7 +820,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_types_complete_request)
             minimal_type_objects);
 
     // Client call getTypeDependencies operation
-    participant_client->get_types(types);
+    SampleIdentity request_id = participant_client->get_types(types);
 
     // Wait for sample reception
     test.join();
@@ -835,7 +845,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_types_complete_request)
 
     // Analyze generated reply
     // TODO: wrong instance name
-    check_message_header(reply.header, request_writer->getGuid(), participant_server->guid());
+    check_reply_header(reply.header, request_id);
     // Operation discriminator
     // TODO: wrong hash (updated in XTYPES v1.3)
     EXPECT_EQ(reply.return_value._d(), 0x018252d3);
@@ -917,7 +927,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_types_minimal_request)
             minimal_type_objects);
 
     // Client call getTypeDependencies operation
-    participant_client->get_types(types);
+    SampleIdentity request_id = participant_client->get_types(types);
 
     // Wait for sample reception
     test.join();
@@ -942,7 +952,7 @@ TEST(TypeLookupServiceTests, typelookup_service_get_types_minimal_request)
 
     // Analyze generated reply
     // TODO: wrong instance name
-    check_message_header(reply.header, request_writer->getGuid(), participant_server->guid());
+    check_reply_header(reply.header, request_id);
     // Operation discriminator
     // TODO: wrong hash (updated in XTYPES v1.3)
     EXPECT_EQ(reply.return_value._d(), 0x018252d3);
