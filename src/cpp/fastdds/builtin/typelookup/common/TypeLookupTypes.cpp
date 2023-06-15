@@ -1350,36 +1350,6 @@ void TypeLookup_RequestTypeSupport::delete_data(
     delete static_cast<TypeLookup_Request*>(data);
 }
 
-/*
-   TypeLookup_ReplyPubSubType::TypeLookup_ReplyPubSubType()
-   {
-
-   }
-
-   TypeLookup_ReplyPubSubType::~TypeLookup_ReplyPubSubType()
-   {
-
-   }
-
-   bool TypeLookup_ReplyPubSubType::serialize(
-        void* data,
-        fastrtps::rtps::SerializedPayload_t* payload)
-   {
-
-   }
-
-   bool TypeLookup_ReplyPubSubType::deserialize(
-        fastrtps::rtps::SerializedPayload_t *payload,
-        void *data)
-   {
-
-   }
-
-   TypeLookup_ReplyTypeSupport::TypeLookup_ReplyTypeSupport()
-    : TypeSupport(new TypeLookup_Reply())
-   {
-   }
- */
 bool TypeLookup_ReplyTypeSupport::serialize(
         void* data,
         fastrtps::rtps::SerializedPayload_t* payload)

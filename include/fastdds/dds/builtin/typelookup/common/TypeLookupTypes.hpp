@@ -321,62 +321,6 @@ public:
 };
 
 // TypeSupports
-class TypeLookup_RequestPubSubType : public TopicDataType
-{
-public:
-    TypeLookup_RequestPubSubType();
-
-    virtual ~TypeLookup_RequestPubSubType() override;
-
-    bool serialize(
-            void *data,
-            fastrtps::rtps::SerializedPayload_t* payload) override;
-
-    bool deserialize(
-            fastrtps::rtps::SerializedPayload_t* payload,
-            void* data) override;
-
-    /*
-    bool getKey(
-            void*,
-            fastrtps::rtps::InstanceHandle_t*,
-            bool) override
-    {}
-    */
-
-    void* createData() override;
-
-    void deleteData(void* data) override;
-};
-
-class TypeLookup_ReplyPubSubType : public TopicDataType
-{
-public:
-    TypeLookup_ReplyPubSubType();
-
-    virtual ~TypeLookup_ReplyPubSubType() override;
-
-    bool serialize(
-            void *data,
-            fastrtps::rtps::SerializedPayload_t* payload) override;
-
-    bool deserialize(
-            fastrtps::rtps::SerializedPayload_t* payload,
-            void* data) override;
-
-    /*
-    bool getKey(
-            void*,
-            fastrtps::rtps::InstanceHandle_t*,
-            bool) override
-    {}
-    */
-
-    void* createData() override;
-
-    void deleteData(void* data) override;
-};
-
 class TypeLookup_RequestTypeSupport : public TypeSupport
 {
 public:
