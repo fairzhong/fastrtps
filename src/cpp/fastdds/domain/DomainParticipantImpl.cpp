@@ -1669,7 +1669,7 @@ fastrtps::rtps::SampleIdentity DomainParticipantImpl::get_type_dependencies(
         const fastrtps::types::TypeIdentifierSeq& in) const
 {
     const fastrtps::rtps::RTPSParticipant* rtps_participant = get_rtps_participant();
-    return nullptr != rtps_participant ?
+    return (nullptr != rtps_participant && nullptr != rtps_participant->typelookup_manager()) ?
            rtps_participant->typelookup_manager()->get_type_dependencies(in) :
            builtin::INVALID_SAMPLE_IDENTITY;
 }
@@ -1678,7 +1678,7 @@ fastrtps::rtps::SampleIdentity DomainParticipantImpl::get_types(
         const fastrtps::types::TypeIdentifierSeq& in) const
 {
     const fastrtps::rtps::RTPSParticipant* rtps_participant = get_rtps_participant();
-    return nullptr != rtps_participant ?
+    return (nullptr != rtps_participant && nullptr != rtps_participant->typelookup_manager()) ?
            rtps_participant->typelookup_manager()->get_types(in) :
            builtin::INVALID_SAMPLE_IDENTITY;
 }
