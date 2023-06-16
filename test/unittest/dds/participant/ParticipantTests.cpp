@@ -3057,6 +3057,20 @@ TEST(ParticipantTests, GetTypes_typelookup_config_client)
 }
 
 /*
+ * Test to check that a Participant with no uninitialized TypeLookup Manager does not crash
+ */
+TEST(ParticipantTests, GetTypes_GetTypeDependencies_sanity_check)
+{
+    // Create participant with TypeLookup Service disabled (default)
+    DomainParticipant* participant = DomainParticipantFactory::get_instance()->create_participant(0,
+            PARTICIPANT_QOS_DEFAULT);
+    fastrtps::types::TypeIdentifierSeq types;
+    register_dynamic_data_string(participant, types);
+    EXPECT_EQ(builtin::INVALID_SAMPLE_IDENTITY, participant->get_type_dependencies(types));
+    EXPECT_EQ(builtin::INVALID_SAMPLE_IDENTITY, participant->get_types(types));
+}
+
+/*
  * This test creates a sequence of TypeIdentifiers to call the get_types() DomainParticipant function.
  * The DomainParticipant is configured to enable the server endpoints of the TypeLookup Service.
  * The method returns the SampleIdentity of the sent request which guid prefix should be the same as the
