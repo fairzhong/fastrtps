@@ -130,6 +130,8 @@ const octet TK_UINT64 = 0x08;
 const octet TK_FLOAT32 = 0x09;
 const octet TK_FLOAT64 = 0x0A;
 const octet TK_FLOAT128 = 0x0B;
+const octet TK_INT8 = 0x0C;
+const octet TK_UINT8 = 0x0D;
 const octet TK_CHAR8 = 0x10;
 const octet TK_CHAR16 = 0x11;
 
