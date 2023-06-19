@@ -53,10 +53,10 @@ public:
 
     /**
      * @brief Constructor
-     * @param pwlp Pointer to the writer liveliness protocol
+     * @param ptlm Pointer to the TypeLookupManager
      */
     TypeLookupRequestListener(
-            TypeLookupManager* pwlp);
+            TypeLookupManager* ptlm);
 
     /**
      * @brief Destructor
