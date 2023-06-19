@@ -49,7 +49,7 @@ TypeObjectFactory* TypeObjectFactory::get_instance()
     if (g_instance == nullptr)
     {
         g_instance = new TypeObjectFactory();
-        g_instance->create_builtin_annotations();
+        register_builtin_annotations_types(g_instance);
     }
     return g_instance;
 }
@@ -192,11 +192,6 @@ TypeObjectFactory::~TypeObjectFactory()
         }
         complete_objects_.clear();
     }
-}
-
-void TypeObjectFactory::create_builtin_annotations()
-{
-    register_builtin_annotations_types(g_instance);
 }
 
 void TypeObjectFactory::nullify_all_entries(
