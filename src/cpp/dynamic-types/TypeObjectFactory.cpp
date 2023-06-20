@@ -145,12 +145,6 @@ TypeObjectFactory::TypeObjectFactory()
     auxIdent->_d(TK_CHAR16);
     identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_CHAR16, auxIdent));
-    // TODO: not defined in XTypes v1.3. Consider removing.
-    // TK_CHAR16:
-    auxIdent = new TypeIdentifier();
-    auxIdent->_d(TK_CHAR16);
-    identifiers_created_.push_back(auxIdent);
-    identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_CHAR16T, auxIdent));
 }
 
 TypeObjectFactory::~TypeObjectFactory()
@@ -978,7 +972,7 @@ TypeKind TypeObjectFactory::get_type_kind(
     {
         return TK_FLOAT128;
     }
-    else if (type_name == TKNAME_CHAR16 || type_name == TKNAME_CHAR16T)
+    else if (type_name == TKNAME_CHAR16)
     {
         return TK_CHAR16;
     }
