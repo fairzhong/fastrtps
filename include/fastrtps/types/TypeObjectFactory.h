@@ -244,6 +244,20 @@ public:
             const TypeIdentifier* identifier,
             const TypeObject* object = nullptr) const;
 
+    /**
+     * @brief Check if a given TypeIdentifier is COMPLETE (XTYPES v1.3 Clause 7.3.4.6.6)
+     *
+     * These are HASH TypeIdentifiers that involve hashing serialized COMPLETE TypeObjects.
+     * They consist of:
+     *     - those with discriminator EK_COMPLETE
+     *     - those with discriminator TI_STRONG_COMPONENT where the contained TypeObjectHashId has discriminator
+     *       EK_COMPLETE (TODO: not yet supported)
+     *     - those for plain collections where the contained PlainCollectionHeader EquivalenceKind is EK_COMPLETE
+     *
+     * @param identifier TypeIdentifier to check its completeness
+     * @return true if the given TypeIdentifier is COMPLETE.
+     *         false otherwise.
+     */
     RTPS_DllAPI bool is_type_identifier_complete(
             const TypeIdentifier* identifier) const;
 

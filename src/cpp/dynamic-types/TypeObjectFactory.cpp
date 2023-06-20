@@ -1305,20 +1305,19 @@ bool TypeObjectFactory::is_type_identifier_complete(
         case TI_STRING16_LARGE:
             return false;
         case TI_PLAIN_SEQUENCE_SMALL:
-            return is_type_identifier_complete(identifier->seq_sdefn().element_identifier());
+            return identifier->seq_sdefn().header().equiv_kind() == EK_COMPLETE;
         case TI_PLAIN_SEQUENCE_LARGE:
-            return is_type_identifier_complete(identifier->seq_ldefn().element_identifier());
+            return identifier->seq_ldefn().header().equiv_kind() == EK_COMPLETE;
         case TI_PLAIN_ARRAY_SMALL:
-            return is_type_identifier_complete(identifier->array_sdefn().element_identifier());
+            return identifier->array_sdefn().header().equiv_kind() == EK_COMPLETE;
         case TI_PLAIN_ARRAY_LARGE:
-            return is_type_identifier_complete(identifier->array_ldefn().element_identifier());
+            return identifier->array_ldefn().header().equiv_kind() == EK_COMPLETE;
         case TI_PLAIN_MAP_SMALL:
-            return is_type_identifier_complete(identifier->map_sdefn().element_identifier())
-                   && is_type_identifier_complete(identifier->map_sdefn().key_identifier());
+            return identifier->map_sdefn().header().equiv_kind() == EK_COMPLETE;
         case TI_PLAIN_MAP_LARGE:
-            return is_type_identifier_complete(identifier->map_ldefn().element_identifier())
-                   && is_type_identifier_complete(identifier->map_ldefn().key_identifier());
+            return identifier->map_ldefn().header().equiv_kind() == EK_COMPLETE;
         case TI_STRONGLY_CONNECTED_COMPONENT:
+            // TODO: not yet supported.
             return false;
         case EK_COMPLETE:
             return true;
