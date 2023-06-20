@@ -120,32 +120,66 @@ protected:
             const TypeIdentifier* identifier) const;
 
 public:
+
+    /**
+     * @brief Returns the TypeObjectFactory singleton instance.
+     *
+     * @return A raw pointer to the TypeObjectFactory singleton instance.
+     */
     RTPS_DllAPI static TypeObjectFactory* get_instance();
 
+    /**
+     * @brief Delete the TypeObjectFactory singleton instance.
+     *
+     * @return RETCODE_OK if correctly deleted.
+     *         RETCODE_ERROR if the singleton instance is not initialized.
+     */
     RTPS_DllAPI static ReturnCode_t delete_instance();
 
     ~TypeObjectFactory();
 
     /**
-     * @brief get_type_information Retrieves the TypeInformation of the named type.
-     * @param type_name
-     * @return
+     * @brief Retrieve the TypeInformation of the named type.
+     *
+     * @param type_name Name of the type which TypeInformation is queried.
+     * @return Pointer to the TypeInformation of the given type name.
+     *         If no TypeInformation is available, nullptr is returned.
      */
     RTPS_DllAPI const TypeInformation* get_type_information(
             const std::string &type_name) const;
 
     /**
-     * @brief get_type_information Retrieves the TypeInformation of the given TypeIdentifier.
-     * @param identifier
-     * @return
+     * @brief Retrieve the TypeInformation of the given TypeIdentifier.
+     *
+     * @param identifier TypeIdentifier which TypeInformation is queried.
+     * @return Pointer to the TypeInformation of the given TypeIdentifier.
+     *         If no TypeInformation is available, nullptr is returned.
      */
     RTPS_DllAPI TypeInformation* get_type_information(
             const TypeIdentifier* identifier) const;
 
+    /**
+     * @brief Retrieve the TypeObject of the named type.
+     *
+     * @param type_name Name of the type which TypeObject is queried.
+     * @param complete Flag to return either the complete or the minimal TypeObject.
+     *                 Default value: minimal TypeObject.
+     * @return Pointer to the TypeObject of the given type name.
+     *         If the TypeObject is not known, nullptr is returned.
+     */
     RTPS_DllAPI const TypeObject* get_type_object(
             const std::string& type_name,
             bool complete = false) const;
 
+    /**
+     * @brief Retrieve the TypeObject of the given TypeIdentifier.
+     *
+     * @param identifier TypeIdentifier which TypeObject is queried.
+     * @return Pointer to the TypeObject of the given TypeIdentifier. The returned TypeObject is consistent with the
+     *         given TypeIdentifier: a minimal TypeIdentifier returns a minimal TypeObject and a complete TypeIdentifier
+     *         returns a minimal TypeObject.
+     *         If the TypeObject is not known, nullptr is returned.
+     */
     RTPS_DllAPI const TypeObject* get_type_object(
             const TypeIdentifier* identifier) const;
 
@@ -161,10 +195,27 @@ public:
     RTPS_DllAPI const TypeIdentifier* get_primitive_type_identifier(
             TypeKind kind) const;
 
+    /**
+     * @brief Retrieve the TypeIdentifier of the named type.
+     *
+     * @param type_name Name of the type which TypeIdentifier is queried.
+     * @param complete Flag to return either the complete or the minimal TypeIdentifier.
+     *                 Default value: minimal TypeIdentifier.
+     * @return Pointer to the TypeIdentifier of the given type name.
+     *         If the TypeIdentifier is not known, nullptr is returned.
+     */
     RTPS_DllAPI const TypeIdentifier* get_type_identifier(
             const std::string& type_name,
             bool complete = false) const;
 
+    /**
+     * @brief Retrieve the TypeIdentifier of the named type.
+     *        The complete TypeIdentifier is queried first and if not found the minimal TypeIdentifier is queried.
+     *
+     * @param type_name Name of the type which TypeIdentifier is queried.
+     * @return Pointer to the TypeIdentifier of the given type name.
+     *         If the TypeIdentifier is not known, nullptr is returned.
+     */
     RTPS_DllAPI const TypeIdentifier* get_type_identifier_trying_complete(
             const std::string& type_name) const;
 
