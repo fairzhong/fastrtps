@@ -72,83 +72,84 @@ TypeObjectFactory::TypeObjectFactory()
     TypeIdentifier* auxIdent;
     // TK_BOOLEAN:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_BOOLEAN);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_BOOLEAN, auxIdent));
     // TK_BYTE:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_BYTE);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_BYTE, auxIdent));
-    // TK_BYTE:
+    // TK_INT8:
     auxIdent = new TypeIdentifier();
+    auxIdent->_d(TK_INT8);
     identifiers_created_.push_back(auxIdent);
-    auxIdent->_d(TK_BYTE);
-    identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_UINT8, auxIdent));
-    // TK_BYTE:
-    auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
-    auxIdent->_d(TK_BYTE);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_INT8, auxIdent));
     // TK_INT16:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_INT16);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_INT16, auxIdent));
     // TK_INT32:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_INT32);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_INT32, auxIdent));
     // TK_INT64:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_INT64);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_INT64, auxIdent));
+    // TK_UINT8:
+    auxIdent = new TypeIdentifier();
+    auxIdent->_d(TK_UINT8);
+    identifiers_created_.push_back(auxIdent);
+    identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_UINT8, auxIdent));
     // TK_UINT16:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_UINT16);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_UINT16, auxIdent));
     // TK_UINT32:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_UINT32);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_UINT32, auxIdent));
     // TK_UINT64:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_UINT64);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_UINT64, auxIdent));
     // TK_FLOAT32:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_FLOAT32);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_FLOAT32, auxIdent));
     // TK_FLOAT64:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_FLOAT64);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_FLOAT64, auxIdent));
     // TK_FLOAT128:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_FLOAT128);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_FLOAT128, auxIdent));
     // TK_CHAR8:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_CHAR8);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_CHAR8, auxIdent));
     // TK_CHAR16:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_CHAR16);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_CHAR16, auxIdent));
+    // TODO: not defined in XTypes v1.3. Consider removing.
     // TK_CHAR16:
     auxIdent = new TypeIdentifier();
-    identifiers_created_.push_back(auxIdent);
     auxIdent->_d(TK_CHAR16);
+    identifiers_created_.push_back(auxIdent);
     identifiers_.insert(std::pair<std::string, TypeIdentifier*>(TKNAME_CHAR16T, auxIdent));
 }
 
