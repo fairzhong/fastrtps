@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  publisher:
+    image: ubuntu:22.04
+    volumes:
+      - @PROJECT_BINARY_DIR@:@PROJECT_BINARY_DIR@
+    environment:
+      LD_LIBRARY_PATH: @PROJECT_BINARY_DIR@/src/cpp:@fastcdr_BINARY_DIR@
+      EXAMPLE_DIR: @PROJECT_BINARY_DIR@/examples/cpp/dds/BasicConfigurationExample
+    command: bash -c "$${EXAMPLE_DIR}/BasicConfigurationExample publisher --wait 2 --samples 10 --interval 10 --reliable --transient & $${EXAMPLE_DIR}/BasicConfigurationExample subscriber --samples 10 --reliable --transient"
+
+  subscriber:
+    image: ubuntu:22.04
+    volumes:
+      - @PROJECT_BINARY_DIR@:@PROJECT_BINARY_DIR@
+    environment:
+      LD_LIBRARY_PATH: @PROJECT_BINARY_DIR@/src/cpp:@fastcdr_BINARY_DIR@
+      EXAMPLE_DIR: @PROJECT_BINARY_DIR@/examples/cpp/dds/BasicConfigurationExample
+    command: bash -c "$${EXAMPLE_DIR}/BasicConfigurationExample subscriber --samples 10 --reliable --transient"

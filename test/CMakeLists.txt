@@ -53,6 +53,16 @@ if(EPROSIMA_BUILD_TESTS)
     if(UNIX AND NOT APPLE AND STRICT_REALTIME)
         add_subdirectory(realtime)
     endif()
+
+    find_package(PythonInterp 3 REQUIRED)
+    if(PYTHONINTERP_FOUND)
+        file(GLOB files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/examples/*)
+        foreach(file ${files})
+            configure_file(${file} ${PROJECT_BINARY_DIR}/test/${file} @ONLY)
+        endforeach()
+        add_test(NAME example_tests COMMAND ${PYTHON_EXECUTABLE} -m pytest -vrP WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test/examples)
+    endif()
+
 endif()
 
 ###############################################################################
