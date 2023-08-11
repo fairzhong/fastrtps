@@ -88,6 +88,24 @@ set(DYNAMIC_TYPES_TEST_SOURCE
     ${PROJECT_SOURCE_DIR}/src/cpp/rtps/flowcontrol/FlowControllerConsts.cpp
     )
 
+set(DYNAMIC_TYPES_DDS_TYPES_TEST_SOURCE
+    DynamicTypesDDSTypesTest.cpp
+    idl/Basic.cxx
+    idl/BasicPubSubTypes.cxx
+    idl/BasicTypeObject.cxx
+    ${DYNAMIC_TYPES_SOURCE}
+
+    ${PROJECT_SOURCE_DIR}/src/cpp/rtps/xmlparser/XMLProfileManager.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/rtps/xmlparser/XMLParser.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/rtps/xmlparser/XMLDynamicParser.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/rtps/xmlparser/XMLElementParser.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/rtps/xmlparser/XMLParserCommon.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/publisher/qos/WriterQos.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/subscriber/qos/ReaderQos.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/rtps/flowcontrol/ThroughputControllerDescriptor.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/rtps/flowcontrol/FlowControllerConsts.cpp
+    )
+
 set(DYNAMIC_COMPLEX_TYPES_TEST_SOURCE
     DynamicComplexTypesTests.cpp
     idl/Test.cxx
@@ -138,6 +156,37 @@ if(QNX)
 endif()
 add_gtest(DynamicTypesTests SOURCES ${DYNAMIC_TYPES_TEST_SOURCE})
 
+add_executable(DynamicTypesDDSTypesTest ${DYNAMIC_TYPES_DDS_TYPES_TEST_SOURCE})
+target_compile_definitions(DynamicTypesDDSTypesTest PRIVATE FASTRTPS_NO_LIB
+    BOOST_ASIO_STANDALONE
+    ASIO_STANDALONE
+    $<$<AND:$<NOT:$<BOOL:${WIN32}>>,$<STREQUAL:"${CMAKE_BUILD_TYPE}","Debug">>:__DEBUG>
+    $<$<BOOL:${INTERNAL_DEBUG}>:__INTERNALDEBUG> # Internal debug activated.
+    )
+target_include_directories(DynamicTypesDDSTypesTest PRIVATE
+    ${Asio_INCLUDE_DIR}
+    ${PROJECT_SOURCE_DIR}/test/mock/rtps/TCPTransportDescriptor
+    ${PROJECT_SOURCE_DIR}/test/mock/rtps/TCPv4TransportDescriptor
+    ${PROJECT_SOURCE_DIR}/test/mock/rtps/TCPv6TransportDescriptor
+    ${PROJECT_SOURCE_DIR}/test/mock/rtps/UDPTransportDescriptor
+    ${PROJECT_SOURCE_DIR}/test/mock/rtps/UDPv4TransportDescriptor
+    ${PROJECT_SOURCE_DIR}/test/mock/rtps/UDPv6TransportDescriptor
+    ${PROJECT_SOURCE_DIR}/test/mock/rtps/SharedMemTransportDescriptor
+    $<$<BOOL:${TINYXML2_INCLUDE_DIR}>:${TINYXML2_INCLUDE_DIR}>
+    ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src/cpp
+    $<$<BOOL:${ANDROID}>:${ANDROID_IFADDRS_INCLUDE_DIR}>
+    )
+target_link_libraries(DynamicTypesDDSTypesTest GTest::gtest
+    $<$<BOOL:${WIN32}>:iphlpapi$<SEMICOLON>Shlwapi>
+    $<$<BOOL:${WIN32}>:ws2_32>
+    ${TINYXML2_LIBRARY}
+    fastcdr
+    )
+if(QNX)
+    target_link_libraries(DynamicTypesDDSTypesTest socket)
+endif()
+add_gtest(DynamicTypesDDSTypesTest SOURCES ${DYNAMIC_TYPES_DDS_TYPES_TEST_SOURCE})
 
 add_executable(DynamicComplexTypesTests ${DYNAMIC_COMPLEX_TYPES_TEST_SOURCE})
 target_compile_definitions(DynamicComplexTypesTests PRIVATE
