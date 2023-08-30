@@ -96,6 +96,9 @@ set(DYNAMIC_TYPES_DDS_TYPES_TEST_SOURCE
     idl/dds-types-test/aliases.cxx
     idl/dds-types-test/aliasesPubSubTypes.cxx
     idl/dds-types-test/aliasesTypeObject.cxx
+    idl/dds-types-test/appendable.cxx
+    idl/dds-types-test/appendablePubSubTypes.cxx
+    idl/dds-types-test/appendableTypeObject.cxx
     idl/dds-types-test/arrays.cxx
     idl/dds-types-test/arraysPubSubTypes.cxx
     idl/dds-types-test/arraysTypeObject.cxx
@@ -108,6 +111,9 @@ set(DYNAMIC_TYPES_DDS_TYPES_TEST_SOURCE
     idl/dds-types-test/enumerations.cxx
     idl/dds-types-test/enumerationsPubSubTypes.cxx
     idl/dds-types-test/enumerationsTypeObject.cxx
+    idl/dds-types-test/final.cxx
+    idl/dds-types-test/finalPubSubTypes.cxx
+    idl/dds-types-test/finalTypeObject.cxx
     idl/dds-types-test/inheritance.cxx
     idl/dds-types-test/inheritancePubSubTypes.cxx
     idl/dds-types-test/inheritanceTypeObject.cxx
