@@ -25,7 +25,39 @@ def test_basic_configuration():
                 received += 1
                 continue
 
-        if sent * 2 == received:
+        if sent * 7 == received:
+            ret = True
+    except subprocess.CalledProcessError:
+        print(l for l in out)
+    except subprocess.TimeoutExpired:
+        print('TIMEOUT')
+
+    assert(ret)
+
+def test_hello_world():
+    """."""
+    ret = False
+    out = ''
+    try:
+        out = subprocess.check_output(
+            'docker compose -f hello_world.yml up',
+            stderr=subprocess.STDOUT,
+            shell=True,
+            timeout=30
+        ).decode().split('\n')
+
+        sent = 0
+        received = 0
+        for line in out:
+            if 'SENT' in line:
+                sent += 1
+                continue
+
+            if 'RECEIVED' in line:
+                received += 1
+                continue
+
+        if sent * 4 == received:
             ret = True
     except subprocess.CalledProcessError:
         print(l for l in out)

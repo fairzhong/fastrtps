@@ -55,7 +55,7 @@ if(EPROSIMA_BUILD_TESTS)
     endif()
 
     find_package(PythonInterp 3 REQUIRED)
-    if(PYTHONINTERP_FOUND)
+    if(PYTHONINTERP_FOUND AND THIRDPARTY EQUAL "FORCE")
         file(GLOB files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/examples/*)
         foreach(file ${files})
             configure_file(${file} ${PROJECT_BINARY_DIR}/test/${file} @ONLY)
