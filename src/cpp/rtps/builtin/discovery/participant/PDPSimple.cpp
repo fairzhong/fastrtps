@@ -281,11 +281,12 @@ bool PDPSimple::createPDPEndpoints()
     ratt.endpoint.durabilityKind = TRANSIENT_LOCAL;
     ratt.endpoint.reliabilityKind = BEST_EFFORT;
     ratt.matched_writers_allocation = allocation.participants;
-    mp_listener = new PDPListener(this);
+    
+    endpoints->listener.reset(new PDPListener(this));
     RTPSReader* reader = nullptr;
     if (mp_RTPSParticipant->createReader(&reader, ratt,
             endpoints->reader.payload_pool_, endpoints->reader.history_.get(),
-            mp_listener, c_EntityId_SPDPReader, true, false))
+            endpoints->listener.get(), c_EntityId_SPDPReader, true, false))
     {
         endpoints->reader.reader_ = dynamic_cast<StatelessReader*>(reader);
 #if HAVE_SECURITY
@@ -295,8 +296,7 @@ bool PDPSimple::createPDPEndpoints()
     else
     {
         logError(RTPS_PDP, "SimplePDP Reader creation failed");
-        delete mp_listener;
-        mp_listener = nullptr;
+        endpoints->listener.reset();
         endpoints->reader.release();
         return false;
     }

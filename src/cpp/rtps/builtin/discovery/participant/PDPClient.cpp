@@ -349,7 +349,7 @@ bool PDPClient::create_ds_pdp_reliable_endpoints(
     }
 #endif // HAVE_SECURITY
 
-    mp_listener = new PDPListener(this);
+    endpoints.listener.reset(new PDPListener(this));
 
     RTPSReader* reader = nullptr;
 #if HAVE_SECURITY
@@ -358,7 +358,7 @@ bool PDPClient::create_ds_pdp_reliable_endpoints(
 #else
     EntityId_t reader_entity = c_EntityId_SPDPReader;
 #endif // if HAVE_SECURITY
-    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(), mp_listener,
+    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(), endpoints.listener.get(),
             reader_entity, true, false))
     {
         endpoints.reader.reader_ = dynamic_cast<fastrtps::rtps::StatefulReader*>(reader);
@@ -370,8 +370,7 @@ bool PDPClient::create_ds_pdp_reliable_endpoints(
     else
     {
         logError(RTPS_PDP, "PDPClient Reader creation failed");
-        delete mp_listener;
-        mp_listener = nullptr;
+        endpoints.listener.reset();
         endpoints.reader.release();
         return false;
     }
