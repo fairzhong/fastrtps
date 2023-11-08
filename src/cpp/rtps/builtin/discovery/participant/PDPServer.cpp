@@ -400,7 +400,7 @@ bool PDPServer::create_ds_pdp_reliable_endpoints(
 #endif // HAVE_SQLITE3
 
     // PDP Listener
-    mp_listener = new PDPServerListener(this);
+    endpoints.listener.reset(new PDPServerListener(this));
 
     // Create PDP Reader
     RTPSReader* reader = nullptr;
@@ -409,7 +409,7 @@ bool PDPServer::create_ds_pdp_reliable_endpoints(
 #else
     EntityId_t reader_entity = c_EntityId_SPDPReader;
 #endif // if HAVE_SECURITY
-    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(), mp_listener,
+    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(), endpoints.listener.get(),
             reader_entity, true, false))
     {
         endpoints.reader.reader_ = dynamic_cast<fastrtps::rtps::StatefulReader*>(reader);
@@ -425,8 +425,7 @@ bool PDPServer::create_ds_pdp_reliable_endpoints(
     else
     {
         EPROSIMA_LOG_ERROR(RTPS_PDP_SERVER, "PDPServer Reader creation failed");
-        delete mp_listener;
-        mp_listener = nullptr;
+        endpoints.listener.reset();
         endpoints.reader.release();
         return false;
     }
@@ -1778,7 +1777,7 @@ bool PDPServer::process_backup_discovery_database_restore(
             {
                 change_aux->writerGUID = change_aux->write_params.sample_identity().writer_guid();
                 change_aux->sequenceNumber = change_aux->write_params.sample_identity().sequence_number();
-                mp_listener->onNewCacheChangeAdded(endpoints->reader.reader_, change_aux);
+                builtin_endpoints_->main_listener()->onNewCacheChangeAdded(endpoints->reader.reader_, change_aux);
             }
         }
 
