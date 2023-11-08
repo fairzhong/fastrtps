@@ -93,7 +93,6 @@ PDP::PDP (
     , writer_proxies_number_(allocation.total_writers().initial)
     , writer_proxies_pool_(allocation.total_writers())
     , m_hasChangedLocalPDP(true)
-    , mp_listener(nullptr)
     , temp_reader_proxies_({
                 allocation.locators.max_unicast_locators,
                 allocation.locators.max_multicast_locators,
@@ -137,9 +136,6 @@ PDP::~PDP()
 
     builtin_endpoints_->delete_pdp_endpoints(mp_RTPSParticipant);
     builtin_endpoints_.reset();
-
-    delete mp_listener;
-    mp_listener = nullptr;
 
     for (ParticipantProxyData* it : participant_proxies_)
     {

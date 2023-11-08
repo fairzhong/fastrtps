@@ -46,6 +46,11 @@ struct SimplePDPEndpoints : public PDPEndpoints
         return DISC_BUILTIN_ENDPOINT_PARTICIPANT_ANNOUNCER | DISC_BUILTIN_ENDPOINT_PARTICIPANT_DETECTOR;
     }
 
+    const std::unique_ptr<fastrtps::rtps::ReaderListener>& main_listener() const
+    {
+        return listener;
+    }
+
     bool enable_pdp_readers(
             fastrtps::rtps::RTPSParticipantImpl* participant) override
     {
@@ -82,6 +87,9 @@ struct SimplePDPEndpoints : public PDPEndpoints
 
     //! Builtin Simple PDP writer
     BuiltinWriter<fastrtps::rtps::StatelessWriter> writer;
+
+    //! Listener for Simple PDP reader
+    std::unique_ptr<fastrtps::rtps::ReaderListener> listener;
 };
 
 } // namespace rtps

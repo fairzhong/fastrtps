@@ -451,8 +451,6 @@ protected:
     ResourceLimitedVector<WriterProxyData*> writer_proxies_pool_;
     //!Variable to indicate if any parameter has changed.
     std::atomic_bool m_hasChangedLocalPDP;
-    //!Listener for the SPDP messages.
-    ReaderListener* mp_listener;
     //! ProxyPool for temporary reader proxies
     ProxyPool<ReaderProxyData> temp_reader_proxies_;
     //! ProxyPool for temporary writer proxies
