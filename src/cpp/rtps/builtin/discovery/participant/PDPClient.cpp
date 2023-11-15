@@ -286,10 +286,6 @@ bool PDPClient::create_ds_pdp_best_effort_reader(
             endpoints.stateless_reader.listener_.get(), c_EntityId_SPDPReader, true, false))
     {
         endpoints.stateless_reader.reader_ = dynamic_cast<fastrtps::rtps::StatelessReader*>(reader);
-
-        // Enable unknown clients to reach this reader
-        reader->enableMessagesFromUnkownWriters(true);
-
         mp_RTPSParticipant->set_endpoint_rtps_protection_supports(reader, false);
     }
     // Could not create PDP Reader, so return false
