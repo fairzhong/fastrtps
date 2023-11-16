@@ -139,6 +139,12 @@ private:
      */
     bool createPDPEndpoints() override;
 
+    bool create_dcps_participant_endpoints();
+
+#if HAVE_SECURITY
+    bool create_dcps_participant_secure_endpoints();
+#endif // HAVE_SECURITY
+
 };
 
 } /* namespace rtps */
