@@ -284,11 +284,11 @@ bool PDPSimple::createPDPEndpoints()
     ratt.endpoint.reliabilityKind = BEST_EFFORT;
     ratt.matched_writers_allocation = allocation.participants;
     
-    endpoints->listener.reset(new PDPListener(this));
+    endpoints->reader.listener_.reset(new PDPListener(this));
     RTPSReader* reader = nullptr;
     if (mp_RTPSParticipant->createReader(&reader, ratt,
             endpoints->reader.payload_pool_, endpoints->reader.history_.get(),
-            endpoints->listener.get(), c_EntityId_SPDPReader, true, false))
+            endpoints->reader.listener_.get(), c_EntityId_SPDPReader, true, false))
     {
         endpoints->reader.reader_ = dynamic_cast<StatelessReader*>(reader);
 #if HAVE_SECURITY
@@ -298,7 +298,6 @@ bool PDPSimple::createPDPEndpoints()
     else
     {
         EPROSIMA_LOG_ERROR(RTPS_PDP, "SimplePDP Reader creation failed");
-        endpoints->listener.reset();
         endpoints->reader.release();
         return false;
     }

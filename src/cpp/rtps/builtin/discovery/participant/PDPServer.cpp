@@ -290,7 +290,7 @@ bool PDPServer::create_ds_pdp_best_effort_reader(
     ratt.endpoint.durabilityKind = VOLATILE;
     ratt.endpoint.reliabilityKind = BEST_EFFORT;
 
-    endpoints.stateless_listener.reset(new PDPSecurityInitiatorListener(this,
+    endpoints.stateless_reader.listener_.reset(new PDPSecurityInitiatorListener(this,
             [this](const ParticipantProxyData& participant_data)
             {
                 auto endpoints = static_cast<fastdds::rtps::DiscoveryServerPDPEndpoints*>(builtin_endpoints_.get());
@@ -317,7 +317,7 @@ bool PDPServer::create_ds_pdp_best_effort_reader(
     // Create PDP Reader
     RTPSReader* reader = nullptr;
     if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.stateless_reader.history_.get(),
-            endpoints.stateless_listener.get(), c_EntityId_SPDPReader, true, false))
+            endpoints.stateless_reader.listener_.get(), c_EntityId_SPDPReader, true, false))
     {
         endpoints.stateless_reader.reader_ = dynamic_cast<fastrtps::rtps::StatelessReader*>(reader);
 
@@ -330,8 +330,6 @@ bool PDPServer::create_ds_pdp_best_effort_reader(
     else
     {
         EPROSIMA_LOG_ERROR(RTPS_PDP_SERVER, "PDPServer security initiation Reader creation failed");
-
-        endpoints.stateless_listener.reset();
         endpoints.stateless_reader.release();
         return false;
     }
@@ -400,7 +398,7 @@ bool PDPServer::create_ds_pdp_reliable_endpoints(
 #endif // HAVE_SQLITE3
 
     // PDP Listener
-    endpoints.listener.reset(new PDPServerListener(this));
+    endpoints.reader.listener_.reset(new PDPServerListener(this));
 
     // Create PDP Reader
     RTPSReader* reader = nullptr;
@@ -409,8 +407,8 @@ bool PDPServer::create_ds_pdp_reliable_endpoints(
 #else
     EntityId_t reader_entity = c_EntityId_SPDPReader;
 #endif // if HAVE_SECURITY
-    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(), endpoints.listener.get(),
-            reader_entity, true, false))
+    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(),
+            endpoints.reader.listener_.get(), reader_entity, true, false))
     {
         endpoints.reader.reader_ = dynamic_cast<fastrtps::rtps::StatefulReader*>(reader);
 
@@ -425,7 +423,6 @@ bool PDPServer::create_ds_pdp_reliable_endpoints(
     else
     {
         EPROSIMA_LOG_ERROR(RTPS_PDP_SERVER, "PDPServer Reader creation failed");
-        endpoints.listener.reset();
         endpoints.reader.release();
         return false;
     }
