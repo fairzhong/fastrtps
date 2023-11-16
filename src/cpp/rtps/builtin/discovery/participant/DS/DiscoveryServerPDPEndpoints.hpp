@@ -48,7 +48,7 @@ struct DiscoveryServerPDPEndpoints : public PDPEndpoints
 
     const std::unique_ptr<fastrtps::rtps::ReaderListener>& main_listener() const
     {
-        return listener;
+        return reader.listener_;
     }
 
     bool enable_pdp_readers(
@@ -87,9 +87,6 @@ struct DiscoveryServerPDPEndpoints : public PDPEndpoints
 
     //! Builtin Simple PDP writer
     BuiltinWriter<fastrtps::rtps::StatefulWriter> writer;
-
-    //! Listener for Simple PDP reader
-    std::unique_ptr<fastrtps::rtps::ReaderListener> listener;
 };
 
 } // namespace rtps
