@@ -4586,6 +4586,119 @@ TEST_F(Security, MaliciousHeartbeatIgnore)
     reader.block_for_all();
 }
 
+TEST_P(Security, MaliciousParticipantRemovalIgnore)
+{
+    PubSubWriter<HelloWorldPubSubType> writer("HelloWorldTopic_MaliciousParticipantRemovalIgnore");
+    PubSubReader<HelloWorldPubSubType> reader("HelloWorldTopic_MaliciousParticipantRemovalIgnore");
+
+    struct MaliciousParticipantRemoval
+    {
+        std::array<char, 4> rtps_id{ {'R', 'T', 'P', 'S'} };
+        std::array<uint8_t, 2> protocol_version{ {2, 3} };
+        std::array<uint8_t, 2> vendor_id{ {0x01, 0x0F} };
+        GuidPrefix_t sender_prefix{};
+
+        struct DataSubMsg
+        {
+            struct Header
+            {
+                uint8_t submessage_id = 0x15;
+#if FASTDDS_IS_BIG_ENDIAN_TARGET
+                uint8_t flags = 0x02;
+#else
+                uint8_t flags = 0x03;
+#endif  // FASTDDS_IS_BIG_ENDIAN_TARGET
+                uint16_t submessage_length = 2 + 2 + 4 + 4 + 8;
+                uint16_t extra_flags = 0;
+                uint16_t octets_to_inline_qos = 4 + 4 + 8;
+                EntityId_t reader_id{};
+                EntityId_t writer_id{};
+                SequenceNumber_t sn{};
+            };
+
+            struct InlineQos
+            {
+                struct KeyHash
+                {
+                    uint16_t pid = 0x0070;  // PID_KEY_HASH
+                    uint16_t plen = 16;
+                    GUID_t guid{};
+                };
+
+                struct StatusInfo
+                {
+                    uint16_t pid = 0x0071;  // PID_STATUS_INFO
+                    uint16_t plen = 4;
+                    uint8_t flags[4] = { 0x00, 0x00, 0x00, 0x03 };
+                };
+
+                struct Sentinel
+                {
+                    uint16_t pid = 0x0001;  // PID_SENTINEL
+                    uint16_t plen = 0;
+                };
+
+                KeyHash hash;
+                StatusInfo status;
+                Sentinel sentinel;
+            };
+
+            Header header;
+            InlineQos inline_qos;
+        }
+        data;
+    };
+
+    // Set common QoS
+    reader.history_depth(10).reliability(eprosima::fastrtps::RELIABLE_RELIABILITY_QOS);
+    writer.history_depth(10).reliability(eprosima::fastrtps::RELIABLE_RELIABILITY_QOS);
+
+    // Configure security
+    const std::string governance_file("governance_helloworld_all_enable.smime");
+    const std::string permissions_file("permissions_helloworld.smime");
+    CommonPermissionsConfigure(reader, writer, governance_file, permissions_file);
+
+    // Initialize and wait for authorization and discovery
+    reader.init();
+    ASSERT_TRUE(reader.isInitialized());
+    writer.init();
+    ASSERT_TRUE(writer.isInitialized());
+    reader.waitAuthorized();
+    writer.waitAuthorized();
+    reader.wait_discovery();
+    writer.wait_discovery();
+
+    // Send fake DATA(p[UD])
+    UDPMessageSender fake_msg_sender;
+    {
+        auto writer_guid = writer.datawriter_guid();
+        auto participant_guid = writer.participant_guid();
+        auto domain_id = static_cast<uint32_t>(GET_PID() % 230);
+
+        MaliciousParticipantRemoval packet{};
+        packet.sender_prefix = writer_guid.guidPrefix;
+        packet.data.header.submessage_length += sizeof(packet.data.inline_qos);
+        packet.data.header.writer_id = c_EntityId_SPDPWriter;
+        packet.data.header.reader_id = c_EntityId_SPDPReader;
+        packet.data.header.sn.low = 100;
+        packet.data.inline_qos.hash.guid = participant_guid;
+
+        Locator_t mcast_locator;
+        ASSERT_TRUE(IPLocator::setIPv4(mcast_locator, "239.255.0.1"));
+        mcast_locator.port = 7400 + 250 * domain_id;
+
+        CDRMessage_t msg(0);
+        uint32_t msg_len = static_cast<uint32_t>(sizeof(packet));
+        msg.init(reinterpret_cast<octet*>(&packet), msg_len);
+        msg.length = msg_len;
+        msg.pos = msg_len;
+        fake_msg_sender.send(msg, mcast_locator);
+    }
+
+    EXPECT_FALSE(reader.wait_participant_undiscovery(std::chrono::seconds(1)));
+}
+
+
 void blackbox_security_init()
 {
     certs_path = std::getenv("CERTS_PATH");
