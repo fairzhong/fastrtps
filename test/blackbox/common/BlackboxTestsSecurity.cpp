@@ -86,36 +86,33 @@ public:
         }
     }
 
-protected:
-
-    struct UDPMessageSender
-    {
-        asio::io_service service;
-        asio::ip::udp::socket socket;
-
-        UDPMessageSender()
-            : service()
-            , socket(service)
-        {
-            socket.open(asio::ip::udp::v4());
-        }
-
-        void send(
-                const CDRMessage_t& msg,
-                const Locator_t& destination)
-        {
-            std::string addr = IPLocator::toIPv4string(destination);
-            unsigned short port = static_cast<unsigned short>(destination.port);
-            auto remote = asio::ip::udp::endpoint(asio::ip::address::from_string(addr), port);
-            asio::error_code ec;
-
-            socket.send_to(asio::buffer(msg.buffer, msg.length), remote, 0, ec);
-        }
-
-    };
-
 };
 
+struct UDPMessageSender
+{
+    asio::io_service service;
+    asio::ip::udp::socket socket;
+
+    UDPMessageSender()
+        : service()
+        , socket(service)
+    {
+        socket.open(asio::ip::udp::v4());
+    }
+
+    void send(
+        const CDRMessage_t& msg,
+        const Locator_t& destination)
+    {
+        std::string addr = IPLocator::toIPv4string(destination);
+        unsigned short port = static_cast<unsigned short>(destination.port);
+        auto remote = asio::ip::udp::endpoint(asio::ip::address::from_string(addr), port);
+        asio::error_code ec;
+
+        socket.send_to(asio::buffer(msg.buffer, msg.length), remote, 0, ec);
+    }
+
+};
 
 class SecurityPkcs : public ::testing::Test
 {
@@ -4491,7 +4488,7 @@ TEST_P(Security, BuiltinAuthenticationAndAccessAndCryptoPlugin_PermissionsEnable
     BuiltinAuthenticationAndAccessAndCryptoPlugin_Permissions_validation_ok_common(reader, writer, governance_file);
 }
 
-TEST_F(Security, MaliciousHeartbeatIgnore)
+TEST(Security, MaliciousHeartbeatIgnore)
 {
     PubSubWriter<HelloWorldPubSubType> writer("HelloWorldTopic_MaliciousHeartbeatIgnore");
     PubSubReader<HelloWorldPubSubType> reader("HelloWorldTopic_MaliciousHeartbeatIgnore");
@@ -4696,6 +4693,12 @@ TEST_P(Security, MaliciousParticipantRemovalIgnore)
     }
 
     EXPECT_FALSE(reader.wait_participant_undiscovery(std::chrono::seconds(1)));
+
+    auto data = default_helloworld_data_generator();
+    reader.startReception(data);
+    writer.send(data);
+    ASSERT_TRUE(data.empty());
+    reader.block_for_all();
 }
 
 
