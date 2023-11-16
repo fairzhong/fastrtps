@@ -269,12 +269,12 @@ bool PDPClient::create_ds_pdp_best_effort_reader(
     ratt.endpoint.durabilityKind = VOLATILE;
     ratt.endpoint.reliabilityKind = BEST_EFFORT;
 
-    endpoints.stateless_listener.reset(new PDPSecurityInitiatorListener(this));
+    endpoints.stateless_reader.listener_.reset(new PDPSecurityInitiatorListener(this));
 
     // Create PDP Reader
     RTPSReader* reader = nullptr;
     if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.stateless_reader.history_.get(),
-            endpoints.stateless_listener.get(), c_EntityId_SPDPReader, true, false))
+            endpoints.stateless_reader.listener_.get(), c_EntityId_SPDPReader, true, false))
     {
         endpoints.stateless_reader.reader_ = dynamic_cast<fastrtps::rtps::StatelessReader*>(reader);
 
@@ -287,8 +287,6 @@ bool PDPClient::create_ds_pdp_best_effort_reader(
     else
     {
         logError(RTPS_PDP_SERVER, "PDPServer security initiation Reader creation failed");
-
-        endpoints.stateless_listener.reset();
         endpoints.stateless_reader.release();
         return false;
     }
@@ -349,7 +347,7 @@ bool PDPClient::create_ds_pdp_reliable_endpoints(
     }
 #endif // HAVE_SECURITY
 
-    endpoints.listener.reset(new PDPListener(this));
+    endpoints.reader.listener_.reset(new PDPListener(this));
 
     RTPSReader* reader = nullptr;
 #if HAVE_SECURITY
@@ -358,7 +356,8 @@ bool PDPClient::create_ds_pdp_reliable_endpoints(
 #else
     EntityId_t reader_entity = c_EntityId_SPDPReader;
 #endif // if HAVE_SECURITY
-    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(), endpoints.listener.get(),
+    if (mp_RTPSParticipant->createReader(&reader, ratt, endpoints.reader.history_.get(),
+            endpoints.reader.listener_.get(),
             reader_entity, true, false))
     {
         endpoints.reader.reader_ = dynamic_cast<fastrtps::rtps::StatefulReader*>(reader);
@@ -370,7 +369,6 @@ bool PDPClient::create_ds_pdp_reliable_endpoints(
     else
     {
         logError(RTPS_PDP, "PDPClient Reader creation failed");
-        endpoints.listener.reset();
         endpoints.reader.release();
         return false;
     }
