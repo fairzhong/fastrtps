@@ -515,7 +515,9 @@ void PDP::announceParticipantState(
         else
         {
             this->mp_mutex->lock();
-            ParticipantProxyData proxy_data_copy(*getLocalParticipantProxyData());
+            ParticipantProxyData* local_participant_data = getLocalParticipantProxyData();
+            InstanceHandle_t key = local_participant_data->m_key;
+            ParticipantProxyData proxy_data_copy(*local_participant_data);
             this->mp_mutex->unlock();
 
             if (history.getHistorySize() > 0)
@@ -527,7 +529,7 @@ void PDP::announceParticipantState(
                             {
                                 return cdr_size;
                             },
-                            NOT_ALIVE_DISPOSED_UNREGISTERED, getLocalParticipantProxyData()->m_key);
+                            NOT_ALIVE_DISPOSED_UNREGISTERED, key);
 
             if (change != nullptr)
             {
