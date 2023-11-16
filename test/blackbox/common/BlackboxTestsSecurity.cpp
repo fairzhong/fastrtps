@@ -86,6 +86,34 @@ public:
         }
     }
 
+protected:
+
+    struct UDPMessageSender
+    {
+        asio::io_service service;
+        asio::ip::udp::socket socket;
+
+        UDPMessageSender()
+            : service()
+            , socket(service)
+        {
+            socket.open(asio::ip::udp::v4());
+        }
+
+        void send(
+                const CDRMessage_t& msg,
+                const Locator_t& destination)
+        {
+            std::string addr = IPLocator::toIPv4string(destination);
+            unsigned short port = static_cast<unsigned short>(destination.port);
+            auto remote = asio::ip::udp::endpoint(asio::ip::address::from_string(addr), port);
+            asio::error_code ec;
+
+            socket.send_to(asio::buffer(msg.buffer, msg.length), remote, 0, ec);
+        }
+
+    };
+
 };
 
 
@@ -4461,7 +4489,7 @@ TEST_P(Security, BuiltinAuthenticationAndAccessAndCryptoPlugin_PermissionsEnable
     BuiltinAuthenticationAndAccessAndCryptoPlugin_Permissions_validation_ok_common(reader, writer, governance_file);
 }
 
-TEST(Security, MaliciousHeartbeatIgnore)
+TEST_F(Security, MaliciousHeartbeatIgnore)
 {
     PubSubWriter<HelloWorldPubSubType> writer("HelloWorldTopic_MaliciousHeartbeatIgnore");
     PubSubReader<HelloWorldPubSubType> reader("HelloWorldTopic_MaliciousHeartbeatIgnore");
@@ -4495,32 +4523,7 @@ TEST(Security, MaliciousHeartbeatIgnore)
                 return avoid_sec_submessages.load() && (0x30 == (msg.buffer[msg.pos] & 0xF0));
             };
 
-    struct FakeMsg
-    {
-        asio::io_service service;
-        asio::ip::udp::socket socket;
-
-        FakeMsg()
-            : service()
-            , socket(service)
-        {
-            socket.open(asio::ip::udp::v4());
-        }
-
-        void send(
-                const CDRMessage_t& msg,
-                const Locator_t& destination)
-        {
-            std::string addr = IPLocator::toIPv4string(destination);
-            unsigned short port = static_cast<unsigned short>(destination.port);
-            auto remote = asio::ip::udp::endpoint(asio::ip::address::from_string(addr), port);
-            asio::error_code ec;
-
-            socket.send_to(asio::buffer(msg.buffer, msg.length), remote, 0, ec);
-        }
-
-    };
-    FakeMsg fake_msg;
+    UDPMessageSender fake_msg_sender;
 
     writer.disable_builtin_transport().add_user_transport_to_pparams(transport);
     reader.disable_builtin_transport().add_user_transport_to_pparams(transport);
@@ -4572,7 +4575,7 @@ TEST(Security, MaliciousHeartbeatIgnore)
         msg.init(reinterpret_cast<octet*>(&hb), msg_len);
         msg.length = msg_len;
         msg.pos = msg_len;
-        fake_msg.send(msg, reader_locator);
+        fake_msg_sender.send(msg, reader_locator);
     }
 
     // Enable secure submessages
