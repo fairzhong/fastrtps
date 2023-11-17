@@ -492,23 +492,30 @@ void PDPSimple::removeRemoteEndpoints(
 {
     EPROSIMA_LOG_INFO(RTPS_PDP, "For RTPSParticipant: " << pdata->m_guid);
 
-    auto endpoints = static_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
+    GUID_t guid = pdata->m_guid;
 
-    uint32_t endp = pdata->m_availableBuiltinEndpoints;
-    uint32_t auxendp = endp;
-    auxendp &= DISC_BUILTIN_ENDPOINT_PARTICIPANT_ANNOUNCER;
-    if (auxendp != 0)
     {
-        GUID_t writer_guid(pdata->m_guid.guidPrefix, c_EntityId_SPDPWriter);
-        endpoints->reader.reader_->matched_writer_remove(writer_guid);
+        auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
+        assert(nullptr != endpoints);
+
+        guid.entityId = c_EntityId_SPDPWriter;
+        endpoints->reader.reader_->matched_writer_remove(guid);
+
+        guid.entityId = c_EntityId_SPDPReader;
+        endpoints->writer.writer_->matched_reader_remove(guid);
     }
-    auxendp = endp;
-    auxendp &= DISC_BUILTIN_ENDPOINT_PARTICIPANT_DETECTOR;
-    if (auxendp != 0)
+
+#if HAVE_SECURITY
+    auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+    if (nullptr != endpoints)
     {
-        GUID_t reader_guid(pdata->m_guid.guidPrefix, c_EntityId_SPDPReader);
-        endpoints->writer.writer_->matched_reader_remove(reader_guid);
+        guid.entityId = c_EntityId_spdp_reliable_participant_secure_writer;
+        endpoints->secure_reader.reader_->matched_writer_remove(guid);
+
+        guid.entityId = c_EntityId_spdp_reliable_participant_secure_reader;
+        endpoints->secure_writer.writer_->matched_reader_remove(guid);
     }
+#endif // HAVE_SECURITY
 }
 
 void PDPSimple::notifyAboveRemoteEndpoints(
