@@ -271,16 +271,35 @@ void PDPSimple::announceParticipantState(
 {
     if (enabled_)
     {
-        // TODO(Miguel C): Give priority to secure endpoint
-        auto endpoints = static_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
-        StatelessWriter& writer = *(endpoints->writer.writer_);
-        WriterHistory& history = *(endpoints->writer.history_);
+        auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
+#if HAVE_SECURITY
+        auto secure = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+        if (nullptr != secure)
+        {
+            new_change |= m_hasChangedLocalPDP.exchange(false);
 
-        PDP::announceParticipantState(writer, history, new_change, dispose, wp);
+            if (!dispose)
+            {
+                RTPSWriter& writer = *(endpoints->writer.writer_);
+                WriterHistory& history = *(endpoints->writer.history_);
+                PDP::announceParticipantState(writer, history, new_change, dispose, wp);
+            }
+
+            RTPSWriter& writer = *(secure->secure_writer.writer_);
+            WriterHistory& history = *(secure->secure_writer.history_);
+            PDP::announceParticipantState(writer, history, new_change, dispose, wp);
+        }
+        else
+#endif // HAVE_SECURITY
+        {
+            RTPSWriter& writer = *(endpoints->writer.writer_);
+            WriterHistory& history = *(endpoints->writer.history_);
+            PDP::announceParticipantState(writer, history, new_change, dispose, wp);
+        }
 
         if (!(dispose || new_change))
         {
-            writer.unsent_changes_reset();
+            endpoints->writer.writer_->unsent_changes_reset();
         }
     }
 }
