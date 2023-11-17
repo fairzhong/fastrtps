@@ -1403,6 +1403,42 @@ WriterAttributes PDP::create_builtin_writer_attributes() const
     return attributes;
 }
 
+#if HAVE_SECURITY
+void PDP::add_builtin_security_attributes(
+        ReaderAttributes& ratt,
+        WriterAttributes& watt) const
+{
+    const security::ParticipantSecurityAttributes& part_attr = mp_RTPSParticipant->security_attributes();
+
+    ratt.endpoint.security_attributes().is_submessage_protected = part_attr.is_discovery_protected;
+    ratt.endpoint.security_attributes().plugin_endpoint_attributes = PLUGIN_ENDPOINT_SECURITY_ATTRIBUTES_FLAG_IS_VALID;
+
+    watt.endpoint.security_attributes().is_submessage_protected = part_attr.is_discovery_protected;
+    watt.endpoint.security_attributes().plugin_endpoint_attributes = PLUGIN_ENDPOINT_SECURITY_ATTRIBUTES_FLAG_IS_VALID;
+
+    if (part_attr.is_discovery_protected)
+    {
+        security::PluginParticipantSecurityAttributes plugin_part_attr(part_attr.plugin_participant_attributes);
+
+        if (plugin_part_attr.is_discovery_encrypted)
+        {
+            ratt.endpoint.security_attributes().plugin_endpoint_attributes |=
+                    PLUGIN_ENDPOINT_SECURITY_ATTRIBUTES_FLAG_IS_SUBMESSAGE_ENCRYPTED;
+            watt.endpoint.security_attributes().plugin_endpoint_attributes |=
+                    PLUGIN_ENDPOINT_SECURITY_ATTRIBUTES_FLAG_IS_SUBMESSAGE_ENCRYPTED;
+        }
+        if (plugin_part_attr.is_discovery_origin_authenticated)
+        {
+            ratt.endpoint.security_attributes().plugin_endpoint_attributes |=
+                    PLUGIN_ENDPOINT_SECURITY_ATTRIBUTES_FLAG_IS_SUBMESSAGE_ORIGIN_AUTHENTICATED;
+            watt.endpoint.security_attributes().plugin_endpoint_attributes |=
+                    PLUGIN_ENDPOINT_SECURITY_ATTRIBUTES_FLAG_IS_SUBMESSAGE_ORIGIN_AUTHENTICATED;
+        }
+    }
+}
+
+#endif // HAVE_SECURITY
+
 } /* namespace rtps */
 } /* namespace fastrtps */
 } /* namespace eprosima */

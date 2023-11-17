@@ -418,6 +418,10 @@ public:
     WriterAttributes create_builtin_writer_attributes() const;
 
 #if HAVE_SECURITY
+    void add_builtin_security_attributes(
+            ReaderAttributes& ratt,
+            WriterAttributes& watt) const;
+
     virtual bool pairing_remote_writer_with_local_reader_after_security(
             const GUID_t& local_reader,
             const WriterProxyData& remote_writer_data);
