@@ -382,90 +382,21 @@ void EDPSimple::set_builtin_writer_history_attributes(
 void EDPSimple::set_builtin_reader_attributes(
         ReaderAttributes& attributes)
 {
-    const RTPSParticipantAttributes& pattr = mp_PDP->getRTPSParticipant()->getRTPSParticipantAttributes();
-
-    // Matched writers will depend on total number of participants
-    attributes.matched_writers_allocation = pattr.allocation.participants;
-
-    // As participants allocation policy includes the local participant, one has to be substracted
-    if (attributes.matched_writers_allocation.initial > 1)
-    {
-        attributes.matched_writers_allocation.initial--;
-    }
-    if ((attributes.matched_writers_allocation.maximum > 1) &&
-            (attributes.matched_writers_allocation.maximum < std::numeric_limits<size_t>::max()))
-    {
-        attributes.matched_writers_allocation.maximum--;
-    }
-
-    // Locators are copied from the local participant metatraffic locators
-    attributes.endpoint.unicastLocatorList.clear();
-    for (const Locator_t& loc : mp_PDP->getLocalParticipantProxyData()->metatraffic_locators.unicast)
-    {
-        attributes.endpoint.unicastLocatorList.push_back(loc);
-    }
-    attributes.endpoint.multicastLocatorList.clear();
-    for (const Locator_t& loc : mp_PDP->getLocalParticipantProxyData()->metatraffic_locators.multicast)
-    {
-        attributes.endpoint.multicastLocatorList.push_back(loc);
-    }
-    attributes.endpoint.external_unicast_locators = mp_PDP->builtin_attributes().metatraffic_external_unicast_locators;
-    attributes.endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
+    attributes = mp_PDP->create_builtin_reader_attributes();
 
     // Timings are configured using EDP default values
     attributes.times.heartbeatResponseDelay = edp_heartbeat_response_delay;
-
-    // EDP endpoints are always reliable, transsient local, keyed topics
-    attributes.endpoint.reliabilityKind = RELIABLE;
-    attributes.endpoint.durabilityKind = TRANSIENT_LOCAL;
-    attributes.endpoint.topicKind = WITH_KEY;
-
-    // Built-in EDP readers never expect inline qos
-    attributes.expectsInlineQos = false;
 }
 
 void EDPSimple::set_builtin_writer_attributes(
         WriterAttributes& attributes)
 {
-    const RTPSParticipantAttributes& pattr = mp_PDP->getRTPSParticipant()->getRTPSParticipantAttributes();
-
-    // Matched readers will depend on total number of participants
-    attributes.matched_readers_allocation = pattr.allocation.participants;
-
-    // As participants allocation policy includes the local participant, one has to be substracted
-    if (attributes.matched_readers_allocation.initial > 1)
-    {
-        attributes.matched_readers_allocation.initial--;
-    }
-    if ((attributes.matched_readers_allocation.maximum > 1) &&
-            (attributes.matched_readers_allocation.maximum < std::numeric_limits<size_t>::max()))
-    {
-        attributes.matched_readers_allocation.maximum--;
-    }
-
-    // Locators are copied from the local participant metatraffic locators
-    attributes.endpoint.unicastLocatorList.clear();
-    for (const Locator_t& loc : mp_PDP->getLocalParticipantProxyData()->metatraffic_locators.unicast)
-    {
-        attributes.endpoint.unicastLocatorList.push_back(loc);
-    }
-    attributes.endpoint.multicastLocatorList.clear();
-    for (const Locator_t& loc : mp_PDP->getLocalParticipantProxyData()->metatraffic_locators.multicast)
-    {
-        attributes.endpoint.multicastLocatorList.push_back(loc);
-    }
-    attributes.endpoint.external_unicast_locators = mp_PDP->builtin_attributes().metatraffic_external_unicast_locators;
-    attributes.endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
+    attributes = mp_PDP->create_builtin_writer_attributes();
 
     // Timings are configured using EDP default values
     attributes.times.heartbeatPeriod = edp_heartbeat_period;
     attributes.times.nackResponseDelay = edp_nack_response_delay;
     attributes.times.nackSupressionDuration = edp_nack_supression_duration;
-
-    // EDP endpoints are always reliable, transsient local, keyed topics
-    attributes.endpoint.reliabilityKind = RELIABLE;
-    attributes.endpoint.durabilityKind = TRANSIENT_LOCAL;
-    attributes.endpoint.topicKind = WITH_KEY;
 }
 
 bool EDPSimple::createSEDPEndpoints()

@@ -328,9 +328,9 @@ public:
      * Get a pointer to the local RTPSParticipant ParticipantProxyData object.
      * @return Pointer to the local RTPSParticipant ParticipantProxyData object.
      */
-    ParticipantProxyData* getLocalParticipantProxyData()
+    ParticipantProxyData* getLocalParticipantProxyData() const
     {
-        return participant_proxies_.front();
+        return participant_proxies_.empty() ? nullptr : participant_proxies_.front();
     }
 
     /**
@@ -419,6 +419,10 @@ public:
     {
         return temp_writer_proxies_;
     }
+
+    ReaderAttributes create_builtin_reader_attributes() const;
+
+    WriterAttributes create_builtin_writer_attributes() const;
 
 #if HAVE_SECURITY
     virtual bool pairing_remote_writer_with_local_reader_after_security(

@@ -68,9 +68,7 @@ namespace eprosima {
 namespace fastrtps {
 namespace rtps {
 
-
 // Default configuration values for PDP reliable entities.
-
 const Duration_t pdp_heartbeat_period{ 0, 350 * 1000000  }; // 350 milliseconds
 const Duration_t pdp_nack_response_delay{ 0, 100 * 1000000  }; // 100 milliseconds
 const Duration_t pdp_nack_supression_duration{ 0, 11 * 1000000 }; // 11 milliseconds
@@ -1330,6 +1328,95 @@ void PDP::set_external_participant_properties_(
             participant_data->m_properties.push_back(physical_property_name, *physical_property);
         }
     }
+}
+
+static void set_builtin_matched_allocation(
+        ResourceLimitedContainerConfig& allocation,
+        const RTPSParticipantAttributes& pattr)
+{
+    // Matched endpoints will depend on total number of participants
+    allocation = pattr.allocation.participants;
+
+    // As participants allocation policy includes the local participant, one has to be substracted
+    if (allocation.initial > 1)
+    {
+        allocation.initial--;
+    }
+    if ((allocation.maximum > 1) &&
+            (allocation.maximum < std::numeric_limits<size_t>::max()))
+    {
+        allocation.maximum--;
+    }
+}
+
+static void set_builtin_endpoint_locators(
+        EndpointAttributes& endpoint,
+        const PDP* pdp,
+        const BuiltinProtocols* builtin)
+{
+    const RTPSParticipantAttributes& pattr = pdp->getRTPSParticipant()->getRTPSParticipantAttributes();
+
+    auto part_data = pdp->getLocalParticipantProxyData();
+    if (nullptr == part_data)
+    {
+        // Local participant data has not yet been created.
+        // This means we are creating the PDP endpoints, so we copy the locators from mp_builtin
+        endpoint.multicastLocatorList = builtin->m_metatrafficMulticastLocatorList;
+        endpoint.unicastLocatorList = builtin->m_metatrafficUnicastLocatorList;
+    }
+    else
+    {
+        // Locators are copied from the local participant metatraffic locators
+        endpoint.unicastLocatorList.clear();
+        for (const Locator_t& loc : part_data->metatraffic_locators.unicast)
+        {
+            endpoint.unicastLocatorList.push_back(loc);
+        }
+        endpoint.multicastLocatorList.clear();
+        for (const Locator_t& loc : part_data->metatraffic_locators.multicast)
+        {
+            endpoint.multicastLocatorList.push_back(loc);
+        }
+    }
+
+    // External locators are always taken from the same place
+    endpoint.external_unicast_locators = pdp->builtin_attributes().metatraffic_external_unicast_locators;
+    endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
+}
+
+ReaderAttributes PDP::create_builtin_reader_attributes() const
+{
+    ReaderAttributes attributes;
+
+    const RTPSParticipantAttributes& pattr = getRTPSParticipant()->getRTPSParticipantAttributes();
+    set_builtin_matched_allocation(attributes.matched_writers_allocation, pattr);
+    set_builtin_endpoint_locators(attributes.endpoint, this, mp_builtin);
+
+    // Builtin endpoints are always reliable, transsient local, keyed topics
+    attributes.endpoint.reliabilityKind = RELIABLE;
+    attributes.endpoint.durabilityKind = TRANSIENT_LOCAL;
+    attributes.endpoint.topicKind = WITH_KEY;
+
+    // Built-in readers never expect inline qos
+    attributes.expectsInlineQos = false;
+
+    return attributes;
+}
+
+WriterAttributes PDP::create_builtin_writer_attributes() const
+{
+    WriterAttributes attributes;
+
+    const RTPSParticipantAttributes& pattr = getRTPSParticipant()->getRTPSParticipantAttributes();
+    set_builtin_matched_allocation(attributes.matched_readers_allocation, pattr);
+    set_builtin_endpoint_locators(attributes.endpoint, this, mp_builtin);
+
+    // Builtin endpoints are always reliable, transsient local, keyed topics
+    attributes.endpoint.reliabilityKind = RELIABLE;
+    attributes.endpoint.durabilityKind = TRANSIENT_LOCAL;
+    attributes.endpoint.topicKind = WITH_KEY;
+
+    return attributes;
 }
 
 } /* namespace rtps */
