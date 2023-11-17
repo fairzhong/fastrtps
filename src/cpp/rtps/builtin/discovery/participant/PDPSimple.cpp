@@ -486,56 +486,6 @@ void PDPSimple::assignRemoteEndpoints(
 {
     EPROSIMA_LOG_INFO(RTPS_PDP, "For RTPSParticipant: " << pdata->m_guid.guidPrefix);
 
-    // TODO(Miguel C): Move almost everything here to notifyAboveRemoteEndpoints
-    auto endpoints = static_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
-
-    const NetworkFactory& network = mp_RTPSParticipant->network_factory();
-    uint32_t endp = pdata->m_availableBuiltinEndpoints;
-    uint32_t auxendp = endp;
-    bool use_multicast_locators = !mp_RTPSParticipant->getAttributes().builtin.avoid_builtin_multicast ||
-            pdata->metatraffic_locators.unicast.empty();
-    auxendp &= DISC_BUILTIN_ENDPOINT_PARTICIPANT_ANNOUNCER;
-    if (auxendp != 0)
-    {
-        auto temp_writer_data = get_temporary_writer_proxies_pool().get();
-
-        temp_writer_data->clear();
-        temp_writer_data->guid().guidPrefix = pdata->m_guid.guidPrefix;
-        temp_writer_data->guid().entityId = c_EntityId_SPDPWriter;
-        temp_writer_data->persistence_guid(pdata->get_persistence_guid());
-        temp_writer_data->set_persistence_entity_id(c_EntityId_SPDPWriter);
-        temp_writer_data->set_remote_locators(pdata->metatraffic_locators, network, use_multicast_locators);
-        temp_writer_data->m_qos.m_reliability.kind = RELIABLE_RELIABILITY_QOS;
-        temp_writer_data->m_qos.m_durability.kind = TRANSIENT_LOCAL_DURABILITY_QOS;
-        endpoints->reader.reader_->matched_writer_add(*temp_writer_data);
-    }
-    auxendp = endp;
-    auxendp &= DISC_BUILTIN_ENDPOINT_PARTICIPANT_DETECTOR;
-    if (auxendp != 0)
-    {
-        auto temp_reader_data = get_temporary_reader_proxies_pool().get();
-
-        temp_reader_data->clear();
-        temp_reader_data->m_expectsInlineQos = false;
-        temp_reader_data->guid().guidPrefix = pdata->m_guid.guidPrefix;
-        temp_reader_data->guid().entityId = c_EntityId_SPDPReader;
-        temp_reader_data->set_remote_locators(pdata->metatraffic_locators, network, use_multicast_locators);
-        temp_reader_data->m_qos.m_reliability.kind = BEST_EFFORT_RELIABILITY_QOS;
-        temp_reader_data->m_qos.m_durability.kind = TRANSIENT_LOCAL_DURABILITY_QOS;
-        endpoints->writer.writer_->matched_reader_add(*temp_reader_data);
-
-        StatelessWriter* pW = endpoints->writer.writer_;
-
-        if (pW != nullptr)
-        {
-            pW->unsent_changes_reset();
-        }
-        else
-        {
-            EPROSIMA_LOG_ERROR(RTPS_PDP, "Using PDPSimple protocol with a reliable writer");
-        }
-    }
-
 #if HAVE_SECURITY
     // Validate remote participant
     mp_RTPSParticipant->security_manager().discovered_participant(*pdata);
@@ -573,15 +523,110 @@ void PDPSimple::notifyAboveRemoteEndpoints(
         const ParticipantProxyData& pdata,
         bool notify_secure_endpoints)
 {
+    auto endpoints = static_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
+
+    const NetworkFactory& network = mp_RTPSParticipant->network_factory();
+    bool use_multicast_locators = !mp_RTPSParticipant->getAttributes().builtin.avoid_builtin_multicast ||
+            pdata.metatraffic_locators.unicast.empty();
+    const uint32_t endp = pdata.m_availableBuiltinEndpoints;
+
+    // Default to values for non-secure endpoints
+    auto reliability_kind = BEST_EFFORT_RELIABILITY_QOS;
+    uint32_t pdp_reader_mask = DISC_BUILTIN_ENDPOINT_PARTICIPANT_DETECTOR;
+    uint32_t pdp_writer_mask = DISC_BUILTIN_ENDPOINT_PARTICIPANT_ANNOUNCER;
+    EntityId_t reader_entity_id = c_EntityId_SPDPReader;
+    EntityId_t writer_entity_id = c_EntityId_SPDPWriter;
+    RTPSReader* reader = endpoints->reader.reader_;
+    RTPSWriter* writer = endpoints->writer.writer_;
+
+#if HAVE_SECURITY
+    // If the other participant has been authenticated, use values for secure endpoints
+    if (notify_secure_endpoints)
+    {
+        auto secure_endpoints = static_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+        reliability_kind = RELIABLE_RELIABILITY_QOS;
+        pdp_reader_mask = DISC_BUILTIN_ENDPOINT_PARTICIPANT_SECURE_DETECTOR;
+        pdp_writer_mask = DISC_BUILTIN_ENDPOINT_PARTICIPANT_SECURE_ANNOUNCER;
+        reader_entity_id = c_EntityId_spdp_reliable_participant_secure_reader;
+        writer_entity_id = c_EntityId_spdp_reliable_participant_secure_writer;
+        reader = secure_endpoints->secure_reader.reader_;
+        writer = secure_endpoints->secure_writer.writer_;
+    }
+#endif // HAVE_SECURITY
+
+    if (0 != (endp & pdp_writer_mask))
+    {
+        auto temp_writer_data = get_temporary_writer_proxies_pool().get();
+
+        temp_writer_data->clear();
+        temp_writer_data->guid().guidPrefix = pdata.m_guid.guidPrefix;
+        temp_writer_data->guid().entityId = writer_entity_id;
+        temp_writer_data->persistence_guid(pdata.get_persistence_guid());
+        temp_writer_data->set_persistence_entity_id(writer_entity_id);
+        temp_writer_data->set_remote_locators(pdata.metatraffic_locators, network, use_multicast_locators);
+        temp_writer_data->m_qos.m_reliability.kind = reliability_kind;
+        temp_writer_data->m_qos.m_durability.kind = TRANSIENT_LOCAL_DURABILITY_QOS;
+#if HAVE_SECURITY
+        if (notify_secure_endpoints)
+        {
+            if (!mp_RTPSParticipant->security_manager().discovered_builtin_writer(
+                        reader->getGuid(), pdata.m_guid, *temp_writer_data,
+                        reader->getAttributes().security_attributes()))
+            {
+                EPROSIMA_LOG_ERROR(RTPS_EDP, "Security manager returns an error for writer " <<
+                        temp_writer_data->guid());
+            }
+        }
+        else
+#endif // HAVE_SECURITY
+        {
+            reader->matched_writer_add(*temp_writer_data);
+        }
+    }
+
+    if (0 != (endp & pdp_reader_mask))
+    {
+        auto temp_reader_data = get_temporary_reader_proxies_pool().get();
+
+        temp_reader_data->clear();
+        temp_reader_data->m_expectsInlineQos = false;
+        temp_reader_data->guid().guidPrefix = pdata.m_guid.guidPrefix;
+        temp_reader_data->guid().entityId = reader_entity_id;
+        temp_reader_data->set_remote_locators(pdata.metatraffic_locators, network, use_multicast_locators);
+        temp_reader_data->m_qos.m_reliability.kind = reliability_kind;
+        temp_reader_data->m_qos.m_durability.kind = TRANSIENT_LOCAL_DURABILITY_QOS;
+#if HAVE_SECURITY
+        if (notify_secure_endpoints)
+        {
+            if (!mp_RTPSParticipant->security_manager().discovered_builtin_reader(
+                        writer->getGuid(), pdata.m_guid, *temp_reader_data,
+                        writer->getAttributes().security_attributes()))
+            {
+                EPROSIMA_LOG_ERROR(RTPS_EDP, "Security manager returns an error for reader " <<
+                        temp_reader_data->guid());
+            }
+        }
+        else
+#endif // HAVE_SECURITY
+        {
+            writer->matched_reader_add(*temp_reader_data);
+        }
+
+        if (BEST_EFFORT_RELIABILITY_QOS == reliability_kind)
+        {
+            endpoints->writer.writer_->unsent_changes_reset();
+        }
+    }
+
     //Inform EDP of new RTPSParticipant data:
     if (mp_EDP != nullptr)
     {
-        mp_EDP->assignRemoteEndpoints(pdata, (notify_secure_endpoints ? true : false));
+        mp_EDP->assignRemoteEndpoints(pdata, notify_secure_endpoints);
     }
 
     if (mp_builtin->mp_WLP != nullptr)
     {
-        mp_builtin->mp_WLP->assignRemoteEndpoints(pdata, (notify_secure_endpoints ? true : false));
+        mp_builtin->mp_WLP->assignRemoteEndpoints(pdata, notify_secure_endpoints);
     }
 
     if (mp_builtin->tlm_ != nullptr)
@@ -589,6 +634,37 @@ void PDPSimple::notifyAboveRemoteEndpoints(
         mp_builtin->tlm_->assign_remote_endpoints(pdata);
     }
 }
+
+#if HAVE_SECURITY
+bool PDPSimple::pairing_remote_writer_with_local_reader_after_security(
+        const GUID_t& local_reader,
+        const WriterProxyData& remote_writer_data)
+{
+    auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+    if ((nullptr != endpoints) && (local_reader == endpoints->secure_reader.reader_->getGuid()))
+    {
+        endpoints->secure_reader.reader_->matched_writer_add(remote_writer_data);
+        return true;
+    }
+
+    return PDP::pairing_remote_writer_with_local_reader_after_security(local_reader, remote_writer_data);
+}
+
+bool PDPSimple::pairing_remote_reader_with_local_writer_after_security(
+        const GUID_t& local_writer,
+        const ReaderProxyData& remote_reader_data)
+{
+    auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+    if ((nullptr != endpoints) && (local_writer == endpoints->secure_writer.writer_->getGuid()))
+    {
+        endpoints->secure_writer.writer_->matched_reader_add(remote_reader_data);
+        return true;
+    }
+
+    return PDP::pairing_remote_reader_with_local_writer_after_security(local_writer, remote_reader_data);
+}
+
+#endif // HAVE_SECURITY
 
 bool PDPSimple::newRemoteEndpointStaticallyDiscovered(
         const GUID_t& pguid,
