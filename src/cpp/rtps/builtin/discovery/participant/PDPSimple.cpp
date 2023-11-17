@@ -334,22 +334,16 @@ bool PDPSimple::create_dcps_participant_endpoints()
     reader.payload_pool_->reserve_history(reader_pool_cfg, true);
     reader.history_.reset(new ReaderHistory(hatt));
 
-    ReaderAttributes ratt;
-    ratt.endpoint.multicastLocatorList = mp_builtin->m_metatrafficMulticastLocatorList;
-    ratt.endpoint.unicastLocatorList = mp_builtin->m_metatrafficUnicastLocatorList;
-    ratt.endpoint.external_unicast_locators = mp_builtin->m_att.metatraffic_external_unicast_locators;
-    ratt.endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
-    ratt.endpoint.endpointKind = READER;
-    ratt.endpoint.topicKind = WITH_KEY;
-    ratt.endpoint.durabilityKind = TRANSIENT_LOCAL;
+    ReaderAttributes ratt = create_builtin_reader_attributes();
     ratt.endpoint.reliabilityKind = BEST_EFFORT;
-    ratt.matched_writers_allocation = allocation.participants;
 
     RTPSReader* rtps_reader = nullptr;
     if (mp_RTPSParticipant->createReader(&rtps_reader, ratt, reader.payload_pool_, reader.history_.get(),
             reader.listener_.get(), reader_entity_id, true, false))
     {
         reader.reader_ = dynamic_cast<StatelessReader*>(rtps_reader);
+        assert(nullptr != reader.reader_);
+
 #if HAVE_SECURITY
         mp_RTPSParticipant->set_endpoint_rtps_protection_supports(rtps_reader, false);
 #endif // if HAVE_SECURITY
@@ -370,15 +364,9 @@ bool PDPSimple::create_dcps_participant_endpoints()
     writer.payload_pool_->reserve_history(writer_pool_cfg, false);
     writer.history_.reset(new WriterHistory(hatt));
 
-    WriterAttributes watt;
-    watt.endpoint.external_unicast_locators = mp_builtin->m_att.metatraffic_external_unicast_locators;
-    watt.endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
-    watt.endpoint.endpointKind = WRITER;
-    watt.endpoint.durabilityKind = TRANSIENT_LOCAL;
+    WriterAttributes watt = create_builtin_writer_attributes();
     watt.endpoint.reliabilityKind = BEST_EFFORT;
-    watt.endpoint.topicKind = WITH_KEY;
     watt.endpoint.remoteLocatorList = m_discovery.initialPeersList;
-    watt.matched_readers_allocation = allocation.participants;
 
     if (pattr.throughputController.bytesPerPeriod != UINT32_MAX && pattr.throughputController.periodMillisecs != 0)
     {
@@ -390,23 +378,23 @@ bool PDPSimple::create_dcps_participant_endpoints()
             nullptr, writer_entity_id, true))
     {
         writer.writer_ = dynamic_cast<StatelessWriter*>(rtps_writer);
+        assert(nullptr != writer.writer_);
+
 #if HAVE_SECURITY
         mp_RTPSParticipant->set_endpoint_rtps_protection_supports(rtps_writer, false);
 #endif // if HAVE_SECURITY
-        if (writer.writer_ != nullptr)
+
+        const NetworkFactory& network = mp_RTPSParticipant->network_factory();
+        LocatorList_t fixed_locators;
+        Locator_t local_locator;
+        for (const Locator_t& loc : mp_builtin->m_initialPeersList)
         {
-            const NetworkFactory& network = mp_RTPSParticipant->network_factory();
-            LocatorList_t fixed_locators;
-            Locator_t local_locator;
-            for (const Locator_t& loc : mp_builtin->m_initialPeersList)
+            if (network.transform_remote_locator(loc, local_locator))
             {
-                if (network.transform_remote_locator(loc, local_locator))
-                {
-                    fixed_locators.push_back(local_locator);
-                }
+                fixed_locators.push_back(local_locator);
             }
-            writer.writer_->set_fixed_locators(fixed_locators);
         }
+        writer.writer_->set_fixed_locators(fixed_locators);
     }
     else
     {
@@ -440,22 +428,16 @@ bool PDPSimple::create_dcps_participant_secure_endpoints()
     reader.payload_pool_->reserve_history(reader_pool_cfg, true);
     reader.history_.reset(new ReaderHistory(hatt));
 
-    ReaderAttributes ratt;
-    ratt.endpoint.multicastLocatorList = mp_builtin->m_metatrafficMulticastLocatorList;
-    ratt.endpoint.unicastLocatorList = mp_builtin->m_metatrafficUnicastLocatorList;
-    ratt.endpoint.external_unicast_locators = mp_builtin->m_att.metatraffic_external_unicast_locators;
-    ratt.endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
-    ratt.endpoint.endpointKind = READER;
-    ratt.endpoint.topicKind = WITH_KEY;
-    ratt.endpoint.durabilityKind = TRANSIENT_LOCAL;
-    ratt.endpoint.reliabilityKind = RELIABLE;
-    ratt.matched_writers_allocation = allocation.participants;
+    ReaderAttributes ratt = create_builtin_reader_attributes();
+    WriterAttributes watt = create_builtin_writer_attributes();
+    add_builtin_security_attributes(ratt, watt);
 
     RTPSReader* rtps_reader = nullptr;
     if (mp_RTPSParticipant->createReader(&rtps_reader, ratt, reader.payload_pool_, reader.history_.get(),
             reader.listener_.get(), reader_entity_id, true, false))
     {
         reader.reader_ = dynamic_cast<StatefulReader*>(rtps_reader);
+        assert(nullptr != reader.reader_);
     }
     else
     {
@@ -473,23 +455,9 @@ bool PDPSimple::create_dcps_participant_secure_endpoints()
     writer.payload_pool_->reserve_history(writer_pool_cfg, false);
     writer.history_.reset(new WriterHistory(hatt));
 
-    WriterAttributes watt;
-    watt.endpoint.external_unicast_locators = mp_builtin->m_att.metatraffic_external_unicast_locators;
-    watt.endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
-    watt.endpoint.endpointKind = WRITER;
-    watt.endpoint.durabilityKind = TRANSIENT_LOCAL;
-    watt.endpoint.reliabilityKind = RELIABLE;
-    watt.endpoint.topicKind = WITH_KEY;
-    watt.matched_readers_allocation = allocation.participants;
-
-    if (pattr.throughputController.bytesPerPeriod != UINT32_MAX && pattr.throughputController.periodMillisecs != 0)
-    {
-        watt.mode = ASYNCHRONOUS_WRITER;
-    }
-
     RTPSWriter* rtps_writer = nullptr;
     if (mp_RTPSParticipant->createWriter(&rtps_writer, watt, writer.payload_pool_, writer.history_.get(),
-            nullptr, reader_entity_id, true))
+            nullptr, writer_entity_id, true))
     {
         writer.writer_ = dynamic_cast<StatefulWriter*>(rtps_writer);
         assert(nullptr != writer.writer_);
@@ -502,6 +470,7 @@ bool PDPSimple::create_dcps_participant_secure_endpoints()
     }
     return true;
 }
+
 #endif  // HAVE_SECURITY
 
 void PDPSimple::assignRemoteEndpoints(
