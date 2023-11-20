@@ -141,6 +141,14 @@ private:
 
     bool create_dcps_participant_endpoints();
 
+    void match_pdp_remote_endpoints(
+            const ParticipantProxyData& pdata,
+            bool notify_secure_endpoints);
+
+    void assign_low_level_remote_endpoints(
+            const ParticipantProxyData& pdata,
+            bool notify_secure_endpoints);
+
 #if HAVE_SECURITY
     bool create_dcps_participant_secure_endpoints();
 
