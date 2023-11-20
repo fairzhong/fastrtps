@@ -47,8 +47,7 @@ namespace rtps {
 PDPSecurityInitiatorListener::PDPSecurityInitiatorListener(
         PDP* parent,
         SecurityInitiatedCallback response_cb)
-    : parent_pdp_(parent)
-    , temp_participant_data_(parent->getRTPSParticipant()->getRTPSParticipantAttributes().allocation)
+    : PDPListener(parent)
     , response_cb_(response_cb)
 {
 }
@@ -57,6 +56,15 @@ void PDPSecurityInitiatorListener::onNewCacheChangeAdded(
         RTPSReader* reader,
         const CacheChange_t* const change_in)
 {
+    // Act as the standard PDPListener when the writer is matched.
+    // This will be the case for unauthenticated participants when
+    // allowed_unathenticated_participants is true
+    if (reader->matched_writer_is_matched(change_in->writerGUID))
+    {
+        PDPListener::onNewCacheChangeAdded(reader, change_in);
+        return;
+    }
+
     CacheChange_t* change = const_cast<CacheChange_t*>(change_in);
     GUID_t writer_guid = change->writerGUID;
     EPROSIMA_LOG_INFO(RTPS_PDP, "SPDP Message received from: " << change_in->writerGUID);
@@ -156,12 +164,6 @@ void PDPSecurityInitiatorListener::onNewCacheChangeAdded(
 
     //Remove change form history.
     parent_pdp_->builtin_endpoints_->remove_from_pdp_reader_history(change);
-}
-
-bool PDPSecurityInitiatorListener::get_key(
-        CacheChange_t* change)
-{
-    return ParameterList::readInstanceHandleFromCDRMsg(change, fastdds::dds::PID_PARTICIPANT_GUID);
 }
 
 } /* namespace rtps */
