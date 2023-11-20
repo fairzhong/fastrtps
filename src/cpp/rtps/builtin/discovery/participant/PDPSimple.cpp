@@ -534,12 +534,25 @@ void PDPSimple::assignRemoteEndpoints(
     EPROSIMA_LOG_INFO(RTPS_PDP, "For RTPSParticipant: " << pdata->m_guid.guidPrefix);
 
 #if HAVE_SECURITY
-    // Validate remote participant
-    mp_RTPSParticipant->security_manager().discovered_participant(*pdata);
-#else
-    //Inform EDP of new RTPSParticipant data:
-    notifyAboveRemoteEndpoints(*pdata, false);
+    auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+    if (nullptr != endpoints)
+    {
+        // This participant is secure.
+        // PDP should have been matched inside notifyAboveRemoteEndpoints after completing the authentication process.
+        // We now match the other builtin endpoints.
+        GUID_t remote_guid = pdata->m_guid;
+        remote_guid.entityId = c_EntityId_spdp_reliable_participant_secure_writer;
+        bool notify_secure = endpoints->secure_reader.reader_->matched_writer_is_matched(remote_guid);
+        assign_low_level_remote_endpoints(*pdata, notify_secure);
+    }
+    else
 #endif // if HAVE_SECURITY
+    {
+        // This participant is not secure.
+        // Match PDP and other builtin endpoints.
+        match_pdp_remote_endpoints(*pdata, false);
+        assign_low_level_remote_endpoints(*pdata, false);
+    }
 }
 
 void PDPSimple::removeRemoteEndpoints(
@@ -574,6 +587,13 @@ void PDPSimple::removeRemoteEndpoints(
 }
 
 void PDPSimple::notifyAboveRemoteEndpoints(
+        const ParticipantProxyData& pdata,
+        bool notify_secure_endpoints)
+{
+    match_pdp_remote_endpoints(pdata, notify_secure_endpoints);
+}
+
+void PDPSimple::match_pdp_remote_endpoints(
         const ParticipantProxyData& pdata,
         bool notify_secure_endpoints)
 {
@@ -671,8 +691,12 @@ void PDPSimple::notifyAboveRemoteEndpoints(
             endpoints->writer.writer_->unsent_changes_reset();
         }
     }
+}
 
-    //Inform EDP of new RTPSParticipant data:
+void PDPSimple::assign_low_level_remote_endpoints(
+        const ParticipantProxyData& pdata,
+        bool notify_secure_endpoints)
+{
     if (mp_EDP != nullptr)
     {
         mp_EDP->assignRemoteEndpoints(pdata, notify_secure_endpoints);
