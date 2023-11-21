@@ -3691,11 +3691,14 @@ TEST(Security, AllowUnauthenticatedParticipants_TwoSecureParticipantsWithDiffere
 
     ASSERT_TRUE(writer.isInitialized());
 
-    //! Wait enough time for the PKI requests to time out and give validation_failed (~15secs)
-    writer.wait_discovery(std::chrono::seconds(20));
+    //! Wait for the authorization to fail (~15secs)
+    writer.waitUnauthorized();
+
+    //! Wait for the discovery
+    writer.wait_discovery();
 
     //! check that the writer matches the reader because of having allow_unauthenticated_participants enabled
-    ASSERT_TRUE(writer.get_matched());
+    ASSERT_TRUE(writer.is_matched());
 
     //! Data is correctly sent and received
     auto data = default_helloworld_data_generator();
@@ -3771,13 +3774,16 @@ TEST(Security, AllowUnauthenticatedParticipants_TwoParticipantsDifferentCertific
 
     ASSERT_TRUE(writer.isInitialized());
 
-    //! Wait enough time for the PKI requests to time out and give validation_failed (~15secs)
-    writer.wait_discovery(std::chrono::seconds(20));
+    //! Wait for the authorization to fail (~15secs)
+    writer.waitUnauthorized();
+
+    //! Wait some time afterwards (this will time out)
+    writer.wait_discovery(std::chrono::seconds(1));
 
     //! check that the writer does not match the reader because of
     //! having read and write protection enabled
     //! despite allow_unauthenticated_participants is enabled
-    ASSERT_FALSE(writer.get_matched());
+    ASSERT_FALSE(writer.is_matched());
 }
 
 // *INDENT-OFF*
