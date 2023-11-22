@@ -530,6 +530,10 @@ protected:
      */
     virtual void update_builtin_locators() = 0;
 
+    void notify_and_maybe_ignore_new_participant(
+            ParticipantProxyData* pdata,
+            bool& should_be_ignored);
+
 private:
 
     //!TimedEvent to periodically resend the local RTPSParticipant information.

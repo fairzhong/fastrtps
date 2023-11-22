@@ -564,6 +564,39 @@ void PDP::resetParticipantAnnouncement()
     }
 }
 
+void PDP::notify_and_maybe_ignore_new_participant(
+        ParticipantProxyData* pdata,
+        bool& should_be_ignored)
+{
+    should_be_ignored = false;
+
+    EPROSIMA_LOG_INFO(RTPS_PDP_DISCOVERY, "New participant "
+        << pdata->m_guid << " at "
+        << "MTTLoc: " << pdata->metatraffic_locators
+        << " DefLoc:" << pdata->default_locators);
+
+    RTPSParticipantListener* listener = getRTPSParticipant()->getListener();
+    if (listener != nullptr)
+    {
+        {
+            std::lock_guard<std::mutex> cb_lock(callback_mtx_);
+            ParticipantDiscoveryInfo info(*pdata);
+            info.status = ParticipantDiscoveryInfo::DISCOVERED_PARTICIPANT;
+
+
+            listener->onParticipantDiscovery(
+                getRTPSParticipant()->getUserRTPSParticipant(),
+                std::move(info),
+                should_be_ignored);
+        }
+
+        if (should_be_ignored)
+        {
+            getRTPSParticipant()->ignore_participant(pdata->m_guid.guidPrefix);
+        }
+    }
+}
+
 bool PDP::has_reader_proxy_data(
         const GUID_t& reader)
 {
