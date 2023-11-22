@@ -131,9 +131,6 @@ void PDPListener::onNewCacheChangeAdded(
                 }
             }
 
-            auto status = (pdata == nullptr) ? ParticipantDiscoveryInfo::DISCOVERED_PARTICIPANT :
-                    ParticipantDiscoveryInfo::CHANGED_QOS_PARTICIPANT;
-
             if (pdata == nullptr)
             {
                 // Create a new one when not found
@@ -144,33 +141,6 @@ void PDPListener::onNewCacheChangeAdded(
 
                 if (pdata != nullptr)
                 {
-                    EPROSIMA_LOG_INFO(RTPS_PDP_DISCOVERY, "New participant "
-                            << pdata->m_guid << " at "
-                            << "MTTLoc: " << pdata->metatraffic_locators
-                            << " DefLoc:" << pdata->default_locators);
-
-                    RTPSParticipantListener* listener = parent_pdp_->getRTPSParticipant()->getListener();
-                    if (listener != nullptr)
-                    {
-                        bool should_be_ignored = false;
-                        {
-                            std::lock_guard<std::mutex> cb_lock(parent_pdp_->callback_mtx_);
-                            ParticipantDiscoveryInfo info(*pdata);
-                            info.status = status;
-
-
-                            listener->onParticipantDiscovery(
-                                parent_pdp_->getRTPSParticipant()->getUserRTPSParticipant(),
-                                std::move(info),
-                                should_be_ignored);
-                        }
-                        if (should_be_ignored)
-                        {
-                            parent_pdp_->getRTPSParticipant()->ignore_participant(guid.guidPrefix);
-                        }
-
-                    }
-
                     // Assigning remote endpoints implies sending a DATA(p) to all matched and fixed readers, since
                     // StatelessWriter::matched_reader_add marks the entire history as unsent if the added reader's
                     // durability is bigger or equal to TRANSIENT_LOCAL_DURABILITY_QOS (TRANSIENT_LOCAL or TRANSIENT),
@@ -210,7 +180,7 @@ void PDPListener::onNewCacheChangeAdded(
                     {
                         std::lock_guard<std::mutex> cb_lock(parent_pdp_->callback_mtx_);
                         ParticipantDiscoveryInfo info(*pdata);
-                        info.status = status;
+                        info.status = ParticipantDiscoveryInfo::CHANGED_QOS_PARTICIPANT;
 
                         listener->onParticipantDiscovery(
                             parent_pdp_->getRTPSParticipant()->getUserRTPSParticipant(),
