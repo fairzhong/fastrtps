@@ -480,25 +480,30 @@ bool PDPClient::create_ds_pdp_reliable_endpoints(
 void PDPClient::assignRemoteEndpoints(
         ParticipantProxyData* pdata)
 {
+    bool ignored = false;
+    notify_and_maybe_ignore_new_participant(pdata, ignored);
+    if (!ignored)
     {
-        eprosima::shared_lock<eprosima::shared_mutex> disc_lock(mp_builtin->getDiscoveryMutex());
-
-        // Verify if this participant is a server
-        for (auto& svr : mp_builtin->m_DiscoveryServers)
         {
-            if (data_matches_with_prefix(svr.guidPrefix, *pdata))
+            eprosima::shared_lock<eprosima::shared_mutex> disc_lock(mp_builtin->getDiscoveryMutex());
+
+            // Verify if this participant is a server
+            for (auto& svr : mp_builtin->m_DiscoveryServers)
             {
-                std::unique_lock<std::recursive_mutex> lock(*getMutex());
-                svr.proxy = pdata;
+                if (data_matches_with_prefix(svr.guidPrefix, *pdata))
+                {
+                    std::unique_lock<std::recursive_mutex> lock(*getMutex());
+                    svr.proxy = pdata;
+                }
             }
         }
-    }
 
 #if HAVE_SECURITY
-    if (mp_RTPSParticipant->security_manager().discovered_participant(*pdata))
+        if (mp_RTPSParticipant->security_manager().discovered_participant(*pdata))
 #endif // HAVE_SECURITY
-    {
-        perform_builtin_endpoints_matching(*pdata);
+        {
+            perform_builtin_endpoints_matching(*pdata);
+        }
     }
 }
 

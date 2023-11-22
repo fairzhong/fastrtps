@@ -531,27 +531,30 @@ bool PDPSimple::create_dcps_participant_secure_endpoints()
 void PDPSimple::assignRemoteEndpoints(
         ParticipantProxyData* pdata)
 {
-    EPROSIMA_LOG_INFO(RTPS_PDP, "For RTPSParticipant: " << pdata->m_guid.guidPrefix);
-
+    bool ignored = false;
+    notify_and_maybe_ignore_new_participant(pdata, ignored);
+    if (!ignored)
+    {
 #if HAVE_SECURITY
-    auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
-    if (nullptr != endpoints)
-    {
-        // This participant is secure.
-        // PDP should have been matched inside notifyAboveRemoteEndpoints after completing the authentication process.
-        // We now match the other builtin endpoints.
-        GUID_t remote_guid = pdata->m_guid;
-        remote_guid.entityId = c_EntityId_spdp_reliable_participant_secure_writer;
-        bool notify_secure = endpoints->secure_reader.reader_->matched_writer_is_matched(remote_guid);
-        assign_low_level_remote_endpoints(*pdata, notify_secure);
-    }
-    else
+        auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+        if (nullptr != endpoints)
+        {
+            // This participant is secure.
+            // PDP should have been matched inside notifyAboveRemoteEndpoints after completing the authentication process.
+            // We now match the other builtin endpoints.
+            GUID_t remote_guid = pdata->m_guid;
+            remote_guid.entityId = c_EntityId_spdp_reliable_participant_secure_writer;
+            bool notify_secure = endpoints->secure_reader.reader_->matched_writer_is_matched(remote_guid);
+            assign_low_level_remote_endpoints(*pdata, notify_secure);
+        }
+        else
 #endif // if HAVE_SECURITY
-    {
-        // This participant is not secure.
-        // Match PDP and other builtin endpoints.
-        match_pdp_remote_endpoints(*pdata, false);
-        assign_low_level_remote_endpoints(*pdata, false);
+        {
+            // This participant is not secure.
+            // Match PDP and other builtin endpoints.
+            match_pdp_remote_endpoints(*pdata, false);
+            assign_low_level_remote_endpoints(*pdata, false);
+        }
     }
 }
 
