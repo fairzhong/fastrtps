@@ -100,66 +100,65 @@ using eprosima::fastdds::dds::TKNAME_MAP;
 
 // ---------- TypeKinds (begin) ------------------
 
-using eprosima::fastdds::dds::TypeKind;
+using TypeKind = eprosima::fastrtps::rtps::octet;
 
-// Version 1.1 per-compilation unit globals
+// invalid
+const TypeKind TK_NONE = 0x00;
 
-using eprosima::fastdds::dds::TK_NONE;
-using eprosima::fastdds::dds::TK_BOOLEAN;
-using eprosima::fastdds::dds::TK_BYTE;
-using eprosima::fastdds::dds::TK_INT16;
-using eprosima::fastdds::dds::TK_INT32;
-using eprosima::fastdds::dds::TK_INT64;
-using eprosima::fastdds::dds::TK_UINT16;
-using eprosima::fastdds::dds::TK_UINT32;
-using eprosima::fastdds::dds::TK_UINT64;
-using eprosima::fastdds::dds::TK_FLOAT32;
-using eprosima::fastdds::dds::TK_FLOAT64;
-using eprosima::fastdds::dds::TK_FLOAT128;
-using eprosima::fastdds::dds::TK_CHAR8;
-using eprosima::fastdds::dds::TK_CHAR16;
+// Primitive TKs
+const TypeKind TK_BOOLEAN = 0x01;
+const TypeKind TK_BYTE = 0x02;
+const TypeKind TK_INT16 = 0x03;
+const TypeKind TK_INT32 = 0x04;
+const TypeKind TK_INT64 = 0x05;
+const TypeKind TK_UINT16 = 0x06;
+const TypeKind TK_UINT32 = 0x07;
+const TypeKind TK_UINT64 = 0x08;
+const TypeKind TK_FLOAT32 = 0x09;
+const TypeKind TK_FLOAT64 = 0x0A;
+const TypeKind TK_FLOAT128 = 0x0B;
+const TypeKind TK_CHAR8 = 0x10;
+const TypeKind TK_CHAR16 = 0x11;
 
 // String TKs
-using eprosima::fastdds::dds::TK_STRING8;
-using eprosima::fastdds::dds::TK_STRING16;
-
-// String TIs
-using eprosima::fastdds::dds::TI_STRING8_SMALL;
-using eprosima::fastdds::dds::TI_STRING8_LARGE;
-using eprosima::fastdds::dds::TI_STRING16_SMALL;
-using eprosima::fastdds::dds::TI_STRING16_LARGE;
+const TypeKind TK_STRING8 = 0x20;
+const TypeKind TK_STRING16 = 0x21;
 
 // Constructed/Named types
-using eprosima::fastdds::dds::TK_ALIAS;
+const TypeKind TK_ALIAS = 0x30;
 
 // Enumerated TKs
-using eprosima::fastdds::dds::TK_ENUM;
-using eprosima::fastdds::dds::TK_BITMASK;
+const TypeKind TK_ENUM = 0x40;
+const TypeKind TK_BITMASK = 0x41;
 
 // Structured TKs
-using eprosima::fastdds::dds::TK_ANNOTATION;
-using eprosima::fastdds::dds::TK_STRUCTURE;
-using eprosima::fastdds::dds::TK_UNION;
-using eprosima::fastdds::dds::TK_BITSET;
+const TypeKind TK_ANNOTATION = 0x50;
+const TypeKind TK_STRUCTURE = 0x51;
+const TypeKind TK_UNION = 0x52;
+const TypeKind TK_BITSET = 0x53;
 
 // Collection TKs
-using eprosima::fastdds::dds::TK_SEQUENCE;
-using eprosima::fastdds::dds::TK_ARRAY;
-using eprosima::fastdds::dds::TK_MAP;
+const TypeKind TK_SEQUENCE = 0x60;
+const TypeKind TK_ARRAY = 0x61;
+const TypeKind TK_MAP = 0x62;
 
-// Collection TIs
-using eprosima::fastdds::dds::TI_PLAIN_SEQUENCE_SMALL;
-using eprosima::fastdds::dds::TI_PLAIN_SEQUENCE_LARGE;
-using eprosima::fastdds::dds::TI_PLAIN_ARRAY_SMALL;
-using eprosima::fastdds::dds::TI_PLAIN_ARRAY_LARGE;
-using eprosima::fastdds::dds::TI_PLAIN_MAP_SMALL;
-using eprosima::fastdds::dds::TI_PLAIN_MAP_LARGE;
-using eprosima::fastdds::dds::TI_STRONGLY_CONNECTED_COMPONENT;
+// TypeIdentifiers
+const TypeKind TI_STRING8_SMALL = 0x70;
+const TypeKind TI_STRING8_LARGE = 0x71;
+const TypeKind TI_STRING16_SMALL = 0x72;
+const TypeKind TI_STRING16_LARGE = 0x73;
+const TypeKind TI_PLAIN_SEQUENCE_SMALL = 0x80;
+const TypeKind TI_PLAIN_SEQUENCE_LARGE = 0x81;
+const TypeKind TI_PLAIN_ARRAY_SMALL = 0x90;
+const TypeKind TI_PLAIN_ARRAY_LARGE = 0x91;
+const TypeKind TI_PLAIN_MAP_SMALL = 0xA0;
+const TypeKind TI_PLAIN_MAP_LARGE = 0xA1;
+const TypeKind TI_STRONGLY_CONNECTED_COMPONENT = 0xB0;
 
 // Equivalence Kinds
-using eprosima::fastdds::dds::EK_MINIMAL;
-using eprosima::fastdds::dds::EK_COMPLETE;
-using eprosima::fastdds::dds::EK_BOTH;
+const TypeKind EK_MINIMAL = 0xF1; // 0x1111 0001
+const TypeKind EK_COMPLETE = 0xF2; // 0x1111 0010
+const TypeKind EK_BOTH = 0xF3; // 0x1111 0011
 
 // ---------- TypeKinds (end) ------------------
 

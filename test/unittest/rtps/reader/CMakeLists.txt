@@ -51,8 +51,9 @@ target_include_directories(WriterProxyTests PRIVATE
     ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
     ${PROJECT_SOURCE_DIR}/src/cpp
     )
-target_link_libraries(WriterProxyTests foonathan_memory
+target_link_libraries(WriterProxyTests
     fastcdr
+    foonathan_memory
     GTest::gmock
     ${CMAKE_DL_LIBS})
 gtest_discover_tests(WriterProxyTests)
@@ -97,8 +98,9 @@ target_include_directories(WriterProxyStopTest PRIVATE
     ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
     ${PROJECT_SOURCE_DIR}/src/cpp
     )
-target_link_libraries(WriterProxyStopTest foonathan_memory
+target_link_libraries(WriterProxyStopTest
     fastcdr
+    foonathan_memory
     GTest::gmock
     ${CMAKE_DL_LIBS})
 gtest_discover_tests(WriterProxyStopTest)
@@ -142,8 +144,9 @@ target_include_directories(WriterProxyAcknackTests PRIVATE
     ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
     ${PROJECT_SOURCE_DIR}/src/cpp
     )
-target_link_libraries(WriterProxyAcknackTests foonathan_memory
+target_link_libraries(WriterProxyAcknackTests
     fastcdr
+    foonathan_memory
     GTest::gmock
     ${CMAKE_DL_LIBS})
 gtest_discover_tests(WriterProxyAcknackTests)
