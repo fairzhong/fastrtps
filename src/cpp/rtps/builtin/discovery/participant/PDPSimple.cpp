@@ -565,7 +565,27 @@ void PDPSimple::notifyAboveRemoteEndpoints(
         const ParticipantProxyData& pdata,
         bool notify_secure_endpoints)
 {
-    match_pdp_remote_endpoints(pdata, notify_secure_endpoints);
+    if (notify_secure_endpoints)
+    {
+        match_pdp_remote_endpoints(pdata, true);
+    }
+    else
+    {
+        // Add remote participant data
+        GUID_t writer_guid{ pdata.m_guid.guidPrefix, c_EntityId_SPDPWriter };
+        ParticipantProxyData* part_data = createParticipantProxyData(pdata, writer_guid);
+        if (part_data != nullptr)
+        {
+            bool ignored = false;
+            notify_and_maybe_ignore_new_participant(part_data, ignored);
+            if (!ignored)
+            {
+                match_pdp_remote_endpoints(*part_data, false);
+                assign_low_level_remote_endpoints(*part_data, false);
+            }
+        }
+    }
+
 }
 
 void PDPSimple::match_pdp_remote_endpoints(
