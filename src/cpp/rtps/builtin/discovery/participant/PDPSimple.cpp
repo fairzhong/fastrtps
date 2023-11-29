@@ -575,6 +575,10 @@ void PDPSimple::match_pdp_remote_endpoints(
         const ParticipantProxyData& pdata,
         bool notify_secure_endpoints)
 {
+#if !HAVE_SECURITY
+    static_cast<void>(notify_secure_endpoints);
+#endif // !HAVE_SECURITY
+
     auto endpoints = static_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
 
     const NetworkFactory& network = mp_RTPSParticipant->network_factory();
