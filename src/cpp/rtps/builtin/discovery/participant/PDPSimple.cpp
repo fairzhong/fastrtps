@@ -338,7 +338,7 @@ bool PDPSimple::create_dcps_participant_endpoints()
     auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpoints*>(builtin_endpoints_.get());
     assert(nullptr != endpoints);
 
-    const char* topic_name = "DCPSParticipant";
+    constexpr const char* topic_name = "DCPSParticipant";
     const EntityId_t reader_entity_id = c_EntityId_SPDPReader;
     const EntityId_t writer_entity_id = c_EntityId_SPDPWriter;
 
@@ -432,7 +432,7 @@ bool PDPSimple::create_dcps_participant_secure_endpoints()
     auto endpoints = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
     assert(nullptr != endpoints);
 
-    const char* topic_name = "DCPSParticipantsSecure";
+    constexpr const char* topic_name = "DCPSParticipantsSecure";
     const EntityId_t reader_entity_id = c_EntityId_spdp_reliable_participant_secure_reader;
     const EntityId_t writer_entity_id = c_EntityId_spdp_reliable_participant_secure_writer;
 
