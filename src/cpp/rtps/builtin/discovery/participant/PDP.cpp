@@ -1425,7 +1425,7 @@ ReaderAttributes PDP::create_builtin_reader_attributes() const
     set_builtin_matched_allocation(attributes.matched_writers_allocation, pattr);
     set_builtin_endpoint_locators(attributes.endpoint, this, mp_builtin);
 
-    // Builtin endpoints are always reliable, transsient local, keyed topics
+    // Builtin endpoints are always reliable, transient local, keyed topics
     attributes.endpoint.reliabilityKind = RELIABLE;
     attributes.endpoint.durabilityKind = TRANSIENT_LOCAL;
     attributes.endpoint.topicKind = WITH_KEY;
@@ -1444,7 +1444,7 @@ WriterAttributes PDP::create_builtin_writer_attributes() const
     set_builtin_matched_allocation(attributes.matched_readers_allocation, pattr);
     set_builtin_endpoint_locators(attributes.endpoint, this, mp_builtin);
 
-    // Builtin endpoints are always reliable, transsient local, keyed topics
+    // Builtin endpoints are always reliable, transient local, keyed topics
     attributes.endpoint.reliabilityKind = RELIABLE;
     attributes.endpoint.durabilityKind = TRANSIENT_LOCAL;
     attributes.endpoint.topicKind = WITH_KEY;
