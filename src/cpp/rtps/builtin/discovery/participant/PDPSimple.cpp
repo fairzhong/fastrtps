@@ -267,9 +267,11 @@ void PDPSimple::announceParticipantState(
         new_change |= m_hasChangedLocalPDP.exchange(false);
 
 #if HAVE_SECURITY
-        auto secure = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
-        if (nullptr != secure)
+        if (mp_RTPSParticipant->is_secure())
         {
+            auto secure = dynamic_cast<fastdds::rtps::SimplePDPEndpointsSecure*>(builtin_endpoints_.get());
+            assert(nullptr != secure);
+
             RTPSWriter& writer = *(secure->secure_writer.writer_);
             WriterHistory& history = *(secure->secure_writer.history_);
             PDP::announceParticipantState(writer, history, new_change, dispose, wp);
