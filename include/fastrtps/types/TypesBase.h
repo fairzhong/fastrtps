@@ -288,6 +288,7 @@ using eprosima::fastdds::dds::ANNOTATION_OCTETSEC_VALUE_MAX_LEN;
 
 using eprosima::fastdds::dds::MemberId;
 using eprosima::fastdds::dds::MEMBER_ID_INVALID;
+constexpr uint32_t INDEX_INVALID = UINT32_MAX;
 
 } // namespace types
 } // namespace fastrtps
