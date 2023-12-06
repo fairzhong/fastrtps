@@ -42,9 +42,10 @@ jobs:
           - 'v142'
     steps:
       - name: Sync eProsima/Fast-DDS repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: src/fastrtps
+          ref: ${{ inputs.fastdds_branch }}
 
       - name: Get minimum supported version of CMake
         uses: lukka/get-cmake@latest
