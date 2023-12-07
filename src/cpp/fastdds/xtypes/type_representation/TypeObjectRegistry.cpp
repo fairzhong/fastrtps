@@ -349,9 +349,6 @@ const TypeIdentifier TypeObjectRegistry::calculate_type_identifier(
 TypeObjectRegistry::TypeObjectRegistry()
 {
     register_primitive_type_identifiers();
-    /* TODO(jlbueno)
-        register_builtin_annotations_type_objects();
-     */
 }
 
 ReturnCode_t TypeObjectRegistry::register_type_object(
