@@ -2690,16 +2690,18 @@ void TypeObjectFactory::apply_type_annotations(
         const fastdds::dds::DynamicType* type {
             build_dynamic_type_v1_3(get_type_name(anno_id), anno_id, get_type_object(anno_id))};
 
-        fastdds::dds::AnnotationDescriptor anno_desc;
-        anno_desc.set_type(*type);
+        /*TODO(richiware)
+           fastdds::dds::AnnotationDescriptor anno_desc;
+           anno_desc.set_type(*type);
 
-        const AppliedAnnotationParameterSeq& anno_params = annotation.param_seq();
-        for (const AppliedAnnotationParameter& a_param : anno_params)
-        {
+           const AppliedAnnotationParameterSeq& anno_params = annotation.param_seq();
+           for (const AppliedAnnotationParameter& a_param : anno_params)
+           {
             std::string param_key = get_key_from_hash(*type, a_param.paramname_hash());
             anno_desc.set_value(param_key.c_str(), a_param.value().to_string().c_str());
-        }
-        type_builder.apply_annotation(anno_desc);
+           }
+           type_builder.apply_annotation(anno_desc);
+         */
     }
 }
 
@@ -2745,16 +2747,18 @@ void TypeObjectFactory::apply_member_annotations(
         const fastdds::dds::DynamicType* type {
             build_dynamic_type_v1_3(get_type_name(anno_id), anno_id, get_type_object(anno_id))};
 
-        fastdds::dds::AnnotationDescriptor anno_desc;
-        anno_desc.set_type(*type);
+        /*TODO(richiware)
+           fastdds::dds::AnnotationDescriptor anno_desc;
+           anno_desc.set_type(*type);
 
-        const AppliedAnnotationParameterSeq& anno_params = annotation.param_seq();
-        for (const AppliedAnnotationParameter& a_param : anno_params)
-        {
+           const AppliedAnnotationParameterSeq& anno_params = annotation.param_seq();
+           for (const AppliedAnnotationParameter& a_param : anno_params)
+           {
             std::string param_key = get_key_from_hash(*type, a_param.paramname_hash());
             anno_desc.set_value(param_key.c_str(), a_param.value().to_string().c_str());
-        }
-        parent_type_builder.apply_annotation_to_member(member_id, anno_desc);
+           }
+           parent_type_builder.apply_annotation_to_member(member_id, anno_desc);
+         */
     }
 }
 
