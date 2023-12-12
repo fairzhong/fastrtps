@@ -101,8 +101,8 @@ struct UDPMessageSender
     }
 
     void send(
-        const CDRMessage_t& msg,
-        const Locator_t& destination)
+            const CDRMessage_t& msg,
+            const Locator_t& destination)
     {
         std::string addr = IPLocator::toIPv4string(destination);
         unsigned short port = static_cast<unsigned short>(destination.port);
