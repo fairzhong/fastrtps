@@ -581,9 +581,9 @@ void PDP::notify_and_maybe_ignore_new_participant(
     should_be_ignored = false;
 
     EPROSIMA_LOG_INFO(RTPS_PDP_DISCOVERY, "New participant "
-        << pdata->m_guid << " at "
-        << "MTTLoc: " << pdata->metatraffic_locators
-        << " DefLoc:" << pdata->default_locators);
+            << pdata->m_guid << " at "
+            << "MTTLoc: " << pdata->metatraffic_locators
+            << " DefLoc:" << pdata->default_locators);
 
     RTPSParticipantListener* listener = getRTPSParticipant()->getListener();
     if (listener != nullptr)
