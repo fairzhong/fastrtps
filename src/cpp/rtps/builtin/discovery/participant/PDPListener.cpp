@@ -134,7 +134,7 @@ void PDPListener::onNewCacheChangeAdded(
             process_alive_data(pdata, temp_participant_data_, writer_guid, reader, lock);
         }
     }
-    else
+    else if (reader->matched_writer_is_matched(writer_guid))
     {
         reader->getMutex().unlock();
         if (parent_pdp_->remove_remote_participant(guid, ParticipantDiscoveryInfo::REMOVED_PARTICIPANT))
