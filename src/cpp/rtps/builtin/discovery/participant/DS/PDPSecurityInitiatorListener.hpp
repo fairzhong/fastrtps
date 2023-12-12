@@ -52,15 +52,6 @@ public:
 
     virtual ~PDPSecurityInitiatorListener() override = default;
 
-    /**
-     * New added cache
-     * @param reader
-     * @param change
-     */
-    void onNewCacheChangeAdded(
-            RTPSReader* reader,
-            const CacheChange_t* const change) override;
-
 protected:
 
     void process_alive_data(
