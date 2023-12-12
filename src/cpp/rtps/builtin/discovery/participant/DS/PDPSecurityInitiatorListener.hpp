@@ -63,6 +63,13 @@ public:
 
 protected:
 
+    void process_alive_data(
+            ParticipantProxyData* old_data,
+            ParticipantProxyData& new_data,
+            GUID_t& writer_guid,
+            RTPSReader* reader,
+            std::unique_lock<std::recursive_mutex>& lock) override;
+
     //! What action to perform upon participant discovery
     SecurityInitiatedCallback response_cb_;
 };

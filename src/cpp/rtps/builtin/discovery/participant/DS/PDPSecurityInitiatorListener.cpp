@@ -23,6 +23,7 @@
 
 #include <fastdds/rtps/builtin/discovery/endpoint/EDP.h>
 #include <fastdds/rtps/builtin/discovery/participant/PDP.h>
+#include <fastdds/rtps/builtin/discovery/participant/PDPListener.h>
 #include <fastdds/rtps/history/ReaderHistory.h>
 #include <fastdds/rtps/participant/ParticipantDiscoveryInfo.h>
 #include <fastdds/rtps/participant/RTPSParticipantListener.h>
@@ -164,6 +165,41 @@ void PDPSecurityInitiatorListener::onNewCacheChangeAdded(
 
     //Remove change form history.
     parent_pdp_->builtin_endpoints_->remove_from_pdp_reader_history(change);
+}
+
+void PDPSecurityInitiatorListener::process_alive_data(
+        ParticipantProxyData* old_data,
+        ParticipantProxyData& new_data,
+        GUID_t& writer_guid,
+        RTPSReader* reader,
+        std::unique_lock<std::recursive_mutex>& lock)
+{
+    if (reader->matched_writer_is_matched(writer_guid))
+    {
+        // Act as the standard PDPListener when the writer is matched.
+        // This will be the case for unauthenticated participants when
+        // allowed_unathenticated_participants is true
+        PDPListener::process_alive_data(old_data, new_data, writer_guid, reader, lock);
+        return;
+    }
+
+    if (old_data == nullptr)
+    {
+        reader->getMutex().unlock();
+        lock.unlock();
+
+        //! notify security manager in order to start handshake
+        bool ret = parent_pdp_->getRTPSParticipant()->security_manager().discovered_participant(new_data);
+        //! Reply to the remote participant
+        if (ret)
+        {
+            response_cb_(temp_participant_data_);
+        }
+
+        // Take again the reader lock
+        reader->getMutex().lock();
+    }
+
 }
 
 } /* namespace rtps */
