@@ -281,7 +281,8 @@ bool StatelessReader::change_received(
         bool update_notified = true;
 
         decltype(matched_writers_)::iterator writer = matched_writers_.end();
-        if ((EXCLUSIVE_OWNERSHIP_QOS == m_att.ownershipKind) || (m_trustedWriterEntityId == change->writerGUID.entityId))
+        if ((EXCLUSIVE_OWNERSHIP_QOS == m_att.ownershipKind) ||
+                (m_trustedWriterEntityId == change->writerGUID.entityId))
         {
             writer = std::find_if(matched_writers_.begin(), matched_writers_.end(),
                             [change](const RemoteWriterInfo_t& item)

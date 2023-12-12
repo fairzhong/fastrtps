@@ -37,22 +37,24 @@ class PDP;
  * This class is implemented in order to use the same structure than with any other RTPSReader.
  * @ingroup DISCOVERY_MODULE
  */
-class PDPListener: public ReaderListener
+class PDPListener : public ReaderListener
 {
 
 public:
+
     /**
      * @param parent Pointer to object creating this object
      */
-    PDPListener(PDP* parent);
+    PDPListener(
+            PDP* parent);
 
     virtual ~PDPListener() override = default;
 
     /**
-    * New added cache
-    * @param reader
-    * @param change
-    */
+     * New added cache
+     * @param reader
+     * @param change
+     */
     void onNewCacheChangeAdded(
             RTPSReader* reader,
             const CacheChange_t* const change) override;
@@ -83,7 +85,8 @@ protected:
      * @param change Pointer to the CacheChange_t
      * @return True on success
      */
-    bool get_key(CacheChange_t* change);
+    bool get_key(
+            CacheChange_t* change);
 
     //!Pointer to the associated mp_SPDP;
     PDP* parent_pdp_;
@@ -101,5 +104,5 @@ protected:
 } /* namespace fastrtps */
 } /* namespace eprosima */
 
-#endif
+#endif // ifndef DOXYGEN_SHOULD_SKIP_THIS_PUBLIC
 #endif /* _FASTDDS_RTPS_PDPLISTENER_H_ */
