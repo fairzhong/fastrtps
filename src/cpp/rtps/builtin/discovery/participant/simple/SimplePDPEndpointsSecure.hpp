@@ -47,7 +47,7 @@ struct SimplePDPEndpointsSecure : public SimplePDPEndpoints
                DISC_BUILTIN_ENDPOINT_PARTICIPANT_SECURE_ANNOUNCER | DISC_BUILTIN_ENDPOINT_PARTICIPANT_SECURE_DETECTOR;
     }
 
-    const std::unique_ptr<fastrtps::rtps::ReaderListener>& main_listener() const
+    const std::unique_ptr<fastrtps::rtps::ReaderListener>& main_listener() const override
     {
         return secure_reader.listener_;
     }
