@@ -46,7 +46,7 @@ struct DiscoveryServerPDPEndpoints : public PDPEndpoints
         return DISC_BUILTIN_ENDPOINT_PARTICIPANT_ANNOUNCER | DISC_BUILTIN_ENDPOINT_PARTICIPANT_DETECTOR;
     }
 
-    const std::unique_ptr<fastrtps::rtps::ReaderListener>& main_listener() const
+    const std::unique_ptr<fastrtps::rtps::ReaderListener>& main_listener() const override
     {
         return reader.listener_;
     }
