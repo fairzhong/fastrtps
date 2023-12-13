@@ -62,6 +62,7 @@
 #include <rtps/persistence/PersistenceService.h>
 #include <statistics/rtps/GuidUtils.hpp>
 
+
 #if HAVE_SECURITY
 #include <security/logging/LogTopic.h>
 #endif  // HAVE_SECURITY
