@@ -2789,11 +2789,12 @@ std::string TypeObjectFactory::get_key_from_hash(
         const fastdds::dds::DynamicType& annotation_descriptor_type,
         const NameHash& hash) const
 {
-    auto members = annotation_descriptor_type.get_all_members();
-    fastdds::dds::MemberId id;
+    /*TODO(richiware)
+       auto members = annotation_descriptor_type.get_all_members();
+       fastdds::dds::MemberId id;
 
-    while (!!id)
-    {
+       while (!!id)
+       {
         std::string name = members[id]->get_name();
 
         NameHash memberHash;
@@ -2808,7 +2809,8 @@ std::string TypeObjectFactory::get_key_from_hash(
         }
 
         id = members.next_key(id);
-    }
+       }
+     */
 
     return {};
 }
