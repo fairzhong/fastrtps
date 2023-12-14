@@ -39,8 +39,6 @@ using eprosima::fastrtps::rtps::c_EntityId_TypeLookup_reply_writer;
 using namespace eprosima::fastdds::dds::builtin;
 using namespace eprosima::fastrtps::types;
 
-using eprosima::fastrtps::types::TypeObjectFactory;
-
 TypeLookupReplyListener::TypeLookupReplyListener(
         TypeLookupManager* manager)
     : typelookup_manager_(manager)
