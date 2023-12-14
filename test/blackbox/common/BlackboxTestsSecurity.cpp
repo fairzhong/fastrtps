@@ -16,21 +16,24 @@
 
 #if HAVE_SECURITY
 
+#include <atomic>
+#include <algorithm>
+#include <fstream>
+#include <map>
+
+#include <gtest/gtest.h>
+
 #include "PubSubReader.hpp"
 #include "PubSubWriter.hpp"
 #include "PubSubWriterReader.hpp"
 #include "PubSubParticipant.hpp"
 
-#include <gtest/gtest.h>
-#include <fstream>
-#include <map>
-#include <algorithm>
-
-#include <fastrtps/xmlparser/XMLProfileManager.h>
-#include <fastdds/rtps/transport/shared_mem/SharedMemTransportDescriptor.h>
-#include <rtps/transport/test_UDPv4Transport.h>
-
 #include <fastdds/dds/log/Log.hpp>
+#include <fastdds/rtps/common/EntityId_t.hpp>
+#include <fastdds/rtps/transport/shared_mem/SharedMemTransportDescriptor.h>
+#include <fastrtps/xmlparser/XMLProfileManager.h>
+
+#include <rtps/transport/test_UDPv4Transport.h>
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
@@ -466,7 +469,7 @@ TEST_P(Security, BuiltinAuthenticationPlugin_PKIDH_lossy_conditions)
 }
 
 // Regresion test for Refs #13295, github #2362
-TEST_P(Security, BuiltinAuthenticationPlugin_second_participant_creation_loop)
+TEST(Security, BuiltinAuthenticationPlugin_second_participant_creation_loop)
 {
     constexpr size_t n_loops = 101;
 
@@ -502,6 +505,63 @@ TEST_P(Security, BuiltinAuthenticationPlugin_second_participant_creation_loop)
     Log::ClearConsumers();
     Log::RegisterConsumer(std::unique_ptr<LogConsumer>(new TestConsumer(n_logs)));
 
+    // Class to allow waiting for the authentication message to be sent
+    class AuthMessageSendStatus
+    {
+        bool message_sent_ = false;
+        std::mutex mutex_;
+        std::condition_variable cv_;
+
+    public:
+
+        void reset()
+        {
+            std::lock_guard < std::mutex> guard(mutex_);
+            message_sent_ = false;
+        }
+
+        void notify()
+        {
+            std::lock_guard<std::mutex> guard(mutex_);
+            message_sent_ = true;
+            cv_.notify_one();
+        }
+
+        void wait()
+        {
+            std::unique_lock<std::mutex> lock(mutex_);
+            cv_.wait(lock, [this]() -> bool
+                    {
+                        return message_sent_;
+                    });
+        }
+
+    };
+
+    // Prepare transport to check that the authentication message is sent
+    auto transport = std::make_shared<test_UDPv4TransportDescriptor>();
+    AuthMessageSendStatus auth_message_send_status;
+    transport->drop_data_messages_filter_ = [&auth_message_send_status](eprosima::fastrtps::rtps::CDRMessage_t& msg)
+            -> bool
+            {
+                auto old_pos = msg.pos;
+
+                // Jump to writer entity id
+                msg.pos += 2 + 2 + 4;
+
+                // Read writer entity id
+                eprosima::fastrtps::rtps::GUID_t writer_guid;
+                eprosima::fastrtps::rtps::CDRMessage::readEntityId(&msg, &writer_guid.entityId);
+                msg.pos = old_pos;
+
+                if (writer_guid.entityId == eprosima::fastrtps::rtps::participant_stateless_message_writer_entity_id)
+                {
+                    auth_message_send_status.notify();
+                }
+
+                return false;
+            };
+
     // Prepare participant properties
     PropertyPolicy property_policy;
     property_policy.properties().emplace_back(Property("dds.sec.auth.plugin", "builtin.PKI-DH"));
@@ -514,6 +574,7 @@ TEST_P(Security, BuiltinAuthenticationPlugin_second_participant_creation_loop)
 
     // Create the participant being checked
     PubSubReader<HelloWorldPubSubType> main_participant("HelloWorldTopic");
+    main_participant.disable_builtin_transport().add_user_transport_to_pparams(transport);
     main_participant.property_policy(property_policy).init();
     EXPECT_TRUE(main_participant.isInitialized());
 
@@ -526,13 +587,14 @@ TEST_P(Security, BuiltinAuthenticationPlugin_second_participant_creation_loop)
 
         // Wait for undiscovery so we can wait for discovery below
         EXPECT_TRUE(main_participant.wait_participant_undiscovery());
+        auth_message_send_status.reset();
 
         // Create another participant with authentication enabled
         PubSubParticipant<HelloWorldPubSubType> other_participant(0, 0, 0, 0);
         EXPECT_TRUE(other_participant.property_policy(property_policy).init_participant());
 
-        // Wait for the new participant to be discovered by the main one
-        EXPECT_TRUE(main_participant.wait_participant_discovery());
+        // Wait for the main participant to send an authentication message to the other participant
+        auth_message_send_status.wait();
 
         // The created participant gets out of scope here, and is destroyed
     }
