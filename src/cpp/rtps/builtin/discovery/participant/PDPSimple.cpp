@@ -320,7 +320,7 @@ bool PDPSimple::createPDPEndpoints()
         create_dcps_participant_secure_endpoints();
     }
 #endif  // HAVE_SECURITY
-    EPROSIMA_LOG_INFO(RTPS_PDP, "SPDP Endpoints creation finished");
+    logInfo(RTPS_PDP, "SPDP Endpoints creation finished");
     return ret_val;
 }
 
@@ -454,7 +454,7 @@ bool PDPSimple::create_dcps_participant_secure_endpoints()
     }
     else
     {
-        EPROSIMA_LOG_ERROR(RTPS_PDP, "'" << topic_name << "' builtin reader creation failed");
+        logError(RTPS_PDP, "'" << topic_name << "' builtin reader creation failed");
         reader.release();
         return false;
     }
@@ -477,7 +477,7 @@ bool PDPSimple::create_dcps_participant_secure_endpoints()
     }
     else
     {
-        EPROSIMA_LOG_ERROR(RTPS_PDP, "'" << topic_name << "' builtin writer creation failed");
+        logError(RTPS_PDP, "'" << topic_name << "' builtin writer creation failed");
         writer.release();
         return false;
     }
@@ -632,7 +632,7 @@ void PDPSimple::match_pdp_remote_endpoints(
                         reader->getGuid(), pdata.m_guid, *temp_writer_data,
                         reader->getAttributes().security_attributes()))
             {
-                EPROSIMA_LOG_ERROR(RTPS_EDP, "Security manager returns an error for writer " <<
+                logError(RTPS_EDP, "Security manager returns an error for writer " <<
                         temp_writer_data->guid());
             }
         }
@@ -661,7 +661,7 @@ void PDPSimple::match_pdp_remote_endpoints(
                         writer->getGuid(), pdata.m_guid, *temp_reader_data,
                         writer->getAttributes().security_attributes()))
             {
-                EPROSIMA_LOG_ERROR(RTPS_EDP, "Security manager returns an error for reader " <<
+                logError(RTPS_EDP, "Security manager returns an error for reader " <<
                         temp_reader_data->guid());
             }
         }

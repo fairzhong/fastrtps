@@ -176,7 +176,7 @@ void PDPListener::process_alive_data(
         old_data->isAlive = true;
         reader->getMutex().unlock();
 
-        EPROSIMA_LOG_INFO(RTPS_PDP_DISCOVERY, "Update participant "
+        logInfo(RTPS_PDP_DISCOVERY, "Update participant "
                 << old_data->m_guid << " at "
                 << "MTTLoc: " << old_data->metatraffic_locators
                 << " DefLoc:" << old_data->default_locators);
@@ -191,8 +191,6 @@ void PDPListener::process_alive_data(
         RTPSParticipantListener* listener = parent_pdp_->getRTPSParticipant()->getListener();
         if (listener != nullptr)
         {
-            bool should_be_ignored = false;
-
             {
                 std::lock_guard<std::mutex> cb_lock(parent_pdp_->callback_mtx_);
                 ParticipantDiscoveryInfo info(*old_data);
@@ -200,12 +198,7 @@ void PDPListener::process_alive_data(
 
                 listener->onParticipantDiscovery(
                     parent_pdp_->getRTPSParticipant()->getUserRTPSParticipant(),
-                    std::move(info),
-                    should_be_ignored);
-            }
-            if (should_be_ignored)
-            {
-                parent_pdp_->getRTPSParticipant()->ignore_participant(participant_guid.guidPrefix);
+                    std::move(info));
             }
         }
     }

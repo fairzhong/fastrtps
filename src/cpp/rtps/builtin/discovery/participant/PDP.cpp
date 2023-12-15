@@ -584,7 +584,7 @@ void PDP::notify_and_maybe_ignore_new_participant(
 {
     should_be_ignored = false;
 
-    EPROSIMA_LOG_INFO(RTPS_PDP_DISCOVERY, "New participant "
+    logInfo(RTPS_PDP_DISCOVERY, "New participant "
             << pdata->m_guid << " at "
             << "MTTLoc: " << pdata->metatraffic_locators
             << " DefLoc:" << pdata->default_locators);
@@ -600,13 +600,7 @@ void PDP::notify_and_maybe_ignore_new_participant(
 
             listener->onParticipantDiscovery(
                 getRTPSParticipant()->getUserRTPSParticipant(),
-                std::move(info),
-                should_be_ignored);
-        }
-
-        if (should_be_ignored)
-        {
-            getRTPSParticipant()->ignore_participant(pdata->m_guid.guidPrefix);
+                std::move(info));
         }
     }
 }
@@ -1332,8 +1326,6 @@ static void set_builtin_endpoint_locators(
         const PDP* pdp,
         const BuiltinProtocols* builtin)
 {
-    const RTPSParticipantAttributes& pattr = pdp->getRTPSParticipant()->getRTPSParticipantAttributes();
-
     auto part_data = pdp->getLocalParticipantProxyData();
     if (nullptr == part_data)
     {
@@ -1356,10 +1348,6 @@ static void set_builtin_endpoint_locators(
             endpoint.multicastLocatorList.push_back(loc);
         }
     }
-
-    // External locators are always taken from the same place
-    endpoint.external_unicast_locators = pdp->builtin_attributes().metatraffic_external_unicast_locators;
-    endpoint.ignore_non_matching_locators = pattr.ignore_non_matching_locators;
 }
 
 ReaderAttributes PDP::create_builtin_reader_attributes() const
