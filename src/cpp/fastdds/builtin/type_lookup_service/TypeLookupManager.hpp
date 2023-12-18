@@ -198,6 +198,13 @@ private:
             const fastrtps::rtps::GuidPrefix_t& type_server);
 
     /**
+     *  Notifies callbacks for a given TypeIdentfierWithSize
+     * @param type_identifier_with_size[in] TypeIdentfierWithSize of the callbacks to notify.
+     */
+    void notify_callbacks(
+            xtypes::TypeIdentfierWithSize type_identifier_with_size);
+
+    /**
      * Adds a callback to the async_get_type_callbacks_ entry of the TypeIdentfierWithSize, or creates a new one if
      * TypeIdentfierWithSize was not in the map before
      * @param type_identifier_with_size[in] TypeIdentfierWithSize to add the callback to
@@ -214,12 +221,12 @@ private:
      * Adds a callback to the async_get_type_callbacks_ entry of the TypeIdentfierWithSize, or creates a new one if
      * TypeIdentfierWithSize was not in the map before
      * @param request[in] SampleIdentity of the request
-     * @param type_id[in] TypeIdentfierWithSize that originated the request.
+     * @param type_identifier_with_size[in] TypeIdentfierWithSize that originated the request.
      * @return true if added. false otherwise
      */
     bool add_async_get_type_request(
             const SampleIdentity& request,
-            const xtypes::TypeIdentfierWithSize& type_id );
+            const xtypes::TypeIdentfierWithSize& type_identifier_with_size );
 
     /**
      * Removes a TypeIdentfierWithSize from the async_get_type_callbacks_.
@@ -228,6 +235,14 @@ private:
      */
     bool remove_async_get_type_callback(
             const xtypes::TypeIdentfierWithSize& type_identifier_with_size);
+
+    /**
+     * Removes a SampleIdentity from the async_get_type_callbacks_.
+     * @param request[in] SampleIdentity to be removed.
+     * @return true if removed. false otherwise
+     */
+    bool remove_async_get_types_request(
+            SampleIdentity request);
 
     /**
      * Complete requests common fields, create CacheChange, serialize request and add change to writer history.
