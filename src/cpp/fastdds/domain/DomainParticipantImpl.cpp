@@ -1531,15 +1531,17 @@ bool DomainParticipantImpl::register_dynamic_type_to_factories(
         DynamicTypeBuilderFactory& factory = DynamicTypeBuilderFactory::get_instance();
         TypeObject typeObj;
 
-        const DynamicType* rtype = nullptr;
-        rtype = dpst_v1_3->GetDynamicType();
-        std::unique_ptr<const DynamicType> dtype{rtype};
+        /*TODO(richiware)
+           const DynamicType* rtype = nullptr;
+           rtype = dpst_v1_3->GetDynamicType();
+           std::unique_ptr<const DynamicType> dtype{rtype};
 
-        // complete
-        factory.build_type_object(*dtype, typeObj);
+           // complete
+           factory.build_type_object(*dtype, typeObj);
 
-        // Minimal too
-        factory.build_type_object(*dtype, typeObj, false);
+           // Minimal too
+           factory.build_type_object(*dtype, typeObj, false);
+         */
     }
     else
     {

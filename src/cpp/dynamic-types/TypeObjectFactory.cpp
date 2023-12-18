@@ -1914,14 +1914,16 @@ ReturnCode_t TypeObjectFactory::build_dynamic_type(
        }
      */
 
-    fastdds::dds::DynamicTypeBuilder* outputType(fastdds::dds::DynamicTypeBuilderFactory::
-                    get_instance().create_type(descriptor));
-    //outputType->set_name(name);
-    if (outputType)
-    {
-        ret = outputType->build();
-        return eprosima::fastdds::dds::RETCODE_OK;
-    }
+    /*TODO(richiware)
+       fastdds::dds::DynamicTypeBuilder* outputType(fastdds::dds::DynamicTypeBuilderFactory::
+               get_instance().create_type(descriptor));
+       //outputType->set_name(name);
+       if (outputType)
+       {
+       ret = outputType->build();
+       return eprosima::fastdds::dds::RETCODE_OK;
+       }
+     */
     return eprosima::fastdds::dds::RETCODE_ERROR;
 }
 

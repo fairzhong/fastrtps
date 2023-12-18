@@ -61,7 +61,7 @@ target_sources(xtypes INTERFACE
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTypeImpl.cpp
     #${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTypeBuilder.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTracker.cpp
-    #${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTypeBuilderImpl.cpp
+    ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTypeBuilderImpl.cpp
     #${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTypeBuilderFactory.cpp
     #${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTypeBuilderFactoryImpl.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/xtypes/dynamic_types/DynamicTypeMemberImpl.cpp
@@ -244,7 +244,7 @@ set(${PROJECT_NAME}_source_files
     rtps/common/Token.cpp
     rtps/xmlparser/XMLParserCommon.cpp
     rtps/xmlparser/XMLElementParser.cpp
-    rtps/xmlparser/XMLDynamicParser.cpp
+    #rtps/xmlparser/XMLDynamicParser.cpp
     rtps/xmlparser/XMLEndpointParser.cpp
     rtps/xmlparser/XMLParser.cpp
     rtps/xmlparser/XMLProfileManager.cpp
