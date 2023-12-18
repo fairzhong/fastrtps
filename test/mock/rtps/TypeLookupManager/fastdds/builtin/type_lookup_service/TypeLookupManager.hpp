@@ -41,7 +41,7 @@ namespace fastdds {
 namespace dds {
 namespace builtin {
 
-extern const fastrtps::rtps::SampleIdentity INVALID_SAMPLE_IDENTITY;
+const SampleIdentity INVALID_SAMPLE_IDENTITY;
 
 /**
  * Class TypeLookupManager that implements the TypeLookup Service described in the DDS-XTYPES 1.2 specification.
@@ -63,10 +63,10 @@ public:
     {
     }
 
-    MOCK_CONST_METHOD1(get_type_dependencies, fastrtps::rtps::SampleIdentity(
+    MOCK_CONST_METHOD1(get_type_dependencies, SampleIdentity(
                 const fastrtps::types::TypeIdentifierSeq&));
 
-    MOCK_CONST_METHOD1(get_types, fastrtps::rtps::SampleIdentity(
+    MOCK_CONST_METHOD1(get_types, SampleIdentity(
                 const fastrtps::types::TypeIdentifierSeq&));
 
 };
