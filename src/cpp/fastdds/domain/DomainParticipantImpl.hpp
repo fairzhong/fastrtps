@@ -656,7 +656,7 @@ protected:
             InstanceHandle_t& handle);
 
     ReturnCode_t register_dynamic_type(
-            const DynamicType* dyn_type);
+            traits<DynamicType>::ref_type dyn_type);
 
     bool register_dynamic_type_to_factories(
             const TypeSupport& type) const;
