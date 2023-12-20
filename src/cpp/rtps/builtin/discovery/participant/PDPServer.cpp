@@ -207,7 +207,7 @@ ParticipantProxyData* PDPServer::createParticipantProxyData(
             eprosima::shared_lock<eprosima::shared_mutex> disc_lock(mp_builtin->getDiscoveryMutex());
             for (auto& svr : mp_builtin->m_DiscoveryServers)
             {
-			    if (data_matches_with_prefix(svr.guidPrefix, participant_data))
+                if (data_matches_with_prefix(svr.guidPrefix, participant_data))
                 {
                     do_lease = true;
                 }
@@ -605,7 +605,7 @@ void PDPServer::match_reliable_pdp_endpoints(
     else
     {
         logError(RTPS_PDP_SERVER, "Participant " << pdata.m_guid.guidPrefix
-                                                           << " did not send information about builtin writers");
+                                                 << " did not send information about builtin writers");
         return;
     }
 
@@ -638,7 +638,7 @@ void PDPServer::match_reliable_pdp_endpoints(
     else
     {
         logError(RTPS_PDP_SERVER, "Participant " << pdata.m_guid.guidPrefix
-                                                           << " did not send information about builtin readers");
+                                                 << " did not send information about builtin readers");
         return;
     }
 }
