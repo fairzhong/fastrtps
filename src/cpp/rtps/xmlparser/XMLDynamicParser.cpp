@@ -41,9 +41,6 @@ using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace eprosima::fastrtps::xmlparser;
 
-using eprosima::fastrtps::types::MAX_ELEMENTS_COUNT;
-using eprosima::fastrtps::types::TypeKind;
-
 XMLP_ret XMLParser::parseXMLDynamicType(
         tinyxml2::XMLElement* p_root)
 {
