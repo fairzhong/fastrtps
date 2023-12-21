@@ -39,119 +39,6 @@ namespace dds {
 namespace xtypes {
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 StringSTypeDefnPubSubType::StringSTypeDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::StringSTypeDefn");
@@ -195,7 +82,7 @@ bool StringSTypeDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -340,8 +227,6 @@ bool StringSTypeDefnPubSubType::getKey(
     return true;
 }
 
-
-
 StringLTypeDefnPubSubType::StringLTypeDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::StringLTypeDefn");
@@ -385,7 +270,7 @@ bool StringLTypeDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -530,8 +415,6 @@ bool StringLTypeDefnPubSubType::getKey(
     return true;
 }
 
-
-
 PlainCollectionHeaderPubSubType::PlainCollectionHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::PlainCollectionHeader");
@@ -575,7 +458,7 @@ bool PlainCollectionHeaderPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -720,8 +603,6 @@ bool PlainCollectionHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 PlainSequenceSElemDefnPubSubType::PlainSequenceSElemDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::PlainSequenceSElemDefn");
@@ -765,7 +646,7 @@ bool PlainSequenceSElemDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -910,8 +791,6 @@ bool PlainSequenceSElemDefnPubSubType::getKey(
     return true;
 }
 
-
-
 PlainSequenceLElemDefnPubSubType::PlainSequenceLElemDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::PlainSequenceLElemDefn");
@@ -955,7 +834,7 @@ bool PlainSequenceLElemDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -1100,8 +979,6 @@ bool PlainSequenceLElemDefnPubSubType::getKey(
     return true;
 }
 
-
-
 PlainArraySElemDefnPubSubType::PlainArraySElemDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::PlainArraySElemDefn");
@@ -1145,7 +1022,7 @@ bool PlainArraySElemDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -1290,8 +1167,6 @@ bool PlainArraySElemDefnPubSubType::getKey(
     return true;
 }
 
-
-
 PlainArrayLElemDefnPubSubType::PlainArrayLElemDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::PlainArrayLElemDefn");
@@ -1335,7 +1210,7 @@ bool PlainArrayLElemDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -1480,8 +1355,6 @@ bool PlainArrayLElemDefnPubSubType::getKey(
     return true;
 }
 
-
-
 PlainMapSTypeDefnPubSubType::PlainMapSTypeDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::PlainMapSTypeDefn");
@@ -1525,7 +1398,7 @@ bool PlainMapSTypeDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -1670,8 +1543,6 @@ bool PlainMapSTypeDefnPubSubType::getKey(
     return true;
 }
 
-
-
 PlainMapLTypeDefnPubSubType::PlainMapLTypeDefnPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::PlainMapLTypeDefn");
@@ -1715,7 +1586,7 @@ bool PlainMapLTypeDefnPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -1859,8 +1730,6 @@ bool PlainMapLTypeDefnPubSubType::getKey(
     }
     return true;
 }
-
-
 
 StronglyConnectedComponentIdPubSubType::StronglyConnectedComponentIdPubSubType()
 {
@@ -2092,8 +1961,8 @@ bool ExtendedTypeDefnPubSubType::serialize(
 #if FASTCDR_VERSION_MAJOR > 1
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
-        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR :
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -2243,9 +2112,6 @@ bool ExtendedTypeDefnPubSubType::getKey(
 
 
 
-
-
-
 ExtendedAnnotationParameterValuePubSubType::ExtendedAnnotationParameterValuePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::ExtendedAnnotationParameterValue");
@@ -2288,8 +2154,8 @@ bool ExtendedAnnotationParameterValuePubSubType::serialize(
 #if FASTCDR_VERSION_MAJOR > 1
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
-        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR :
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -2433,9 +2299,6 @@ bool ExtendedAnnotationParameterValuePubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 AppliedAnnotationParameterPubSubType::AppliedAnnotationParameterPubSubType()
@@ -2627,9 +2490,6 @@ bool AppliedAnnotationParameterPubSubType::getKey(
 }
 
 
-
-
-
 AppliedAnnotationPubSubType::AppliedAnnotationPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::AppliedAnnotation");
@@ -2819,9 +2679,6 @@ bool AppliedAnnotationPubSubType::getKey(
 }
 
 
-
-
-
 AppliedVerbatimAnnotationPubSubType::AppliedVerbatimAnnotationPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::AppliedVerbatimAnnotation");
@@ -2865,7 +2722,7 @@ bool AppliedVerbatimAnnotationPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -3009,8 +2866,6 @@ bool AppliedVerbatimAnnotationPubSubType::getKey(
     }
     return true;
 }
-
-
 
 AppliedBuiltinMemberAnnotationsPubSubType::AppliedBuiltinMemberAnnotationsPubSubType()
 {
@@ -3200,8 +3055,6 @@ bool AppliedBuiltinMemberAnnotationsPubSubType::getKey(
     return true;
 }
 
-
-
 CommonStructMemberPubSubType::CommonStructMemberPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonStructMember");
@@ -3245,7 +3098,7 @@ bool CommonStructMemberPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -3390,8 +3243,6 @@ bool CommonStructMemberPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteMemberDetailPubSubType::CompleteMemberDetailPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteMemberDetail");
@@ -3435,7 +3286,7 @@ bool CompleteMemberDetailPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -3580,8 +3431,6 @@ bool CompleteMemberDetailPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalMemberDetailPubSubType::MinimalMemberDetailPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalMemberDetail");
@@ -3625,7 +3474,7 @@ bool MinimalMemberDetailPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -3769,8 +3618,6 @@ bool MinimalMemberDetailPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteStructMemberPubSubType::CompleteStructMemberPubSubType()
 {
@@ -3961,9 +3808,6 @@ bool CompleteStructMemberPubSubType::getKey(
 }
 
 
-
-
-
 MinimalStructMemberPubSubType::MinimalStructMemberPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalStructMember");
@@ -4151,9 +3995,6 @@ bool MinimalStructMemberPubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 AppliedBuiltinTypeAnnotationsPubSubType::AppliedBuiltinTypeAnnotationsPubSubType()
@@ -4387,7 +4228,7 @@ bool MinimalTypeDetailPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -4532,8 +4373,6 @@ bool MinimalTypeDetailPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteTypeDetailPubSubType::CompleteTypeDetailPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteTypeDetail");
@@ -4577,7 +4416,7 @@ bool CompleteTypeDetailPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -4721,8 +4560,6 @@ bool CompleteTypeDetailPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteStructHeaderPubSubType::CompleteStructHeaderPubSubType()
 {
@@ -4912,8 +4749,6 @@ bool CompleteStructHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalStructHeaderPubSubType::MinimalStructHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalStructHeader");
@@ -5102,8 +4937,6 @@ bool MinimalStructHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteStructTypePubSubType::CompleteStructTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteStructType");
@@ -5147,7 +4980,7 @@ bool CompleteStructTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -5292,8 +5125,6 @@ bool CompleteStructTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalStructTypePubSubType::MinimalStructTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalStructType");
@@ -5337,7 +5168,7 @@ bool MinimalStructTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -5483,9 +5314,6 @@ bool MinimalStructTypePubSubType::getKey(
 }
 
 
-
-
-
 CommonUnionMemberPubSubType::CommonUnionMemberPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonUnionMember");
@@ -5529,7 +5357,7 @@ bool CommonUnionMemberPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -5673,8 +5501,6 @@ bool CommonUnionMemberPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteUnionMemberPubSubType::CompleteUnionMemberPubSubType()
 {
@@ -5863,9 +5689,6 @@ bool CompleteUnionMemberPubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 MinimalUnionMemberPubSubType::MinimalUnionMemberPubSubType()
@@ -6057,9 +5880,6 @@ bool MinimalUnionMemberPubSubType::getKey(
 }
 
 
-
-
-
 CommonDiscriminatorMemberPubSubType::CommonDiscriminatorMemberPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonDiscriminatorMember");
@@ -6103,7 +5923,7 @@ bool CommonDiscriminatorMemberPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -6247,8 +6067,6 @@ bool CommonDiscriminatorMemberPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteDiscriminatorMemberPubSubType::CompleteDiscriminatorMemberPubSubType()
 {
@@ -6438,8 +6256,6 @@ bool CompleteDiscriminatorMemberPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalDiscriminatorMemberPubSubType::MinimalDiscriminatorMemberPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalDiscriminatorMember");
@@ -6627,8 +6443,6 @@ bool MinimalDiscriminatorMemberPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteUnionHeaderPubSubType::CompleteUnionHeaderPubSubType()
 {
@@ -6818,8 +6632,6 @@ bool CompleteUnionHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalUnionHeaderPubSubType::MinimalUnionHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalUnionHeader");
@@ -7008,8 +6820,6 @@ bool MinimalUnionHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteUnionTypePubSubType::CompleteUnionTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteUnionType");
@@ -7053,7 +6863,7 @@ bool CompleteUnionTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -7198,8 +7008,6 @@ bool CompleteUnionTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalUnionTypePubSubType::MinimalUnionTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalUnionType");
@@ -7243,7 +7051,7 @@ bool MinimalUnionTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -7388,8 +7196,6 @@ bool MinimalUnionTypePubSubType::getKey(
     return true;
 }
 
-
-
 CommonAnnotationParameterPubSubType::CommonAnnotationParameterPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonAnnotationParameter");
@@ -7433,7 +7239,7 @@ bool CommonAnnotationParameterPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -7577,8 +7383,6 @@ bool CommonAnnotationParameterPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteAnnotationParameterPubSubType::CompleteAnnotationParameterPubSubType()
 {
@@ -7769,9 +7573,6 @@ bool CompleteAnnotationParameterPubSubType::getKey(
 }
 
 
-
-
-
 MinimalAnnotationParameterPubSubType::MinimalAnnotationParameterPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalAnnotationParameter");
@@ -7959,9 +7760,6 @@ bool MinimalAnnotationParameterPubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 CompleteAnnotationHeaderPubSubType::CompleteAnnotationHeaderPubSubType()
@@ -8340,8 +8138,6 @@ bool MinimalAnnotationHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteAnnotationTypePubSubType::CompleteAnnotationTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteAnnotationType");
@@ -8385,7 +8181,7 @@ bool CompleteAnnotationTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -8530,8 +8326,6 @@ bool CompleteAnnotationTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalAnnotationTypePubSubType::MinimalAnnotationTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalAnnotationType");
@@ -8575,7 +8369,7 @@ bool MinimalAnnotationTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -8720,8 +8514,6 @@ bool MinimalAnnotationTypePubSubType::getKey(
     return true;
 }
 
-
-
 CommonAliasBodyPubSubType::CommonAliasBodyPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonAliasBody");
@@ -8765,7 +8557,7 @@ bool CommonAliasBodyPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -8909,8 +8701,6 @@ bool CommonAliasBodyPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteAliasBodyPubSubType::CompleteAliasBodyPubSubType()
 {
@@ -9100,8 +8890,6 @@ bool CompleteAliasBodyPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalAliasBodyPubSubType::MinimalAliasBodyPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalAliasBody");
@@ -9289,8 +9077,6 @@ bool MinimalAliasBodyPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteAliasHeaderPubSubType::CompleteAliasHeaderPubSubType()
 {
@@ -9668,8 +9454,6 @@ bool MinimalAliasHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteAliasTypePubSubType::CompleteAliasTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteAliasType");
@@ -9713,7 +9497,7 @@ bool CompleteAliasTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -9858,8 +9642,6 @@ bool CompleteAliasTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalAliasTypePubSubType::MinimalAliasTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalAliasType");
@@ -9903,7 +9685,7 @@ bool MinimalAliasTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -10048,8 +9830,6 @@ bool MinimalAliasTypePubSubType::getKey(
     return true;
 }
 
-
-
 CompleteElementDetailPubSubType::CompleteElementDetailPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteElementDetail");
@@ -10093,7 +9873,7 @@ bool CompleteElementDetailPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -10238,8 +10018,6 @@ bool CompleteElementDetailPubSubType::getKey(
     return true;
 }
 
-
-
 CommonCollectionElementPubSubType::CommonCollectionElementPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonCollectionElement");
@@ -10283,7 +10061,7 @@ bool CommonCollectionElementPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -10427,8 +10205,6 @@ bool CommonCollectionElementPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteCollectionElementPubSubType::CompleteCollectionElementPubSubType()
 {
@@ -10618,8 +10394,6 @@ bool CompleteCollectionElementPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalCollectionElementPubSubType::MinimalCollectionElementPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalCollectionElement");
@@ -10808,8 +10582,6 @@ bool MinimalCollectionElementPubSubType::getKey(
     return true;
 }
 
-
-
 CommonCollectionHeaderPubSubType::CommonCollectionHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonCollectionHeader");
@@ -10853,7 +10625,7 @@ bool CommonCollectionHeaderPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -10997,8 +10769,6 @@ bool CommonCollectionHeaderPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteCollectionHeaderPubSubType::CompleteCollectionHeaderPubSubType()
 {
@@ -11188,8 +10958,6 @@ bool CompleteCollectionHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalCollectionHeaderPubSubType::MinimalCollectionHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalCollectionHeader");
@@ -11378,8 +11146,6 @@ bool MinimalCollectionHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteSequenceTypePubSubType::CompleteSequenceTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteSequenceType");
@@ -11423,7 +11189,7 @@ bool CompleteSequenceTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -11568,8 +11334,6 @@ bool CompleteSequenceTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalSequenceTypePubSubType::MinimalSequenceTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalSequenceType");
@@ -11613,7 +11377,7 @@ bool MinimalSequenceTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -11758,8 +11522,6 @@ bool MinimalSequenceTypePubSubType::getKey(
     return true;
 }
 
-
-
 CommonArrayHeaderPubSubType::CommonArrayHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonArrayHeader");
@@ -11803,7 +11565,7 @@ bool CommonArrayHeaderPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -11947,8 +11709,6 @@ bool CommonArrayHeaderPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteArrayHeaderPubSubType::CompleteArrayHeaderPubSubType()
 {
@@ -12138,8 +11898,6 @@ bool CompleteArrayHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalArrayHeaderPubSubType::MinimalArrayHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalArrayHeader");
@@ -12327,8 +12085,6 @@ bool MinimalArrayHeaderPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteArrayTypePubSubType::CompleteArrayTypePubSubType()
 {
@@ -12518,8 +12274,6 @@ bool CompleteArrayTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalArrayTypePubSubType::MinimalArrayTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalArrayType");
@@ -12563,7 +12317,7 @@ bool MinimalArrayTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -12708,8 +12462,6 @@ bool MinimalArrayTypePubSubType::getKey(
     return true;
 }
 
-
-
 CompleteMapTypePubSubType::CompleteMapTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteMapType");
@@ -12753,7 +12505,7 @@ bool CompleteMapTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -12898,8 +12650,6 @@ bool CompleteMapTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalMapTypePubSubType::MinimalMapTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalMapType");
@@ -12943,7 +12693,7 @@ bool MinimalMapTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -13087,9 +12837,6 @@ bool MinimalMapTypePubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 CommonEnumeratedLiteralPubSubType::CommonEnumeratedLiteralPubSubType()
@@ -13280,8 +13027,6 @@ bool CommonEnumeratedLiteralPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteEnumeratedLiteralPubSubType::CompleteEnumeratedLiteralPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteEnumeratedLiteral");
@@ -13469,9 +13214,6 @@ bool CompleteEnumeratedLiteralPubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 MinimalEnumeratedLiteralPubSubType::MinimalEnumeratedLiteralPubSubType()
@@ -13663,9 +13405,6 @@ bool MinimalEnumeratedLiteralPubSubType::getKey(
 }
 
 
-
-
-
 CommonEnumeratedHeaderPubSubType::CommonEnumeratedHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonEnumeratedHeader");
@@ -13709,7 +13448,7 @@ bool CommonEnumeratedHeaderPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -13853,8 +13592,6 @@ bool CommonEnumeratedHeaderPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteEnumeratedHeaderPubSubType::CompleteEnumeratedHeaderPubSubType()
 {
@@ -14044,8 +13781,6 @@ bool CompleteEnumeratedHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 MinimalEnumeratedHeaderPubSubType::MinimalEnumeratedHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalEnumeratedHeader");
@@ -14234,8 +13969,6 @@ bool MinimalEnumeratedHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteEnumeratedTypePubSubType::CompleteEnumeratedTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteEnumeratedType");
@@ -14279,7 +14012,7 @@ bool CompleteEnumeratedTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -14424,8 +14157,6 @@ bool CompleteEnumeratedTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalEnumeratedTypePubSubType::MinimalEnumeratedTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalEnumeratedType");
@@ -14469,7 +14200,7 @@ bool MinimalEnumeratedTypePubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -14614,8 +14345,6 @@ bool MinimalEnumeratedTypePubSubType::getKey(
     return true;
 }
 
-
-
 CommonBitflagPubSubType::CommonBitflagPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonBitflag");
@@ -14659,7 +14388,7 @@ bool CommonBitflagPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -14803,8 +14532,6 @@ bool CommonBitflagPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteBitflagPubSubType::CompleteBitflagPubSubType()
 {
@@ -14993,9 +14720,6 @@ bool CompleteBitflagPubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 MinimalBitflagPubSubType::MinimalBitflagPubSubType()
@@ -15187,9 +14911,6 @@ bool MinimalBitflagPubSubType::getKey(
 }
 
 
-
-
-
 CommonBitmaskHeaderPubSubType::CommonBitmaskHeaderPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonBitmaskHeader");
@@ -15233,7 +14954,7 @@ bool CommonBitmaskHeaderPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -15377,10 +15098,6 @@ bool CommonBitmaskHeaderPubSubType::getKey(
     }
     return true;
 }
-
-
-
-
 
 
 
@@ -15572,8 +15289,6 @@ bool CompleteBitmaskTypePubSubType::getKey(
     return true;
 }
 
-
-
 MinimalBitmaskTypePubSubType::MinimalBitmaskTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalBitmaskType");
@@ -15762,8 +15477,6 @@ bool MinimalBitmaskTypePubSubType::getKey(
     return true;
 }
 
-
-
 CommonBitfieldPubSubType::CommonBitfieldPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CommonBitfield");
@@ -15807,7 +15520,7 @@ bool CommonBitfieldPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -15951,8 +15664,6 @@ bool CommonBitfieldPubSubType::getKey(
     }
     return true;
 }
-
-
 
 CompleteBitfieldPubSubType::CompleteBitfieldPubSubType()
 {
@@ -16143,9 +15854,6 @@ bool CompleteBitfieldPubSubType::getKey(
 }
 
 
-
-
-
 MinimalBitfieldPubSubType::MinimalBitfieldPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalBitfield");
@@ -16333,9 +16041,6 @@ bool MinimalBitfieldPubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 CompleteBitsetHeaderPubSubType::CompleteBitsetHeaderPubSubType()
@@ -16714,8 +16419,6 @@ bool MinimalBitsetHeaderPubSubType::getKey(
     return true;
 }
 
-
-
 CompleteBitsetTypePubSubType::CompleteBitsetTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::CompleteBitsetType");
@@ -16903,8 +16606,6 @@ bool CompleteBitsetTypePubSubType::getKey(
     }
     return true;
 }
-
-
 
 MinimalBitsetTypePubSubType::MinimalBitsetTypePubSubType()
 {
@@ -17136,8 +16837,8 @@ bool CompleteExtendedTypePubSubType::serialize(
 #if FASTCDR_VERSION_MAJOR > 1
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
-        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR :
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -17283,7 +16984,6 @@ bool CompleteExtendedTypePubSubType::getKey(
 }
 
 
-
 MinimalExtendedTypePubSubType::MinimalExtendedTypePubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::MinimalExtendedType");
@@ -17326,8 +17026,8 @@ bool MinimalExtendedTypePubSubType::serialize(
 #if FASTCDR_VERSION_MAJOR > 1
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
-        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR :
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -17476,12 +17176,6 @@ bool MinimalExtendedTypePubSubType::getKey(
 
 
 
-
-
-
-
-
-
 TypeIdentifierTypeObjectPairPubSubType::TypeIdentifierTypeObjectPairPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::TypeIdentifierTypeObjectPair");
@@ -17525,7 +17219,7 @@ bool TypeIdentifierTypeObjectPairPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -17671,9 +17365,6 @@ bool TypeIdentifierTypeObjectPairPubSubType::getKey(
 }
 
 
-
-
-
 TypeIdentifierPairPubSubType::TypeIdentifierPairPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::TypeIdentifierPair");
@@ -17717,7 +17408,7 @@ bool TypeIdentifierPairPubSubType::serialize(
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
         eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -17861,9 +17552,6 @@ bool TypeIdentifierPairPubSubType::getKey(
     }
     return true;
 }
-
-
-
 
 
 TypeIdentfierWithSizePubSubType::TypeIdentfierWithSizePubSubType()
@@ -18055,9 +17743,6 @@ bool TypeIdentfierWithSizePubSubType::getKey(
 }
 
 
-
-
-
 TypeIdentifierWithDependenciesPubSubType::TypeIdentifierWithDependenciesPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::TypeIdentifierWithDependencies");
@@ -18247,9 +17932,6 @@ bool TypeIdentifierWithDependenciesPubSubType::getKey(
 }
 
 
-
-
-
 TypeInformationPubSubType::TypeInformationPubSubType()
 {
     setName("eprosima::fastdds::dds::xtypes::TypeInformation");
@@ -18292,8 +17974,8 @@ bool TypeInformationPubSubType::serialize(
 #if FASTCDR_VERSION_MAJOR > 1
     ser.set_encoding_flag(
         data_representation == DataRepresentationId_t::XCDR_DATA_REPRESENTATION ?
-        eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR  :
-        eprosima::fastcdr::EncodingAlgorithmFlag::DELIMIT_CDR2);
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR :
+        eprosima::fastcdr::EncodingAlgorithmFlag::PL_CDR2);
 #endif // FASTCDR_VERSION_MAJOR > 1
 
     try
@@ -18437,7 +18119,6 @@ bool TypeInformationPubSubType::getKey(
     }
     return true;
 }
-
 
 
 
