@@ -29,7 +29,7 @@
 #include <fastdds/dds/log/Log.hpp>
 #include <fastcdr/exceptions/BadParamException.h>
 #include "idl/new_features_4_2PubSubTypes.h"
-#include "idl/new_features_4_2TypeObject.h"
+#include "idl/new_features_4_2TypeObjectSupport.hpp"
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;

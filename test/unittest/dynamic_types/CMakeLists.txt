@@ -73,7 +73,7 @@ endif()
 set(DYNAMIC_TYPES_TEST_SOURCE
     DynamicTypesTests.cpp
     idl/BasicPubSubTypes.cxx
-    idl/BasicTypeObject.cxx
+    idl/BasicTypeObjectSupport.cxx
     ${DYNAMIC_TYPES_SOURCE}
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/publisher/qos/WriterQos.cpp
     ${PROJECT_SOURCE_DIR}/src/cpp/fastdds/subscriber/qos/ReaderQos.cpp
@@ -91,14 +91,14 @@ set(DYNAMIC_TYPES_TEST_SOURCE
 set(DYNAMIC_COMPLEX_TYPES_TEST_SOURCE
     DynamicComplexTypesTests.cpp
     idl/TestPubSubTypes.cxx
-    idl/TestTypeObject.cxx
+    idl/TestTypeObjectSupport.cxx
     ${DYNAMIC_TYPES_SOURCE}
     )
 
 set(DYNAMIC_TYPES_4_2_TEST_SOURCE
     DynamicTypes_4_2_Tests.cpp
     idl/new_features_4_2PubSubTypes.cxx
-    idl/new_features_4_2TypeObject.cxx
+    idl/new_features_4_2TypeObjectSupport.cxx
     ${DYNAMIC_TYPES_SOURCE}
     )
 

@@ -33,7 +33,7 @@
 
 #include "idl/Test.hpp"
 #include "idl/TestPubSubTypes.h"
-#include "idl/TestTypeObject.h"
+#include "idl/TestTypeObjectSupport.hpp"
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;

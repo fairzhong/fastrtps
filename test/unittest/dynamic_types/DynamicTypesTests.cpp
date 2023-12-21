@@ -29,7 +29,7 @@
 #include <fastdds/dds/log/Log.hpp>
 #include <fastrtps/xmlparser/XMLProfileManager.h>
 #include "idl/BasicPubSubTypes.h"
-#include "idl/BasicTypeObject.h"
+#include "idl/BasicTypeObjectSupport.hpp"
 #include <tinyxml2.h>
 
 using namespace eprosima::fastrtps;

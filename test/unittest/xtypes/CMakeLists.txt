@@ -54,8 +54,8 @@ set(XTYPES_SOURCE
 
 set(XTYPES_TEST_SOURCE
     XTypesTests.cpp
-    idl/TypesTypeObject.cxx
-    idl/WideEnumTypeObject.cxx
+    idl/TypesTypeObjectSupport.cxx
+    idl/WideEnumTypeObjectSupport.cxx
     ${XTYPES_SOURCE}
     )
 

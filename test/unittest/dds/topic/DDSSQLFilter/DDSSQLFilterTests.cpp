@@ -31,7 +31,7 @@
 
 #include "data_types/ContentFilterTestType.hpp"
 #include "data_types/ContentFilterTestTypePubSubTypes.h"
-#include "data_types/ContentFilterTestTypeTypeObject.h"
+#include "data_types/ContentFilterTestTypeTypeObjectSupport.hpp"
 
 namespace eprosima {
 namespace fastdds {
