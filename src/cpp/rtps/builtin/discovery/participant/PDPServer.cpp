@@ -348,8 +348,6 @@ bool PDPServer::create_ds_pdp_reliable_endpoints(
         DiscoveryServerPDPEndpoints& endpoints,
         bool secure)
 {
-    const RTPSParticipantAttributes& pattr = mp_RTPSParticipant->getRTPSParticipantAttributes();
-
     /***********************************
     * PDP READER
     ***********************************/

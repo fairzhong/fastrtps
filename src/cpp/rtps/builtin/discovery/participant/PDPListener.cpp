@@ -177,7 +177,7 @@ void PDPListener::process_alive_data(
         reader->getMutex().unlock();
 
         logInfo(RTPS_PDP_DISCOVERY, "Update participant "
-                << old_data->m_guid << " at "
+                << participant_guid << " at "
                 << "MTTLoc: " << old_data->metatraffic_locators
                 << " DefLoc:" << old_data->default_locators);
 
