@@ -15,70 +15,53 @@
 #ifndef FASTDDS_DDS_XTYPES_DYNAMIC_TYPES_DYNAMIC_DATA_FACTORY_HPP
 #define FASTDDS_DDS_XTYPES_DYNAMIC_TYPES_DYNAMIC_DATA_FACTORY_HPP
 
+#include <memory>
+
 #include <fastdds/dds/core/ReturnCode.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicData.hpp>
 #include <fastdds/dds/xtypes/Types.hpp>
 
 namespace eprosima {
 namespace fastdds {
 namespace dds {
 
-class DynamicType;
-class DynamicData;
-
-class DynamicDataFactory final
+class RTPS_DllAPI DynamicDataFactory : public std::enable_shared_from_this<DynamicDataFactory>
 {
-    DynamicDataFactory() = default;
-
 public:
 
-    RTPS_DllAPI ~DynamicDataFactory() = default;
+    using _ref_type = typename traits<DynamicDataFactory>::ref_type;
 
-    /**
+    /*!
      * Returns the singleton factory object
-     * @remark This method is thread-safe.
-     * @remark The singleton is allocated using C++11 builtin double-checked locking lazy initialization.
-     * @return @ref DynamicDataFactory&
+     * @remark This method is non thread-safe.
+     * @return @ref DynamicDataFactory reference.
      */
-    RTPS_DllAPI static DynamicDataFactory& get_instance() noexcept;
+    static traits<DynamicDataFactory>::ref_type get_instance();
+
+    /*!
+     * Resets the singleton reference.
+     * @return @ref ReturnCode_t
+     * @retval RETCODE_OK is always returned.
+     */
+    static ReturnCode_t delete_instance();
 
     /**
-     * Resets the state of the factory
-     * @remark This method is thread-safe.
-     * @return standard @ref ReturnCode_t
+     * Creates a new @ref DynamicData reference based on the given @ref DynamicType reference.
+     * @param[in] type @ref DynamicType reference associated.
+     * @return new @ref DynamicData reference
      */
-    RTPS_DllAPI static dds::ReturnCode_t delete_instance() noexcept;
+    virtual traits<DynamicData>::ref_type create_data(
+            traits<DynamicType>::ref_type type) = 0;
 
     /**
-     * Create a new @ref DynamicData object based on the given @ref DynamicType state.
-     * @remark This method is thread-safe.
-     * @param[in] type @ref DynamicType associated
-     * @return new @ref DynamicData object
-     */
-    RTPS_DllAPI DynamicData* create_data(
-            const DynamicType& type) noexcept;
-
-    /**
-     * Create a new @ref DynamicDataImpl object based on the given object.
-     * @remark This method is thread-safe.
-     * @param[in] type @ref DynamicDataImpl object
-     * @return new @ref DynamicDataImpl object
-     */
-    RTPS_DllAPI DynamicData* create_copy(
-            const DynamicData& data) noexcept;
-
-    /**
-     * Frees any framework resources associated with the given data according with [standard] section 7.5.2.10.2.
-     * @remark This method is thread-safe.
-     * @remark Non-primitive types will not be tracked by the framework after this call.
-     * @param[in] type @ref DynamicData object whose resources to free
+     * Resets the internal reference if it is cached.
+     * @param[in] type @ref DynamicData reference whose internal cached reference to reset.
      * @return standard ReturnCode_t
-     * [standard]: https://www.omg.org/spec/DDS-XTypes/1.3/ "to the OMG standard"
+     * @retval RETCODE_OK is always returned.
+     * @retval RETCODE_BAD_PARAMETER if reference is nil.
      */
-    RTPS_DllAPI dds::ReturnCode_t delete_data(
-            const DynamicData* pData) noexcept;
-
-    // check if there are outstanding objects associated
-    RTPS_DllAPI bool is_empty() const noexcept;
+    virtual ReturnCode_t delete_data(
+            traits<DynamicData>::ref_type data) = 0;
 };
 
 } // namespace dds

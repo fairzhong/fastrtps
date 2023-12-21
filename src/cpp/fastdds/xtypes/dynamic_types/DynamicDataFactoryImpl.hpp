@@ -15,104 +15,29 @@
 #ifndef FASTDDS_XTYPES_DYNAMIC_TYPES_DYNAMICDATAFACTORYIMPL_HPP
 #define FASTDDS_XTYPES_DYNAMIC_TYPES_DYNAMICDATAFACTORYIMPL_HPP
 
-#include <fastrtps/types/TypesBase.h>
-#include <fastrtps/utils/custom_allocators.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicDataFactory.hpp>
 
 namespace eprosima {
 namespace fastdds {
 namespace dds {
 
-class DynamicTypeImpl;
-class DynamicDataImpl;
-
-/**
- * This class is conceived as a singleton charged of creation of @ref DynamicDataImpl objects.
- * For simplicity direct primitive types instantiation is also possible.
- */
-class DynamicDataFactoryImpl final
+class DynamicDataFactoryImpl : public traits<DynamicDataFactory>::base_type
 {
-    using builder_allocator = eprosima::detail::BuilderAllocator<DynamicDataImpl, DynamicDataFactoryImpl, true>;
-
-    // BuilderAllocator ancillary
-    builder_allocator& get_allocator()
-    {
-        // stateful, this factory must outlive all builders
-        static builder_allocator alloc{*this};
-        return alloc;
-    }
-
-    friend builder_allocator;
-
-    //! allocator callback
-    void after_construction(
-            DynamicDataImpl* b);
-
-    //! allocator callback
-    void before_destruction(
-            DynamicDataImpl* b);
-
-    // free any allocated resources
-    void reset();
-
-    DynamicDataFactoryImpl() = default;
-
-    template<class ... Args>
-    std::shared_ptr<DynamicDataImpl> create_data_impl(
-            Args... args) noexcept;
-
 public:
 
-    ~DynamicDataFactoryImpl();
+    static traits<DynamicDataFactory>::ref_type get_instance() noexcept;
 
-    /**
-     * Returns the singleton factory object
-     * @remark This method is thread-safe.
-     * @remark The singleton is allocated using C++11 builtin double-checked locking lazy initialization.
-     * @return @ref DynamicDataFactoryImpl &
-     */
-    static DynamicDataFactoryImpl& get_instance() noexcept;
-
-    /**
-     * Resets the state of the factory
-     * @remark This method is thread-safe.
-     * @return standard @ref ReturnCode_t
-     */
     static ReturnCode_t delete_instance() noexcept;
 
-    /**
-     * Create a new @ref DynamicDataImpl object based on the given @ref DynamicTypeImpl
-     * @remark This method is thread-safe.
-     * @param[in] type @ref DynamicTypeImpl associated
-     * @return new @ref DynamicDataImpl object
-     */
-    std::shared_ptr<DynamicDataImpl> create_data(
-            const DynamicTypeImpl& type) noexcept;
+    traits<DynamicData>::ref_type create_data(
+            traits<DynamicType>::ref_type type) noexcept override;
 
-    /**
-     * Create a new @ref DynamicDataImpl object based on the given @ref DynamicDataImpl object.
-     * @remark This method is thread-safe.
-     * @param[in] type @ref DynamicDataImpl object
-     * @return new @ref DynamicDataImpl object
-     */
-    std::shared_ptr<DynamicDataImpl> create_copy(
-            const DynamicDataImpl& data) noexcept;
-    std::shared_ptr<DynamicDataImpl> create_copy(
-            DynamicDataImpl&& data) noexcept;
-
-    /**
-     * Frees any framework resources associated with the given data according with [standard] section 7.5.2.10.2.
-     * @remark This method is thread-safe.
-     * @remark RAII will prevent memory leaks even if this method is not called.
-     * @remark Non-primitive types will not be tracked by the framework after this call.
-     * @param[in] type @ref DynamicTypeImpl object whose resources to free
-     * @return standard ReturnCode_t
-     * [standard]: https://www.omg.org/spec/DDS-XTypes/1.3/ "to the OMG standard"
-     */
     ReturnCode_t delete_data(
-            const DynamicDataImpl& data) noexcept;
+            traits<DynamicData>::ref_type data) noexcept override;
 
-    // check if there are outstanding objects associated
-    bool is_empty() const;
+private:
+
+    static traits<DynamicDataFactoryImpl>::ref_type instance_;
 };
 
 } // namespace dds

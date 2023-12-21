@@ -15,69 +15,69 @@
 #ifndef FASTDDS_DDS_XTYPES_DYNAMIC_TYPES_DYNAMIC_DATA_HPP
 #define FASTDDS_DDS_XTYPES_DYNAMIC_TYPES_DYNAMIC_DATA_HPP
 
-#include <fastdds/dds/xtypes/dynamic_types/DynamicDataFactory.hpp>
-#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
-
-#include <cstdint>
 #include <memory>
+
+#include <fastdds/dds/core/ReturnCode.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
+#include <fastdds/rtps/common/Types.h>
+#include <fastrtps/fastrtps_dll.h>
 
 namespace eprosima {
 namespace fastdds {
 namespace dds {
 
-class MemberDescriptor;
-
-class DynamicData final
+class RTPS_DllAPI DynamicData : public std::enable_shared_from_this<DynamicData>
 {
-
-    DynamicData() noexcept = default;
-
-    friend class DynamicDataImpl;
-
 public:
 
-    RTPS_DllAPI bool operator ==(
-            const DynamicData& other) const noexcept;
+    using _ref_type = typename traits<DynamicData>::ref_type;
 
-    RTPS_DllAPI bool operator !=(
-            const DynamicData& other) const noexcept;
-
-    /**
-     * Retrieve the @ref MemberDescriptor associated to a member according with (see [standard] 7.5.2.11.2)
-     * @param [out] value @ref MemberDescriptor object to populate
-     * @param [in] id identifier of the member to retrieve
-     * @return standard DDS @ref ReturnCode_t
-     * [standard]: https://www.omg.org/spec/DDS-XTypes/1.3/ "OMG standard"
+    /*!
+     * Retrieve the @ref DynamicType reference associated to this @ref DynamicData
+     * @return @ref DynamicType reference
      */
-    RTPS_DllAPI ReturnCode_t get_descriptor(
-            MemberDescriptor& value,
-            MemberId id) const noexcept;
+    virtual traits<DynamicType>::ref_type type() = 0;
 
-    /**
-     * Retrieve the @ref DynamicType associated to a member according with (see [standard] 7.5.2.11.8)
-     * @return @ref MemberDescriptor object to populate.
-     * @attention There is no ownership transference.
-     * [standard]: https://www.omg.org/spec/DDS-XTypes/1.3/ "OMG standard"
+    /*!
+     * Retrieves the @ref MemberDescriptor associated to a member.
+     * @param[inout] value Non-nil @ref MemberDescriptor reference where the information is copied.
+     * @param[in] id Identifier of the member to be retrieved.
      */
-    RTPS_DllAPI const DynamicType& get_type() const noexcept;
+    virtual ReturnCode_t get_descriptor(
+            traits<MemberDescriptor>::ref_type value,
+            MemberId id) = 0;
 
-    /**
-     * Queries members by name
+    /*!
+     * Compares two @ref DynamicData, equality requires:
+     *     - Their respective type definitions are equal
+     *     - All contained values are equal and occur in the same order
+     *     - If the samples' type is an aggregated type, previous rule shall be amended as follows:
+     *          -# Members shall be compared without regard to their order.
+     *          -# One of the samples may omit a non-optional member that is present in the other if that
+     *             member takes its default value in the latter sample.
+     * @param [in] other @ref DynamicData reference to compare to
+     * @return `true` on equality
+     */
+    virtual bool equals(
+            traits<DynamicData>::ref_type other) = 0;
+
+    /*!
+     * Queries @ref MemberId by name
      * @param[in] name string
      * @return MemberId or MEMBER_ID_INVALID on failure
      */
-    RTPS_DllAPI MemberId get_member_id_by_name(
-            const char* name) const noexcept;
+    virtual MemberId get_member_id_by_name(
+            const ObjectName& name) = 0;
 
-    /**
-     * Queries members by index
-     * @param[in] index uint32_t
+    /*!
+     * Queries @ref MemberId by index
+     * @param[in] index Index.
      * @return MemberId or MEMBER_ID_INVALID on failure
      */
-    RTPS_DllAPI MemberId get_member_id_at_index(
-            uint32_t index) const noexcept;
+    virtual MemberId get_member_id_at_index(
+            uint32_t index) = 0;
 
-    /**
+    /*!
      * Provides the @b item @b count of the data and depends on the type of object:
      * @li If the object is of a collection type, returns the number of elements currently in the collection.
      *     In the case of an array type, this value will always be equal to the product of the bounds of all array
@@ -92,798 +92,779 @@ public:
      * @li if the object is of an alias type, return the value appropriate for the alias base type.
      * @return count as defined above
      */
-    RTPS_DllAPI uint32_t get_item_count() const noexcept;
+    virtual uint32_t get_item_count() = 0;
 
-    /**
-     * Compares two @ref DynamicData, equality requires:
-     *     - Their respective type definitions are equal
-     *     - All contained values are equal and occur in the same order
-     *     - If the samples' type is an aggregated type, previous rule shall be amended as follows:
-     *          -# Members shall be compared without regard to their order.
-     *          -# One of the samples may omit a non-optional member that is present in the other if that
-     *             member takes its default value in the latter sample.
-     * @param [in] other @ref DynamicDataImpl object to compare to
-     * @attention There is no ownership transference.
-     * @return `true` on equality
+    /*!
+     * Clear all memory associated to the object.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI bool equals(
-            const DynamicData& other) const noexcept;
+    virtual ReturnCode_t clear_all_values() = 0;
 
-    /**
-     * Clear all memory associated to the object
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t clear_all_values() noexcept;
-
-    /**
+    /*!
      * Clear all memory not associated to the key
-     * @return standard DDS @ref ReturnCode_t
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t clear_nonkey_values() noexcept;
+    virtual ReturnCode_t clear_nonkey_values() = 0;
 
-    /**
+    /*!
      * Clear all memory associated to a specific member
-     * @param [in] id identifier of the member to purge
-     * @return standard DDS @ref ReturnCode_t
+     * @param[in] id Identifier of the member to purge
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t clear_value(
-            MemberId id) noexcept;
+    virtual ReturnCode_t clear_value(
+            MemberId id) = 0;
 
-    /**
-     * \b Loans a @ref DynamicDataImpl object within the sample
-     * @remarks This operation allows applications to visit values without allocating additional
-     *         @ref DynamicDataImpl objects or copying values.
+    /*!
+     * \b Loans a @ref DynamicData reference within the sample
      * @remarks This loan shall be returned by the @ref DynamicData::return_loaned_value operation
-     * @param [in] id identifier of the object to retrieve
-     * @return @ref DynamicDataImpl object loaned or \b nil on outstanding loaned data
-     * @attention There is ownership transference. The returned object should not be deleted but freed using
-     *            returned_loaned_value
+     * @param[in] id identifier of the object to retrieve
+     * @return @ref DynamicDataImpl reference loaned or \b nil on outstanding loaned data
      */
-    RTPS_DllAPI DynamicData* loan_value(
-            MemberId id) noexcept;
+    virtual traits<DynamicData>::ref_type loan_value(
+            MemberId id) = 0;
 
-    /**
-     * Returns a loaned retrieved using @ref DynamicDataImpl::return_loaned_value
-     * @param [in] value @ref DynamicDataImpl previously loaned
-     * @attention There is ownership transference. It is not necessary to delete the returned object.
+    /*!
+     * Returns a loaned retrieved using @ref DynamicData::loan_value.
+     * @param[in] value @ref DynamicData reference previously loaned
      */
-    RTPS_DllAPI ReturnCode_t return_loaned_value(
-            DynamicData* value) noexcept;
+    virtual ReturnCode_t return_loaned_value(
+            traits<DynamicData>::ref_type value) = 0;
 
-    /**
-     * Create and return a new data sample with the same contents as this one.
-     * A comparisson of this object and the clone using equals immediately following this call will return `true`.
-     * @return @ref DynamicData
-     * @attention There is ownership transference.
+    /*!
+     * Creates and returns a new data sample with the same contents as this one.
+     * A comparison of this object and the clone using equals immediately following this call will return `true`.
+     * @return @ref DynamicData reference
      */
-    RTPS_DllAPI DynamicData* clone() const noexcept;
+    virtual traits<DynamicData>::ref_type clone() = 0;
 
-    /*
-     * Retrieve an \b int32 value associated to an identifier
-     * @param [out] value \b int32 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves an \b int32 value associated to an identifier.
+     * @param[inout] value \b int32 to populate
+     * @param[in] Id identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_int32_value(
+    virtual ReturnCode_t get_int32_value(
             int32_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
+            MemberId id) = 0;
 
-    /*
-     * Set an \b int32 value associated to an identifier
-     * @param [in] value \b int32 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets an \b int32 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b int32 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_int32_value(
-            int32_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t set_int32_value(
+            MemberId id,
+            int32_t value) = 0;
 
-    /*
-     * Retrieve an \b uint32 value associated to an identifier
-     * @param [out] value \b uint32 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves an \b uint32 value associated to an identifier.
+     * @param[inout] value \b uint32 to populate
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    //TODO(richiware) see why default for memberid
-    RTPS_DllAPI ReturnCode_t get_uint32_value(
+    virtual ReturnCode_t get_uint32_value(
             uint32_t& value,
-            MemberId id) const noexcept;
+            MemberId id) = 0;
 
-    /*
-     * Set an \b uint32 value associated to an identifier
-     * @param [in] value \b uint32 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets an \b uint32 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b uint32 to set.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_uint32_value(
-            uint32_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t set_uint32_value(
+            MemberId id,
+            uint32_t value) = 0;
 
-    /*
-     * Retrieve an \b int16 value associated to an identifier
-     * @param [out] value \b int16 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves an \b int8 value associated to an identifier.
+     * @param[inout] value \b int8 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_int16_value(
-            int16_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b int16 value associated to an identifier
-     * @param [in] value \b int16 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_int16_value(
-            int16_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b uint16 value associated to an identifier
-     * @param [out] value \b uint16 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_uint16_value(
-            uint16_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b uint16 value associated to an identifier
-     * @param [in] value \b uint16 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_uint16_value(
-            uint16_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b int64 value associated to an identifier
-     * @param [out] value \b int64 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_int64_value(
-            int64_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b int64 value associated to an identifier
-     * @param [in] value \b int64 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_int64_value(
-            int64_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b uint64 value associated to an identifier
-     * @param [out] value \b uint64 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_uint64_value(
-            uint64_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b uint64 value associated to an identifier
-     * @param [in] value \b uint64 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_uint64_value(
-            uint64_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b float32 value associated to an identifier
-     * @param [out] value \b float32 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_float32_value(
-            float& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b float32 value associated to an identifier
-     * @param [in] value \b float32 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_float32_value(
-            float value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b float64 value associated to an identifier
-     * @param [out] value \b float64 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_float64_value(
-            double& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b float64 value associated to an identifier
-     * @param [in] value \b float64 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_float64_value(
-            double value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b float128 value associated to an identifier
-     * @param [out] value \b float128 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @remarks Only available on platforms supporting long double
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_float128_value(
-            long double& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b float128 value associated to an identifier
-     * @param [in] value \b float128 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_float128_value(
-            long double value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b char8 value associated to an identifier
-     * @param [out] value \b char8 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_char8_value(
-            char& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b char8 value associated to an identifier
-     * @param [in] value \b char8 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_char8_value(
-            char value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b char16 value associated to an identifier
-     * @param [out] value \b char16 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_char16_value(
-            wchar_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b char16 value associated to an identifier
-     * @param [in] value \b char16 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_char16_value(
-            wchar_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b byte value associated to an identifier
-     * @param [out] value \b byte to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_byte_value(
-            eprosima::fastrtps::rtps::octet& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-
-    /*
-     * Set an \b byte value associated to an identifier
-     * @param [in] value \b byte to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t set_byte_value(
-            eprosima::fastrtps::rtps::octet value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
-
-    /*
-     * Retrieve an \b int8 value associated to an identifier
-     * @param [out] value \b int8 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
-     */
-    RTPS_DllAPI ReturnCode_t get_int8_value(
+    virtual ReturnCode_t get_int8_value(
             int8_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
+            MemberId id) = 0;
 
-    /*
-     * Set an \b int8 value associated to an identifier
-     * @param [in] value \b int8 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets an \b int8 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b int8 to set.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_int8_value(
-            int8_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t set_int8_value(
+            MemberId id,
+            int8_t value) = 0;
 
-    /*
-     * Retrieve an \b uint8 value associated to an identifier
-     * @param [out] value \b uint8 to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves an \b uint8 value associated to an identifier.
+     * @param[inout] value \b uint8 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_uint8_value(
+    virtual ReturnCode_t get_uint8_value(
             uint8_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
+            MemberId id) = 0;
 
-    /*
-     * Set an \b uint8 value associated to an identifier
-     * @param [in] value \b uint8 to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
+    /*!
+     * Sets an \b uint8 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b uint8 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_uint8_value(
+            MemberId id,
+            uint8_t value) = 0;
+
+    /*!
+     * Retrieves an \b int16 value associated to an identifier.
+     * @param[inout] value \b int16 to populate.
+     * @param [in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_int16_value(
+            int16_t& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b int16 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b int16 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_int16_value(
+            MemberId id,
+            int16_t value) = 0;
+
+    /*!
+     * Retrieves an \b uint16 value associated to an identifier.
+     * @param[inout] value \b uint16 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_uint16_value(
+            uint16_t& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b uint16 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b uint16 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_uint16_value(
+            MemberId id,
+            uint16_t value) = 0;
+
+    /*!
+     * Retrieves an \b int64 value associated to an identifier.
+     * @param[inout] value \b int64 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_int64_value(
+            int64_t& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b int64 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b int64 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_int64_value(
+            MemberId id,
+            int64_t value) = 0;
+
+    /*!
+     * Retrieves an \b uint64 value associated to an identifier.
+     * @param[inout] value \b uint64 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_uint64_value(
+            uint64_t& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b uint64 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b uint64 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_uint64_value(
+            MemberId id,
+            uint64_t value) = 0;
+
+    /*!
+     * Retrieves an \b float32 value associated to an identifier.
+     * @param[inout] value \b float32 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_float32_value(
+            float& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b float32 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b float32 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_float32_value(
+            MemberId id,
+            float value) = 0;
+
+    /*!
+     * Retrieves an \b float64 value associated to an identifier.
+     * @param[inout] value \b float64 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_float64_value(
+            double& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b float64 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b float64 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_float64_value(
+            MemberId id,
+            double value) = 0;
+
+    /*!
+     * Retrieves an \b float128 value associated to an identifier.
+     * @param[inout] value \b float128 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @remarks Only available on platforms supporting long double
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_float128_value(
+            long double& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b float128 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b float128 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_float128_value(
+            MemberId id,
+            long double value) = 0;
+
+    /*!
+     * Retrieves an \b char8 value associated to an identifier.
+     * @param[inout] value \b char8 to populate.
+     * @param[in] id Identifier of the member to query.
      * @return standard DDS @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_uint8_value(
-            uint8_t value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t get_char8_value(
+            char& value,
+            MemberId id) = 0;
 
-    /*
-     * Retrieve an \b bool value associated to an identifier
-     * @param [out] value \b bool to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets an \b char8 value associated to an identifier
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b char8 to set.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_bool_value(
+    virtual ReturnCode_t set_char8_value(
+            MemberId id,
+            char value) = 0;
+
+    /*!
+     * Retrieves an \b char16 value associated to an identifier.
+     * @param[inout] value \b char16 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_char16_value(
+            wchar_t& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b char16 value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b char16 to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_char16_value(
+            MemberId id,
+            wchar_t value) = 0;
+
+    /*!
+     * Retrieves an \b byte value associated to an identifier.
+     * @param[inout] value \b byte to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_byte_value(
+            eprosima::fastrtps::rtps::octet& value,
+            MemberId id) = 0;
+
+    /*!
+     * Sets an \b byte value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b byte to set.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t set_byte_value(
+            MemberId id,
+            eprosima::fastrtps::rtps::octet value) = 0;
+
+    /*!
+     * Retrieves an \b bool value associated to an identifier.
+     * @param[in] id Identifier of the member to query.
+     * @param[inout] value \b bool to populate.
+     * @return @ref ReturnCode_t
+     */
+    virtual ReturnCode_t get_boolean_value(
             bool& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
+            MemberId id) = 0;
 
-    /*
-     * Set an \b bool value associated to an identifier
-     * @param [in] value \b bool to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets an \b bool value associated to an identifier
+     * @param[in] Id identifier of the member to set.
+     * @param[in] value \b bool to set.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_bool_value(
-            bool value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t set_boolean_value(
+            MemberId id,
+            bool value) = 0;
 
-    /*
-     * Set an \b bool value associated to an identifier
-     * @param [in] value \b bool to set
-     * @param [in] name bitmask flags can be addressed by name
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves an \b string value associated to an identifier.
+     * @param[inout] value \b string to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_bool_value(
-            bool value,
-            const char* name);
+    virtual ReturnCode_t get_string_value(
+            std::string& value,
+            MemberId id) = 0;
 
-    /*
-     * Retrieve an \b string value associated to an identifier
-     * @param [out] value \b string to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets an \b string value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b string to set.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_string_value(
-            const char*& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
+    virtual ReturnCode_t set_string_value(
+            MemberId id,
+            const std::string& value) = 0;
 
-    /*
-     * Set an \b string value associated to an identifier
-     * @param [in] value \b string to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves an \b wstring value associated to an identifier.
+     * @param[inout] value \b wstring to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_string_value(
-            const char* value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t get_wstring_value(
+            std::wstring& value,
+            MemberId id) = 0;
 
-    /*
-     * Retrieve an \b wstring value associated to an identifier
-     * @param [out] value \b wstring to populate
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets an \b wstring value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value \b wstring to set.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_wstring_value(
-            const wchar_t*& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
+    virtual ReturnCode_t set_wstring_value(
+            MemberId id,
+            const std::wstring& value) = 0;
 
-    /*
-     * Set an \b wstring value associated to an identifier
-     * @param [in] value \b wstring to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves a \b complex value associated to an identifier.
+     * @param[inout] value @ref DynamicData reference to populate
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_wstring_value(
-            const wchar_t* value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t get_complex_value(
+            traits<DynamicData>::ref_type value,
+            MemberId id) = 0;
 
-    /*
-     * Retrieve an \b enum value associated to an identifier
-     * @param [out] value string because enumerations can be addressed by name
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets a \b complex value associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value @ref DynamicData reference to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_enum_value(
-            const char*& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-    /*
-     * Set an \b enum value associated to an identifier
-     * @param [in] value string because enumerations can be addressed by name
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    virtual ReturnCode_t set_complex_value(
+            MemberId id,
+            traits<DynamicData>::ref_type value) = 0;
+
+    /*!
+     * Retrieves a sequence of \b int32 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b int32 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_enum_value(
-            const char* value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t get_int32_values(
+            Int32Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Retrieve an \b enum value associated to an identifier
-     * @param [out] value uin32_t because enums are kept as \b DWORDs.
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets a sequence of \b int32 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b int32 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_enum_value(
-            uint32_t& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
-    /*
-     * Set an \b enum value associated to an identifier
-     * @param [in] value \b enum to set
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    virtual ReturnCode_t set_int32_values(
+            MemberId id,
+            const Int32Seq& value) = 0;
+
+    /*!
+     * Retrieves a sequence of \b uint32 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b uint32 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_enum_value(
-            const uint32_t& value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t get_uint32_values(
+            UInt32Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Retrieve a bitmask object \b mask
-     * @param [out] value uin64_t because bitmasks are kept as \b QWORDs.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets a sequence of \b uint32 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b uint32 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_bitmask_value(
-            uint64_t& value) const;
+    virtual ReturnCode_t set_uint32_values(
+            MemberId id,
+            const UInt32Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve a bitmask object \b mask
-     * @throws \@ref ReturnCode_t on failure
-     * @return uint64 representing bitmask mask
+    /*!
+     * Retrieves a sequence of \b int8 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b int8 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI uint64_t get_bitmask_value() const;
+    virtual ReturnCode_t get_int8_values(
+            Int8Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Set a \b mask value on a bitmask
-     * @param [in] value \b mask to set
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets a sequence of \b int8 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b int8 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_bitmask_value(
-            uint64_t value);
+    virtual ReturnCode_t set_int8_values(
+            MemberId id,
+            const Int8Seq& value) = 0;
 
-    /*
-     * Retrieve a \b complex value associated to an identifier
-     * @param [out] value @ref DynamicDataImpl reference to populate
-     * @attention There is ownership transference. The returned value must be released.
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Retrieves a sequence of \b uint8 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b uint8 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t get_complex_value(
-            const DynamicData*& value,
-            MemberId id = MEMBER_ID_INVALID) const noexcept;
+    virtual ReturnCode_t get_uint8_values(
+            UInt8Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Set a \b complex value associated to an identifier
-     * @param [in] value @ref DynamicDataImpl to set
-     * @attention There is no ownership transference.
-     * @param [in] id identifier of the member to set. \b MEMBER_ID_INVALID for primitives.
-     * @return standard DDS @ref ReturnCode_t
+    /*!
+     * Sets a sequence of \b uint8 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b uint8 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI ReturnCode_t set_complex_value(
-            const DynamicData& value,
-            MemberId id = MEMBER_ID_INVALID) noexcept;
+    virtual ReturnCode_t set_uint8_values(
+            MemberId id,
+            const UInt8Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b int32 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b int32 queried
+    /*!
+     * Retrieves a sequence of \b int16 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b int16 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI int32_t get_int32_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_int16_values(
+            Int16Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b uint32 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b uint32 queried
+    /*!
+     * Sets a sequence of \b int16 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b int16 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI uint32_t get_uint32_value(
-            MemberId id) const;
+    virtual ReturnCode_t set_int16_values(
+            MemberId id,
+            const Int16Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b int16 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b int16 queried
+    /*!
+     * Retrieves a sequence of \b uint16 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b uint16 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI int16_t get_int16_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_uint16_values(
+            UInt16Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b uint16 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b uint16 queried
+    /*!
+     * Sets a sequence of \b uint16 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b uint16 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI uint16_t get_uint16_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t set_uint16_values(
+            MemberId id,
+            const UInt16Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b int64 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b int64 queried
+    /*!
+     * Retrieves a sequence of \b int64 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b int64 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI int64_t get_int64_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_int64_values(
+            Int64Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b uint64 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b uint64 queried
+    /*!
+     * Sets a sequence of \b int64 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b int64 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI uint64_t get_uint64_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t set_int64_values(
+            MemberId id,
+            const Int64Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b float32 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b float32 queried
+    /*!
+     * Retrieves a sequence of \b uint64 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b uint64 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI float get_float32_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_uint64_values(
+            UInt64Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b float64 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b float64 queried
+    /*!
+     * Sets a sequence of \b uint64 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b uint64 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI double get_float64_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t set_uint64_values(
+            MemberId id,
+            const UInt64Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b float128 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b float128 queried
+    /*!
+     * Retrieves a sequence of \b float32 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b float32 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI long double get_float128_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_float32_values(
+            Float32Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b char8 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b char8 queried
+    /*!
+     * Sets a sequence of \b float32 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b float32 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI char get_char8_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t set_float32_values(
+            MemberId id,
+            const Float32Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b char16 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b char16 queried
+    /*!
+     * Retrieves a sequence of \b float64 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b float64 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI wchar_t get_char16_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_float64_values(
+            Float64Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b byte associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b byte queried
+    /*!
+     * Sets a sequence of \b float64 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b float64 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI eprosima::fastrtps::rtps::octet get_byte_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t set_float64_values(
+            MemberId id,
+            const Float64Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b int8 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b int8 queried
+    /*!
+     * Retrieves a sequence of \b float128 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b float128 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @remarks Only available on platforms supporting long double
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI int8_t get_int8_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_float128_values(
+            Float128Seq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b uint8 associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b uint8 queried
+    /*!
+     * Sets a sequence of \b float128 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b float128 to set
+     * @remarks Only available on platforms supporting long double
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI uint8_t get_uint8_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t set_float128_values(
+            MemberId id,
+            const Float128Seq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b bool associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b bool queried
+    /*!
+     * Retrieves a sequence of \b char8 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b char8 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI bool get_bool_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_char8_values(
+            CharSeq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b bool associated to an identifier
-     * @param [in] name string because \b bitmask can be addressed by name
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b bool queried
+    /*!
+     * Sets a sequence of \b char8 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b char8 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI bool get_bool_value(
-            const char* name) const;
+    virtual ReturnCode_t set_char8_values(
+            MemberId id,
+            const CharSeq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b string associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b string queried
+    /*!
+     * Retrieves a sequence of \b char16 values associated to an identifier.
+     * @param[inout] value \b Sequence of \b char16 to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI const char* get_string_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_char16_values(
+            WcharSeq& value,
+            MemberId id) = 0;
 
-    /*
-     * Convenient override to retrieve an \b wstring associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b wstring queried
+    /*!
+     * Sets a sequence of \b char16 values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b char16 to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI const wchar_t* get_wstring_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t set_char16_values(
+            MemberId id,
+            const WcharSeq& value) = 0;
 
-    /*
-     * Convenient override to retrieve an \b enum associated to an identifier
-     * @param [in] id identifier of the member to query. \b MEMBER_ID_INVALID for primitives.
-     * @throws \@ref ReturnCode_t on failure
-     * @return \b enum queried
+    /*!
+     * Retrieves a sequence of \b byte values associated to an identifier.
+     * @param[inout] value \b Sequence of \b byte to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI const char* get_enum_value(
-            MemberId id = MEMBER_ID_INVALID) const;
+    virtual ReturnCode_t get_byte_values(
+            ByteSeq& value,
+            MemberId id) = 0;
 
-    RTPS_DllAPI ReturnCode_t get_union_label(
-            uint64_t& value) const;
-
-    RTPS_DllAPI uint64_t get_union_label() const;
-
-    RTPS_DllAPI MemberId get_discriminator_value() const;
-
-    RTPS_DllAPI ReturnCode_t get_discriminator_value(
-            MemberId& id) const noexcept;
-
-    RTPS_DllAPI ReturnCode_t set_discriminator_value(
-            MemberId value) noexcept;
-
-    RTPS_DllAPI MemberId get_array_index(
-            const uint32_t* pos,
-            uint32_t size) const noexcept;
-
-    //! Insert a new key in a map
-    RTPS_DllAPI ReturnCode_t insert_map_data(
-            const DynamicData& key,
-            MemberId& outKeyId,
-            MemberId& outValueId);
-
-    //! Insert a new key-value pair in a map
-    RTPS_DllAPI ReturnCode_t insert_map_data(
-            const DynamicData& key,
-            const DynamicData& value,
-            MemberId& outKey,
-            MemberId& outValue);
-
-    //! Remove a key from a map
-    RTPS_DllAPI ReturnCode_t remove_map_data(
-            MemberId keyId);
-
-    /*
-     * Serialize the object into a given stream
-     * @param cdr @ref eprosima::fastrtps::Cdr to fill in
+    /*!
+     * Sets a sequence of \b byte values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b byte to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI void serialize(
-            eprosima::fastcdr::Cdr& cdr) const;
+    virtual ReturnCode_t set_byte_values(
+            MemberId id,
+            const ByteSeq& value) = 0;
 
-    /*
-     * Deserialize the object from the given payload
-     * @param cdr @ref eprosima::fastrtps::Cdr to parse
-     * @return bool specifying success
+    /*!
+     * Retrieves a sequence of \b bool values associated to an identifier.
+     * @param[inout] value \b Sequence of \b bool to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI bool deserialize(
-            eprosima::fastcdr::Cdr& cdr);
+    virtual ReturnCode_t get_boolean_values(
+            BooleanSeq& value,
+            MemberId id) = 0;
 
-    /*
-     * Serialize the object key into a given stream
-     * @param cdr @ref eprosima::fastrtps::Cdr to fill in
+    /*!
+     * Sets a sequence of \b bool values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b bool to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI void serializeKey(
-            eprosima::fastcdr::Cdr& cdr) const;
+    virtual ReturnCode_t set_boolean_values(
+            MemberId id,
+            const BooleanSeq& value) = 0;
 
-    /*
-     * Calculate an object serialized size
-     * @param data @ref DynamicData object to serialize
-     * @param current_alignment size_t
-     * @return size_t calculated size in bytes
+    /*!
+     * Retrieves a sequence of \b string values associated to an identifier.
+     * @param[inout] value \b Sequence of \b string to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI static size_t getCdrSerializedSize(
-            const DynamicData& data,
-            size_t current_alignment = 0);
+    virtual ReturnCode_t get_string_values(
+            StringSeq& value,
+            MemberId id) = 0;
 
-    /*
-     * Calculate an empty object serialized size
-     * @param type @ref DynamicType object to serialize
-     * @param current_alignment size_t
-     * @return size_t calculated size in bytes
+    /*!
+     * Sets a sequence of \b string values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b string to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI static size_t getEmptyCdrSerializedSize(
-            const DynamicType& type,
-            size_t current_alignment = 0);
+    virtual ReturnCode_t set_string_values(
+            MemberId id,
+            const StringSeq& value) = 0;
 
-    /*
-     * Calculate maximum serialized size of the type's key
-     * @param type @ref DynamicType object to serialize
-     * @param current_alignment size_t
-     * @return size_t calculated size in bytes
-     * @remark returned value is a guidance, for example:
-     *  a 100 sequence length is taken as reference
+    /*!
+     * Retrieves a sequence of \b wstring values associated to an identifier.
+     * @param[inout] value \b Sequence of \b wstring to populate.
+     * @param[in] id Identifier of the member to query.
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI static size_t getKeyMaxCdrSerializedSize(
-            const DynamicType& type,
-            size_t current_alignment = 0);
+    virtual ReturnCode_t get_wstring_values(
+            WstringSeq& value,
+            MemberId id) = 0;
 
-    /*
-     * Calculate maximum serialized size
-     * @param type @ref DynamicType object to serialize
-     * @param current_alignment size_t
-     * @return size_t calculated size in bytes
-     * @remark returned value is a guidance, for example:
-     *  a 100 sequence length is taken as reference
+    /*!
+     * Sets a sequence of \b wstring values associated to an identifier.
+     * @param[in] id Identifier of the member to set.
+     * @param[in] value Sequence of \b wstring to set
+     * @return @ref ReturnCode_t
      */
-    RTPS_DllAPI static size_t getMaxCdrSerializedSize(
-            const DynamicType& type,
-            size_t current_alignment = 0);
+    virtual ReturnCode_t set_wstring_values(
+            MemberId id,
+            const WstringSeq& value) = 0;
 
+protected:
+
+    DynamicData() = default;
+
+    virtual ~DynamicData() = default;
+
+    traits<DynamicData>::ref_type _this();
+
+private:
+
+    DynamicData(
+            const DynamicData&) = delete;
+
+    DynamicData(
+            DynamicData&&) = delete;
+
+    DynamicData& operator =(
+            const DynamicData&) = delete;
+
+    DynamicData& operator =(
+            DynamicData&&) = delete;
 };
 
 } // namespace dds
 } // namespace fastdds
 } // namespace eprosima
-
-namespace std {
-
-template<>
-struct default_delete<eprosima::fastdds::dds::DynamicData>
-{
-    void operator ()(
-            const eprosima::fastdds::dds::DynamicData* pA) const noexcept
-    {
-        auto& inst = eprosima::fastdds::dds::DynamicDataFactory::get_instance();
-        inst.delete_data(pA);
-    }
-
-};
-
-} // namespace std
 
 #endif // FASTDDS_DDS_XTYPES_DYNAMIC_TYPES_DYNAMIC_DATA_HPP
