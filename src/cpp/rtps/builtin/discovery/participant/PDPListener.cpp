@@ -146,6 +146,7 @@ void PDPListener::process_alive_data(
         std::unique_lock<std::recursive_mutex>& lock)
 {
     GUID_t participant_guid = new_data.m_guid;
+    static_cast<void>(participant_guid);
 
     if (old_data == nullptr)
     {
