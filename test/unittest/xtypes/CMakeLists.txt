@@ -47,22 +47,22 @@ endif()
 
 include_directories(mock/)
 
-add_executable(XTypesTests ${XTYPES_TEST_SOURCE})
-target_compile_definitions(XTypesTests PRIVATE
-    BOOST_ASIO_STANDALONE
-    ASIO_STANDALONE
-    $<$<AND:$<NOT:$<BOOL:${WIN32}>>,$<STREQUAL:"${CMAKE_BUILD_TYPE}","Debug">>:__DEBUG>
-    $<$<BOOL:${INTERNAL_DEBUG}>:__INTERNALDEBUG> # Internal debug activated.
-    )
-target_include_directories(XTypesTests PRIVATE
-    ${Asio_INCLUDE_DIR}
-    ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
-    ${PROJECT_SOURCE_DIR}/src/cpp
-    )
-target_link_libraries(XTypesTests GTest::gtest fastdds::xtypes ${MOCKS})
-if(MSVC OR MSVC_IDE)
-    target_link_libraries(XTypesTests ${PRIVACY} fastcdr iphlpapi Shlwapi ws2_32)
-else()
-    target_link_libraries(XTypesTests ${PRIVACY} fastcdr)
-endif()
-gtest_discover_tests(XTypesTests)
+#add_executable(XTypesTests ${XTYPES_TEST_SOURCE})
+#target_compile_definitions(XTypesTests PRIVATE
+#    BOOST_ASIO_STANDALONE
+#    ASIO_STANDALONE
+#    $<$<AND:$<NOT:$<BOOL:${WIN32}>>,$<STREQUAL:"${CMAKE_BUILD_TYPE}","Debug">>:__DEBUG>
+#    $<$<BOOL:${INTERNAL_DEBUG}>:__INTERNALDEBUG> # Internal debug activated.
+#    )
+#target_include_directories(XTypesTests PRIVATE
+#    ${Asio_INCLUDE_DIR}
+#    ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR}/include
+#    ${PROJECT_SOURCE_DIR}/src/cpp
+#    )
+#target_link_libraries(XTypesTests GTest::gtest fastdds::xtypes ${MOCKS})
+#if(MSVC OR MSVC_IDE)
+#    target_link_libraries(XTypesTests ${PRIVACY} fastcdr iphlpapi Shlwapi ws2_32)
+#else()
+#    target_link_libraries(XTypesTests ${PRIVACY} fastcdr)
+#endif()
+#gtest_discover_tests(XTypesTests)

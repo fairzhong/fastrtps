@@ -24,6 +24,8 @@
 #include <fastdds/dds/domain/DomainParticipantListener.hpp>
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicData.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
 #include <fastrtps/subscriber/SampleInfo.h>
 #include <fastrtps/rtps/common/Types.h>
 
@@ -65,9 +67,9 @@ private:
 
     std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastdds::dds::Topic*> topics_;
 
-    std::map<eprosima::fastdds::dds::DataReader*, const eprosima::fastdds::dds::DynamicType*> readers_;
+    std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastdds::dds::DynamicType::_ref_type> readers_;
 
-    std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastdds::dds::DynamicData*> datas_;
+    std::map<eprosima::fastdds::dds::DataReader*, eprosima::fastdds::dds::DynamicData::_ref_type> datas_;
 
     eprosima::fastrtps::SubscriberAttributes att_;
 
@@ -107,7 +109,7 @@ public:
 
         std::condition_variable types_cv_;
 
-        const eprosima::fastdds::dds::DynamicType* received_type_ {nullptr};
+        eprosima::fastdds::dds::DynamicType::_ref_type received_type_;
 
         std::atomic<bool> reception_flag_{false};
 

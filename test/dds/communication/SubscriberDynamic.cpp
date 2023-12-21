@@ -32,10 +32,11 @@
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicData.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/attributes/SubscriberAttributes.h>
 #include <fastrtps/subscriber/SampleInfo.h>
-#include <fastdds/dds/xtypes/dynamic_types/DynamicData.hpp>
 #include <fastrtps/types/TypeObjectFactory.h>
 
 using namespace eprosima::fastdds::dds;
@@ -267,30 +268,32 @@ int main(
         auto& topic_name = remote_names.first;
         auto& type_name = remote_names.second;
 
-        const DynamicType* type {nullptr};
+        DynamicType::_ref_type type;
 
         {
-            const eprosima::fastrtps::types::TypeIdentifier* ident =
+            /*TODO(richiware)
+               const eprosima::fastrtps::types::TypeIdentifier* ident =
                     TypeObjectFactory::get_instance()->get_type_identifier_trying_complete(type_name);
 
-            if (ident == nullptr)
-            {
+               if (ident == nullptr)
+               {
                 std::cout << "ERROR: TypeIdentifier cannot be retrieved for type: "
                           << type_name << std::endl;
                 throw 1;
-            }
+               }
 
-            const eprosima::fastrtps::types::TypeObject* obj =
+               const eprosima::fastrtps::types::TypeObject* obj =
                     TypeObjectFactory::get_instance()->get_type_object(ident);
 
-            const DynamicType* ret_type = nullptr;
-            if (!TypeObjectFactory::get_instance()->build_dynamic_type(ret_type, type_name, ident, obj))
-            {
+               const DynamicType* ret_type = nullptr;
+               if (!TypeObjectFactory::get_instance()->build_dynamic_type(ret_type, type_name, ident, obj))
+               {
                 std::cout << "ERROR: DynamicType cannot be created for type: " << type_name << std::endl;
                 throw 1;
-            }
+               }
 
-            type = ret_type;
+               type = ret_type;
+             */
         }
 
         // Create the Topic & DataReader
@@ -325,7 +328,7 @@ int main(
         while ((notexit || number_samples < samples ) && listener.run_)
         {
             // loop taking samples
-            DynamicPubSubType pst(*type);
+            DynamicPubSubType pst(type);
             DynamicData* sample {static_cast<DynamicData*>(pst.createData())};
             eprosima::fastdds::dds::SampleInfo info;
 
@@ -339,10 +342,10 @@ int main(
 
                     ++number_samples;
 
-                    message = sample->get_string_value(0);
-                    index = sample->get_uint32_value(1);
+                    sample->get_string_value(message, 0);
+                    sample->get_uint32_value(index, 1);
 
-                    DynamicData* inner {sample->loan_value(2)};
+                    DynamicData::_ref_type inner {sample->loan_value(2)};
                     inner->get_byte_value(count, 0);
 
                     std::cout << "Received sample: index(" << index << "), message("

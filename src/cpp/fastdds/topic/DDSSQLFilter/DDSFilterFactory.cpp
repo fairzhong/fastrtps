@@ -25,6 +25,8 @@
 #include <fastdds/dds/topic/IContentFilter.hpp>
 #include <fastdds/dds/topic/IContentFilterFactory.hpp>
 #include <fastdds/dds/topic/TopicDataType.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicType.hpp>
+#include <fastdds/dds/xtypes/dynamic_types/DynamicTypeBuilderFactory.hpp>
 
 #include <fastrtps/types/TypeObject.h>
 #include <fastrtps/types/TypeObjectFactory.h>
@@ -529,11 +531,10 @@ ReturnCode_t DDSFilterFactory::create_content_filter(
             auto node = parser::parse_filter_expression(filter_expression, type_object);
             if (node)
             {
-                auto type_id = TypeObjectFactory::get_instance()->get_type_identifier(type_name, true);
-                const DynamicType* ret_type = nullptr;
-                ret = TypeObjectFactory::get_instance()->build_dynamic_type(ret_type, type_name, type_id, type_object);
+                traits<DynamicType>::ref_type ret_type; /*TODO(richiware)=
+                                                           DynamicTypeBuilderFactory::get_instance()->create_type_w_type_object(*type_object)->build();*/
 
-                if (!!ret)
+                if (ret)
                 {
                     DDSFilterExpression* expr = get_expression();
                     expr->set_type(ret_type);
