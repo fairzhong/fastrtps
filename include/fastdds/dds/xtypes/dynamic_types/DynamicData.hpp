@@ -44,7 +44,7 @@ public:
      * @param[in] id Identifier of the member to be retrieved.
      */
     virtual ReturnCode_t get_descriptor(
-            traits<MemberDescriptor>::ref_type value,
+            traits<MemberDescriptor>::ref_type& value,
             MemberId id) = 0;
 
     /*!
