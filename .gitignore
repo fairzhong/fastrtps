@@ -39,7 +39,7 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar
 *.war
 *.ear
 
@@ -445,3 +445,6 @@ compile_commands.json
 
 # Uncrustify
 uncrustify.cfg
+
+
+output

@@ -36,6 +36,8 @@ string(TOUPPER "${PROJECT_NAME}" PROJECT_NAME_UPPER)
 
 message(STATUS "Version: ${PROJECT_VERSION}")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 ###############################################################################
 # eProsima build options
 ###############################################################################
@@ -567,16 +569,16 @@ install(FILES ${PROJECT_SOURCE_DIR}/resources/xsd/fastdds_static_discovery.xsd
     COMPONENT xsd
     )
 
-option(INSTALL_EXAMPLES "Install example" OFF)
+# option(INSTALL_EXAMPLES "Install example" OFF)
 
-if(INSTALL_EXAMPLES)
-  # Install examples
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/examples/cpp
-      DESTINATION examples/
-      COMPONENT examples
-      PATTERN "examples/CMakeLists.txt" EXCLUDE
-      )
-endif()
+# if(INSTALL_EXAMPLES)
+#   # Install examples
+#   install(DIRECTORY ${PROJECT_SOURCE_DIR}/examples/cpp
+#       DESTINATION examples/
+#       COMPONENT examples
+#       PATTERN "examples/CMakeLists.txt" EXCLUDE
+#       )
+# endif()
 
 option(INSTALL_TOOLS "Install tools" OFF)
 
