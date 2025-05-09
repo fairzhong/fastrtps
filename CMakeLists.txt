@@ -109,7 +109,7 @@ option(EPROSIMA_INSTALLER "Activate the creation of a build to create windows in
 ###############################################################################
 # eProsima build options
 ###############################################################################
-option(EPROSIMA_BUILD "Activate internal building" OFF)
+option(EPROSIMA_BUILD "Activate internal building" ON)
 
 if(EPROSIMA_INSTALLER)
     set(EPROSIMA_BUILD ON)
@@ -308,7 +308,7 @@ option(LOG_NO_ERROR "Do not compile Error Log level" OFF)
 cmake_dependent_option(
     FASTDDS_ENFORCE_LOG_INFO
     "The LOG_NO_INFO option must be enforced regardless of selected configuration"
-    OFF
+    ON
     "NOT LOG_NO_INFO"
     OFF)
 
@@ -359,7 +359,7 @@ add_subdirectory(test)
 ###############################################################################
 # Examples
 ###############################################################################
-option(COMPILE_EXAMPLES "Build example" OFF)
+option(COMPILE_EXAMPLES "Build example" ON)
 
 if(EPROSIMA_BUILD AND IS_TOP_LEVEL AND NOT EPROSIMA_INSTALLER AND NOT EPROSIMA_INSTALLER_MINION)
     set(COMPILE_EXAMPLES ON)

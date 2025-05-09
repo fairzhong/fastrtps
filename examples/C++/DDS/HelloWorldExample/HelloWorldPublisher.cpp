@@ -25,7 +25,7 @@
 #include <fastdds/dds/publisher/qos/PublisherQos.hpp>
 #include <fastdds/dds/publisher/DataWriter.hpp>
 #include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
-
+#include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 #include <thread>
 
 using namespace eprosima::fastdds::dds;
@@ -43,8 +43,30 @@ bool HelloWorldPublisher::init()
 {
     hello_.index(0);
     hello_.message("HelloWorld");
-    DomainParticipantQos pqos;
-    pqos.name("Participant_pub");
+
+    DomainParticipantQos pqos = PARTICIPANT_QOS_DEFAULT; 
+    pqos.name("master_participant");
+    auto udp_transport = std::make_shared<eprosima::fastdds::rtps::UDPv4TransportDescriptor>();
+    udp_transport->interfaceWhiteList.push_back("127.0.0.1"); // 指定网卡 IP
+    udp_transport->maxInitialPeersRange=5;
+    pqos.transport().user_transports.push_back(udp_transport);
+    pqos.transport().use_builtin_transports = false;
+    
+    pqos.wire_protocol().builtin.avoid_builtin_multicast=true;
+    pqos.wire_protocol().builtin.use_WriterLivelinessProtocol=false;
+
+    // eprosima::fastrtps::rtps::Locator_t unicast_locator;
+    // unicast_locator.kind = LOCATOR_KIND_UDPv4;
+    // eprosima::fastrtps::rtps::IPLocator::setIPv4(unicast_locator, "127.0.0.1");
+    // unicast_locator.port = 7416;
+    // pqos.wire_protocol().builtin.metatrafficUnicastLocatorList.push_back(unicast_locator);
+    
+    // eprosima::fastdds::rtps::Locator initial_peer;
+    // eprosima::fastrtps::rtps::IPLocator::setIPv4(initial_peer, "127.0.0.1");
+    // initial_peer.port = 7418;
+    // pqos.wire_protocol().builtin.initialPeersList.push_back(initial_peer);
+
+
     participant_ = DomainParticipantFactory::get_instance()->create_participant(0, pqos);
 
     if (participant_ == nullptr)
@@ -70,8 +92,16 @@ bool HelloWorldPublisher::init()
         return false;
     }
 
+    DataWriterQos wqos = DATAWRITER_QOS_DEFAULT;
+    // eprosima::fastrtps::rtps::Locator_t multicast_locator;
+    // multicast_locator.kind = LOCATOR_KIND_UDPv4;
+    // eprosima::fastrtps::rtps::IPLocator::setIPv4(multicast_locator, "239.7.7.7"); // 组播地址
+    // multicast_locator.port = 7777; // 组播端口 (可选)
+    // wqos.endpoint().multicast_locator_list.clear();
+    // wqos.endpoint().multicast_locator_list.push_back(multicast_locator);
+
     // CREATE THE WRITER
-    writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT, &listener_);
+    writer_ = publisher_->create_datawriter(topic_, wqos, &listener_);
 
     if (writer_ == nullptr)
     {

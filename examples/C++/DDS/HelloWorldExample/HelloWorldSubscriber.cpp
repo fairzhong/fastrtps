@@ -25,6 +25,7 @@
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
+#include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 
 using namespace eprosima::fastdds::dds;
 
@@ -39,8 +40,28 @@ HelloWorldSubscriber::HelloWorldSubscriber()
 
 bool HelloWorldSubscriber::init()
 {
-    DomainParticipantQos pqos;
-    pqos.name("Participant_sub");
+    DomainParticipantQos pqos = PARTICIPANT_QOS_DEFAULT; 
+    pqos.name("master_participant");
+    auto udp_transport = std::make_shared<eprosima::fastdds::rtps::UDPv4TransportDescriptor>();
+    udp_transport->interfaceWhiteList.push_back("127.0.0.1"); // 指定网卡 IP
+    udp_transport->maxInitialPeersRange=5;
+    pqos.transport().user_transports.push_back(udp_transport);
+    pqos.transport().use_builtin_transports = false;
+    pqos.wire_protocol().builtin.avoid_builtin_multicast=true;
+    pqos.wire_protocol().builtin.use_WriterLivelinessProtocol=false;
+
+    // eprosima::fastrtps::rtps::Locator_t unicast_locator;
+    // unicast_locator.kind = LOCATOR_KIND_UDPv4;
+    // eprosima::fastrtps::rtps::IPLocator::setIPv4(unicast_locator, "127.0.0.1");
+    // unicast_locator.port = 7400;
+    // pqos.wire_protocol().builtin.metatrafficUnicastLocatorList.push_back(unicast_locator);
+    
+
+    // eprosima::fastdds::rtps::Locator initial_peer;
+    // eprosima::fastrtps::rtps::IPLocator::setIPv4(initial_peer, "127.0.0.1");
+    // initial_peer.port = 7416;
+    // pqos.wire_protocol().builtin.initialPeersList.push_back(initial_peer);
+
     participant_ = DomainParticipantFactory::get_instance()->create_participant(0, pqos);
 
     if (participant_ == nullptr)
@@ -72,7 +93,23 @@ bool HelloWorldSubscriber::init()
 
     // CREATE THE READER
     DataReaderQos rqos = DATAREADER_QOS_DEFAULT;
-    rqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+    // rqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+    
+    // 监听组播地址
+    // eprosima::fastrtps::rtps::Locator_t multicast_locator;
+    // multicast_locator.kind = LOCATOR_KIND_UDPv4;
+    // eprosima::fastrtps::rtps::IPLocator::setIPv4(multicast_locator, "239.7.7.7");
+    // multicast_locator.port = 7777;
+    // rqos.endpoint().multicast_locator_list.clear();
+    // rqos.endpoint().multicast_locator_list.push_back(multicast_locator);
+
+    // eprosima::fastrtps::rtps::Locator_t unicast_locator;
+    // unicast_locator.kind = LOCATOR_KIND_UDPv4;
+    // eprosima::fastrtps::rtps::IPLocator::setIPv4(unicast_locator, "127.0.0.1");
+    // unicast_locator.port = 7418;
+    // rqos.endpoint().unicast_locator_list.clear();
+    // rqos.endpoint().unicast_locator_list.push_back(unicast_locator);
+
     reader_ = subscriber_->create_datareader(topic_, rqos, &listener_);
 
     if (reader_ == nullptr)

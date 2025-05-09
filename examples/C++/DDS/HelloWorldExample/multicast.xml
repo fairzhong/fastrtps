@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dds>
+    <profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+        <transport_descriptors>
+            <transport_descriptor>
+                <transport_id>udp_transport</transport_id>
+                <type>UDPv4</type>
+                <maxInitialPeersRange>5</maxInitialPeersRange>
+                <!-- 白名单，多个会发送重复数据 -->
+                <interfaceWhiteList>
+                    <address>127.0.0.1</address>
+                </interfaceWhiteList>
+            </transport_descriptor>
+            <transport_descriptor>
+                <transport_id>shm_transport</transport_id>
+                <type>SHM</type>
+            </transport_descriptor>
+        </transport_descriptors>
+
+        <participant profile_name="master_participant" is_default_profile="true">
+            <rtps>
+                <name>💡HelloWorld_ParticipantName</name>
+                <userTransports>
+                    <transport_id>udp_transport</transport_id>
+                    <!-- <transport_id>shm_transport</transport_id> -->
+                </userTransports>
+                <useBuiltinTransports>false</useBuiltinTransports>
+                <builtin>
+                    <!-- false为使用PDP多播 -->
+                    <avoid_builtin_multicast>true</avoid_builtin_multicast>
+                    <use_WriterLivelinessProtocol>false</use_WriterLivelinessProtocol>
+                    <initialPeersList>
+                        <locator>
+                            <udpv4>
+                                <address>127.0.0.1</address>
+                                <port>7410</port> <!-- 默认 participant 0 就是 7410 -->
+                            </udpv4>
+                        </locator>
+                    </initialPeersList>
+                    <discovery_config>
+                        <!-- PDP公告周期 -->
+                        <leaseAnnouncement>
+                            <sec>30</sec>
+                        </leaseAnnouncement>
+                        <!-- 定义节点在发现期间对其它节点宣布其“存活时间”的持续时长 -->
+                        <leaseDuration>
+                            <sec>50</sec>
+                        </leaseDuration>
+                        <!-- 定义节点启动时发送初始发现PDP公告的次数和间隔时间 -->
+                        <initialAnnouncements>
+                            <count>0</count>
+                            <period>
+                                <sec>1</sec>
+                            </period>
+                        </initialAnnouncements>
+                    </discovery_config>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <data_writer profile_name="/HelloWorldTopic">
+            <topic>
+                <historyQos>
+                    <kind>KEEP_LAST</kind>
+                    <depth>5</depth>
+                </historyQos>
+            </topic>
+            <qos>
+                <durability>
+                    <kind>VOLATILE</kind>
+                </durability>
+                <reliability>
+                    <kind>RELIABLE</kind>
+                </reliability>
+            </qos>
+            <multicastLocatorList>
+                <locator>
+                    <udpv4>
+                        <address>239.7.7.13</address>
+                    </udpv4>
+                </locator>
+            </multicastLocatorList>
+        </data_writer>
+        <data_reader profile_name="/HelloWorldTopic">
+            <topic>
+                <historyQos>
+                    <kind>KEEP_LAST</kind>
+                    <depth>5</depth>
+                </historyQos>
+            </topic>
+            <qos>
+                <durability>
+                    <kind>VOLATILE</kind>
+                </durability>
+                <reliability>
+                    <kind>RELIABLE</kind>
+                </reliability>
+            </qos>
+            <multicastLocatorList>
+                <locator>
+                    <udpv4>
+                        <address>239.7.7.13</address>
+                    </udpv4>
+                </locator>
+            </multicastLocatorList>
+        </data_reader>
+
+    </profiles>
+</dds>

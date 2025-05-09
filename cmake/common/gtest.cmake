@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-option(GTEST_INDIVIDUAL "Activate the execution of GTest tests" OFF)
+option(GTEST_INDIVIDUAL "Activate the execution of GTest tests" ON)
 
 macro(add_gtest)
     # Parse arguments

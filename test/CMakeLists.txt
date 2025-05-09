@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-option(PERFORMANCE_TESTS "Activate the building and execution of performance tests" OFF)
-option(SYSTEM_TESTS "Activate the building and execution of system tests" OFF)
-option(PROFILING_TESTS "Activate the building and execution of profiling tests" OFF)
-option(EPROSIMA_BUILD_TESTS "Activate the building and execution unit tests and integral tests" OFF)
+option(PERFORMANCE_TESTS "Activate the building and execution of performance tests" ON)
+option(SYSTEM_TESTS "Activate the building and execution of system tests" ON)
+option(PROFILING_TESTS "Activate the building and execution of profiling tests" ON)
+option(EPROSIMA_BUILD_TESTS "Activate the building and execution unit tests and integral tests" ON)
 
 if(EPROSIMA_BUILD AND NOT EPROSIMA_INSTALLER AND NOT EPROSIMA_INSTALLER_MINION)
     set(EPROSIMA_BUILD_TESTS ON)
