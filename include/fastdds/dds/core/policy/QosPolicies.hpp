@@ -441,16 +441,16 @@ typedef enum LivelinessQosPolicyKind : fastrtps::rtps::octet
     /**
      * The infrastructure will automatically signal liveliness for the DataWriters at least as often as required by the lease_duration.
      */
-    AUTOMATIC_LIVELINESS_QOS,
+    AUTOMATIC_LIVELINESS_QOS, // 由 RTPS 协议自动管理活跃性。
     /**
      * The Service will assume that as long as at least one Entity within the DomainParticipant has asserted its liveliness the other
      * Entities in that same DomainParticipant are also alive.
      */
-    MANUAL_BY_PARTICIPANT_LIVELINESS_QOS,
+    MANUAL_BY_PARTICIPANT_LIVELINESS_QOS, // 由 Participant 手动管理活跃性。
     /**
      * The Service will only assume liveliness of the DataWriter if the application has asserted liveliness of that DataWriter itself.
      */
-    MANUAL_BY_TOPIC_LIVELINESS_QOS
+    MANUAL_BY_TOPIC_LIVELINESS_QOS // 由 Topic 手动管理活跃性。
 
 } LivelinessQosPolicyKind;
 

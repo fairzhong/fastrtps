@@ -86,7 +86,8 @@ public:
     rtps::MemoryManagementPolicy_t historyMemoryPolicy;
 
     //!Properties
-    rtps::PropertyPolicy properties;
+    rtps::PropertyPolicy properties; // 常用于在发现阶段（Discovery）传递自定义信息，或者为特定的 RTPS 协议扩展提供支持
+
     ResourceLimitedContainerConfig matched_subscriber_allocation;
 
     /**

@@ -27,9 +27,6 @@
 #include <fastrtps/subscriber/SubscriberListener.h>
 #include <fastrtps/subscriber/SampleInfo.h>
 
-
-
-
 #include "HelloWorld.h"
 
 class HelloWorldSubscriber

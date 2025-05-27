@@ -49,8 +49,9 @@ bool HelloWorldSubscriber::init()
     }
 
     //REGISTER THE TYPE
-
     Domain::registerType(mp_participant, &m_type);
+
+
     //CREATE THE SUBSCRIBER
     SubscriberAttributes Rparam;
     Rparam.topic.topicKind = NO_KEY;

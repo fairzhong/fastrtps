@@ -82,13 +82,13 @@ struct SocketTransportDescriptor : public TransportDescriptorInterface
     }
 
     //! Length of the send buffer.
-    uint32_t sendBufferSize;
+    uint32_t sendBufferSize; // 套接字发送缓冲区的大小
     //! Length of the receive buffer.
-    uint32_t receiveBufferSize;
+    uint32_t receiveBufferSize; // 套接字接收缓冲区的大小
     //! Allowed interfaces in an IP string format.
-    std::vector<std::string> interfaceWhiteList;
+    std::vector<std::string> interfaceWhiteList; // 表示允许使用的网络接口列表
     //! Specified time to live (8bit - 255 max TTL)
-    uint8_t TTL;
+    uint8_t TTL;  // 控制数据包在网络中的传播范围
 };
 
 } // namespace rtps

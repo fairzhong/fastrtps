@@ -39,6 +39,9 @@ class TimedEventImpl;
  * This class centralizes all operations over timed events in the same thread.
  * @ingroup MANAGEMENT_MODULE
  */
+//* 单线程事件循环模型
+//* 用于管理定时事件（TimedEvent）的中心类，其作用是统一调度和管理所有定时器操作，确保线程安全、避免竞态条件，并提供非阻塞接口以支持高效的异步操作。
+
 class ResourceEvent
 {
 public:
@@ -50,6 +53,7 @@ public:
     /*!
      * @brief Method to initialize the internal thread.
      */
+    // 初始化内部线程，启动事件循环
     void init_thread();
 
     /*!
@@ -58,6 +62,7 @@ public:
      * This method has to be called when creating a TimedEventImpl object.
      * @param event TimedEventImpl object that has been created.
      */
+    // 注册一个新的定时器对象，使其被 ResourceEvent 管理
     void register_timer(
             TimedEventImpl* event);
 
@@ -70,6 +75,7 @@ public:
      * Then it avoids the situation of the execution thread calling the event handler when it was previously removed.
      * @param event TimedEventImpl object that will be deleted and we have to be sure all its operations are cancelled.
      */
+    // 安全注销一个定时器，确保它不再被调用。
     void unregister_timer(
             TimedEventImpl* event);
 
@@ -79,6 +85,7 @@ public:
      * These operations can be the cancellation of the timer or starting another async_wait.
      * @param event TimedEventImpl object that has operations to be scheduled.
      */
+    // 告知 ResourceEvent 某个定时器有新的操作需要调度（如修改时间或取消）。
     void notify(
             TimedEventImpl* event);
 
@@ -90,6 +97,7 @@ public:
      * @param event TimedEventImpl object that has operations to be scheduled.
      * @param timeout Maximum blocking time of the method.
      */
+    // 同上，但允许指定超时时间，适用于实时性要求高的场景。
     void notify(
             TimedEventImpl* event,
             const std::chrono::steady_clock::time_point& timeout);

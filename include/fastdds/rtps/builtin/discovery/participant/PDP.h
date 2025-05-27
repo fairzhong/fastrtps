@@ -359,12 +359,15 @@ protected:
     RTPSParticipantImpl* mp_RTPSParticipant;
     //!Discovery attributes.
     BuiltinAttributes m_discovery;
+
     //!Pointer to the PDPWriter.
     RTPSWriter* mp_PDPWriter;
     //!Pointer to the PDPReader.
     RTPSReader* mp_PDPReader;
+
     //!Pointer to the EDP object.
     EDP* mp_EDP;
+    
     //!Number of participant proxy data objects created
     size_t participant_proxies_number_;
     //!Registered RTPSParticipants (including the local one, that is the first one.)
@@ -379,10 +382,13 @@ protected:
     size_t writer_proxies_number_;
     //!Pool of writer proxy data objects ready for reuse
     ResourceLimitedVector<WriterProxyData*> writer_proxies_pool_;
+
     //!Variable to indicate if any parameter has changed.
     std::atomic_bool m_hasChangedLocalPDP;
+
     //!Listener for the SPDP messages.
     ReaderListener* mp_listener;
+
     //!WriterHistory
     WriterHistory* mp_PDPWriterHistory;
     //!Writer payload pool
@@ -391,12 +397,14 @@ protected:
     ReaderHistory* mp_PDPReaderHistory;
     //!Reader payload pool
     std::shared_ptr<ITopicPayloadPool> reader_payload_pool_;
+
     //!ReaderProxyData to allow preallocation of remote locators
     ReaderProxyData temp_reader_data_;
     //!WriterProxyData to allow preallocation of remote locators
     WriterProxyData temp_writer_data_;
     //!To protect temp_writer_data_ and temp_reader_data_
     std::mutex temp_data_lock_;
+    
     //!Participant data atomic access assurance
     std::recursive_mutex* mp_mutex;
     //!To protect callbacks (ParticipantProxyData&)

@@ -511,8 +511,10 @@ private:
     // ResourceSend* mp_send_thr;
     //! Event Resource
     ResourceEvent mp_event_thr;
+
     //! BuiltinProtocols of this RTPSParticipant
     BuiltinProtocols* mp_builtinProtocols;
+    
     //!Semaphore to wait for the listen thread creation.
     Semaphore* mp_ResourceSemaphore;
     //!Id counter to correctly assign the ids to writers and readers.
@@ -527,7 +529,7 @@ private:
     //!Reader List
     std::vector<RTPSReader*> m_userReaderList;
     //!Network Factory
-    NetworkFactory m_network_Factory;
+    NetworkFactory m_network_Factory;  // 放置transport
     //!Async writer thread
     AsyncWriterThread async_thread_;
     //! Type cheking function
@@ -556,7 +558,7 @@ private:
     //!Participant Listener
     RTPSParticipantListener* mp_participantListener;
     //!Pointer to the user participant
-    RTPSParticipant* mp_userParticipant;
+    RTPSParticipant* mp_userParticipant;  //Impl模式
 
     RTPSParticipantImpl& operator =(
             const RTPSParticipantImpl&) = delete;
@@ -634,7 +636,7 @@ private:
     /*
      * Flow controllers for this participant.
      */
-    std::vector<std::unique_ptr<FlowController>> m_controllers;
+    std::vector<std::unique_ptr<FlowController>> m_controllers; // 流控
 
 #if HAVE_SECURITY
     security::ParticipantSecurityAttributes security_attributes_;

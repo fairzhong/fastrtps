@@ -45,6 +45,7 @@ namespace rtps {
 #define LOCATOR_ADDRESS_INVALID(a) {std::memset(a, 0x00, 16 * sizeof(octet));}
 #define LOCATOR_PORT_INVALID 0
 #define LOCATOR_KIND_RESERVED 0
+
 #define LOCATOR_KIND_UDPv4 1
 #define LOCATOR_KIND_UDPv6 2
 #define LOCATOR_KIND_TCPv4 4
@@ -53,6 +54,7 @@ namespace rtps {
 
 //!@brief Class Locator_t, uniquely identifies a communication channel for a particular transport.
 //For example, an address+port combination in the case of UDP.
+//通过地址和端口的组合来唯一标识一个通信通道
 //!@ingroup COMMON_MODULE
 class RTPS_DllAPI Locator_t
 {

@@ -101,7 +101,7 @@ struct LocatorSelectorEntry
     }
 
     //! GUID of the remote entity.
-    GUID_t remote_guid;
+    GUID_t remote_guid;  //* 远程 Writer 的 GUID，
     //! List of unicast locators to send data to the remote entity.
     ResourceLimitedVector<Locator_t> unicast;
     //! List of multicast locators to send data to the remote entity.

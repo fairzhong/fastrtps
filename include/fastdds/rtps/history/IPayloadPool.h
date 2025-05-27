@@ -32,6 +32,7 @@ struct CacheChange_t;
 
 /**
  * An interface for classes responsible of serialized payload management.
+ * IPayloadPool 用于管理数据的序列化和反序列化过程中的内存分配与释放
  */
 class IPayloadPool
 {

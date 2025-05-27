@@ -104,23 +104,28 @@ PDP::PDP (
     , mp_mutex(new std::recursive_mutex())
     , resend_participant_info_event_(nullptr)
 {
+    // 根据配置参数预分配一定数量的参与者、读者和写者的代理数据对象，并将它们放入各自的池中，以便在运行时动态管理和复用这些对象，避免频繁的内存分配与释放，提高性能。
+
     size_t max_unicast_locators = allocation.locators.max_unicast_locators;
     size_t max_multicast_locators = allocation.locators.max_multicast_locators;
 
+    // 初始化参与者代理数据池
     for (size_t i = 0; i < allocation.participants.initial; ++i)
     {
-        participant_proxies_pool_.push_back(new ParticipantProxyData(allocation));
+        participant_proxies_pool_.push_back(new ParticipantProxyData(allocation)); //用于存储远程参与者的元数据信息
     }
 
+    // 初始化读者代理数据池
     for (size_t i = 0; i < allocation.total_readers().initial; ++i)
     {
-        reader_proxies_pool_.push_back(new ReaderProxyData(max_unicast_locators, max_multicast_locators,
+        reader_proxies_pool_.push_back(new ReaderProxyData(max_unicast_locators, max_multicast_locators, // 用于描述远程读者的信息
                 allocation.data_limits));
     }
 
+    // 初始化写者代理数据池
     for (size_t i = 0; i < allocation.total_writers().initial; ++i)
     {
-        writer_proxies_pool_.push_back(new WriterProxyData(max_unicast_locators, max_multicast_locators,
+        writer_proxies_pool_.push_back(new WriterProxyData(max_unicast_locators, max_multicast_locators, //用于描述远程写者的信息
                 allocation.data_limits));
     }
 }
@@ -359,21 +364,25 @@ void PDP::initializeParticipantProxyData(
     participant_data->m_properties.push_back(fastdds::dds::parameter_property_participant_type, ptype);
 }
 
+// 负责为 RTPS 参与者（Participant）配置和初始化 PDP 所需的资源、端点以及生命周期管理机制。
 bool PDP::initPDP(
         RTPSParticipantImpl* part)
 {
     logInfo(RTPS_PDP, "Beginning");
     mp_RTPSParticipant = part;
     m_discovery = mp_RTPSParticipant->getAttributes().builtin;
-    initial_announcements_ = m_discovery.discovery_config.initial_announcements;
-    //CREATE ENDPOINTS
+    initial_announcements_ = m_discovery.discovery_config.initial_announcements; // 初始化通告次数和周期，用于控制发现过程中的初始广播频率
+    
+    // 创建用于 PDP 协议通信的读写端点（Writer 和 Reader）
     if (!createPDPEndpoints())
     {
         return false;
     }
-    //UPDATE METATRAFFIC.
+    
+    // 将 PDP Reader 的单播定位器更新到内置协议中，用于后续发现消息的路由
     mp_builtin->updateMetatrafficLocators(this->mp_PDPReader->getAttributes().unicastLocatorList);
 
+    // 本参与者创建一个 ParticipantProxyData 对象，并初始化
     mp_mutex->lock();
     ParticipantProxyData* pdata = add_participant_proxy_data(part->getGuid(), false);
     mp_mutex->unlock();
@@ -384,27 +393,28 @@ bool PDP::initPDP(
     }
     initializeParticipantProxyData(pdata);
 
-    // Create lease events on already created proxy data objects
+    // 为每个预分配的 ParticipantProxyData 对象创建定时事件，用于检测远程参与者的存活状态（Liveliness）
     for (ParticipantProxyData* pool_item : participant_proxies_pool_)
     {
         pool_item->lease_duration_event = new TimedEvent(mp_RTPSParticipant->getEventResource(),
                         [this, pool_item]() -> bool
                         {
+                            // 检查是否超时并移除失效参与者。
                             check_remote_participant_liveliness(pool_item);
                             return false;
                         }, 0.0);
     }
-
+    // 创建重发参与者信息的定时事件
     resend_participant_info_event_ = new TimedEvent(mp_RTPSParticipant->getEventResource(),
                     [&]() -> bool
                     {
-                        announceParticipantState(false);
+                        announceParticipantState(false); // 广播本参与者的信息
                         set_next_announcement_interval();
                         return true;
                     },
                     0);
 
-    set_initial_announcement_interval();
+    set_initial_announcement_interval(); // 初始间隔
 
     return true;
 }

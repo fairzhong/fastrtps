@@ -52,10 +52,10 @@ public:
             uint32_t participant_id,
             GuidPrefix_t& guid_prefix) const
     {
-        // Use precalculated vendor-host-process part of the prefix
+        // 将预先计算好的8字节前缀数据（prefix_.value）复制到输出参数guid_prefix的前8字节中。
         std::copy(prefix_.value, prefix_.value + 8, guid_prefix.value);
 
-        // Add little endian serialization of participant_id
+        //将输入的participant_id以小端序（Little Endian）方式写入guid_prefix的第9~12字节。
         guid_prefix.value[8] = static_cast<octet>(participant_id & 0xFF);
         guid_prefix.value[9] = static_cast<octet>((participant_id >> 8) & 0xFF);
         guid_prefix.value[10] = static_cast<octet>((participant_id >> 16) & 0xFF);
@@ -78,10 +78,12 @@ private:
     GuidUtils()
     {
         // This is to comply with RTPS section 9.3.1.5 - Mapping of the GUID_t
+        // 置为eProsima厂商ID
         prefix_.value[0] = c_VendorId_eProsima[0];
         prefix_.value[1] = c_VendorId_eProsima[1];
 
         // On Fast DDS, next two bytes should be the same across all processes on the same host
+        // 使用主机唯一标识（host_id）
         uint16_t host_id = SystemInfo::instance().host_id();
         prefix_.value[2] = static_cast<octet>(host_id & 0xFF);
         prefix_.value[3] = static_cast<octet>((host_id >> 8) & 0xFF);
@@ -98,10 +100,12 @@ private:
         // along with a random 16 bits value. This should not be a problem, as the PID is known to be 16 bits long on
         // several systems. On those where it is longer, using the 16 least-significant ones along with a random value
         // should still give enough uniqueness for our use cases.
+        // 使用进程ID低16位
         int pid = SystemInfo::instance().process_id();
         prefix_.value[4] = static_cast<octet>(pid & 0xFF);
         prefix_.value[5] = static_cast<octet>((pid >> 8) & 0xFF);
 
+        // 填充随机值
         std::random_device generator;
         std::uniform_int_distribution<uint16_t> distribution(0, std::numeric_limits<uint16_t>::max());
         uint16_t rand_value = distribution(generator);

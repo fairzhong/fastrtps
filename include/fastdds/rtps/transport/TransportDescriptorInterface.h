@@ -92,10 +92,10 @@ struct TransportDescriptorInterface
     }
 
     //! Maximum size of a single message in the transport
-    uint32_t maxMessageSize;
+    uint32_t maxMessageSize; //表示单个消息在传输层的最大允许大小（以字节为单位）
 
     //! Number of channels opened with each initial remote peer.
-    uint32_t maxInitialPeersRange;
+    uint32_t maxInitialPeersRange; //定义了在初始化阶段，系统尝试与远程对等方建立连接时，最多会尝试打开多少个通道。
 };
 
 } // namespace rtps

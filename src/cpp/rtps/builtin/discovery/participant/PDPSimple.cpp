@@ -234,10 +234,13 @@ bool PDPSimple::createPDPEndpoints()
 {
     logInfo(RTPS_PDP, "Beginning");
 
+    // 获取参与者的内存分配属性 allocation，用于后续缓存大小设置
     const RTPSParticipantAllocationAttributes& allocation =
             mp_RTPSParticipant->getRTPSParticipantAttributes().allocation;
 
     //SPDP BUILTIN RTPSParticipant READER
+    //* 创建SPDP READER
+    // 设置 Reader 历史记录的最大负载大小、内存策略和缓存数量。
     HistoryAttributes hatt;
     hatt.payloadMaxSize = mp_builtin->m_att.readerPayloadSize;
     hatt.memoryPolicy = mp_builtin->m_att.readerHistoryMemoryPolicy;
@@ -251,10 +254,12 @@ bool PDPSimple::createPDPEndpoints()
         hatt.maximumReservedCaches = (int32_t)allocation.participants.maximum;
     }
 
+    // 根据配置创建或获取用于存储读取数据的内存池
     PoolConfig reader_pool_cfg = PoolConfig::from_history_attributes(hatt);
     reader_payload_pool_ = TopicPayloadPoolRegistry::get("DCPSParticipant", reader_pool_cfg);
     reader_payload_pool_->reserve_history(reader_pool_cfg, true);
 
+    // 配置 Reader 属性
     mp_PDPReaderHistory = new ReaderHistory(hatt);
     ReaderAttributes ratt;
     ratt.endpoint.multicastLocatorList = mp_builtin->m_metatrafficMulticastLocatorList;
@@ -263,7 +268,9 @@ bool PDPSimple::createPDPEndpoints()
     ratt.endpoint.durabilityKind = TRANSIENT_LOCAL;
     ratt.endpoint.reliabilityKind = BEST_EFFORT;
     ratt.matched_writers_allocation = allocation.participants;
+    // 创建PDPListener
     mp_listener = new PDPListener(this);
+    // 创建StatelessReader
     if (mp_RTPSParticipant->createReader(&mp_PDPReader, ratt, reader_payload_pool_, mp_PDPReaderHistory, mp_listener,
             c_EntityId_SPDPReader, true, false))
     {
@@ -284,6 +291,7 @@ bool PDPSimple::createPDPEndpoints()
     }
 
     //SPDP BUILTIN RTPSParticipant WRITER
+    // 创建SPDP WRITER
     hatt.payloadMaxSize = mp_builtin->m_att.writerPayloadSize;
     hatt.initialReservedCaches = 1;
     hatt.maximumReservedCaches = 1;
@@ -308,6 +316,7 @@ bool PDPSimple::createPDPEndpoints()
         watt.mode = ASYNCHRONOUS_WRITER;
     }
 
+    // 创建StatelessWriter
     RTPSWriter* wout;
     if (mp_RTPSParticipant->createWriter(&wout, watt, writer_payload_pool_, mp_PDPWriterHistory, nullptr,
             c_EntityId_SPDPWriter, true))
@@ -328,7 +337,7 @@ bool PDPSimple::createPDPEndpoints()
                     fixed_locators.push_back(local_locator);
                 }
             }
-            dynamic_cast<StatelessWriter*>(wout)->set_fixed_locators(fixed_locators);
+            dynamic_cast<StatelessWriter*>(wout)->set_fixed_locators(fixed_locators); // 转换为StatelessWriter
         }
     }
     else

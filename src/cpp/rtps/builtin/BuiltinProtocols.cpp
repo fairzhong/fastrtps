@@ -70,6 +70,7 @@ BuiltinProtocols::~BuiltinProtocols()
 
 }
 
+// 为给定的 RTPS 参与者 (RTPSParticipantImpl) 初始化所有内置协议模块。
 bool BuiltinProtocols::initBuiltinProtocols(
         RTPSParticipantImpl* p_part,
         BuiltinAttributes& attributes)
@@ -143,9 +144,9 @@ bool BuiltinProtocols::initBuiltinProtocols(
         tlm_->init_typelookup_service(mp_participantImpl);
     }
 
-    mp_PDP->announceParticipantState(true);
-    mp_PDP->resetParticipantAnnouncement();
-    mp_PDP->enable();
+    mp_PDP->announceParticipantState(true);  // 通知其他节点当前参与者的存在。
+    mp_PDP->resetParticipantAnnouncement();  // 周期性地发送公告信息
+    mp_PDP->enable(); // 激活 PDP，开始处理发现过程
 
     return true;
 }

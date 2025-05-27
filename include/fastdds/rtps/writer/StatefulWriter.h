@@ -93,10 +93,10 @@ private:
             const WriterAttributes& att);
 
     //!Timed Event to manage the periodic HB to the Reader.
-    TimedEvent* periodic_hb_event_;
+    TimedEvent* periodic_hb_event_;  // 心跳定时
 
     //! Timed Event to manage the Acknack response delay.
-    TimedEvent* nack_response_event_;
+    TimedEvent* nack_response_event_;  // Acknack response delay
 
     //! A timed event to mark samples as acknowledget (used only if disable positive ACKs QoS is enabled)
     TimedEvent* ack_event_;
@@ -107,9 +107,9 @@ private:
     WriterTimes m_times;
 
     //! Vector containing all the remote ReaderProxies.
-    ResourceLimitedVector<ReaderProxy*> matched_remote_readers_;
+    ResourceLimitedVector<ReaderProxy*> matched_remote_readers_; // 存放 远程 Reader 的 ReaderProxy（即跨进程或跨网络的 Reader）
     //! Vector containing all the inactive, ready for reuse, ReaderProxies.
-    ResourceLimitedVector<ReaderProxy*> matched_readers_pool_;
+    ResourceLimitedVector<ReaderProxy*> matched_readers_pool_;   // inactive ReaderProxy
 
     using ReaderProxyIterator = ResourceLimitedVector<ReaderProxy*>::iterator;
     using ReaderProxyConstIterator = ResourceLimitedVector<ReaderProxy*>::const_iterator;
@@ -445,15 +445,15 @@ private:
             const std::chrono::time_point<std::chrono::steady_clock>& max_blocking_time);
 
     //! True to disable piggyback heartbeats
-    bool disable_heartbeat_piggyback_;
+    bool disable_heartbeat_piggyback_; // 捎带机制（Piggyback）是指在发送数据时，将心跳信息附加到数据消息中，以减少单独发送心跳消息的开销
     //! True to disable positive ACKs
-    bool disable_positive_acks_;
+    bool disable_positive_acks_; // 正确认机制是指 Reader 在接收到数据后，向 Writer 发送确认消息（ACK），表示数据已成功接收
     //! Keep duration for disable positive ACKs QoS, in microseconds
-    std::chrono::duration<double, std::ratio<1, 1000000>> keep_duration_us_;
-    //! Last acknowledged cache change (only used if using disable positive ACKs QoS)
-    SequenceNumber_t last_sequence_number_;
+    std::chrono::duration<double, std::ratio<1, 1000000>> keep_duration_us_; // 用于指定在禁用正确认机制时，数据在历史记录中保留的时间（以微秒为单位）
+    //! Last acknowledged cache change (only used if using disable positive ACKs QoS) 
+    SequenceNumber_t last_sequence_number_; // 用于跟踪 Writer 发送的数据中，最后一个被 Reader 确认的序列号
     //! Biggest sequence number removed from history
-    SequenceNumber_t biggest_removed_sequence_number_;
+    SequenceNumber_t biggest_removed_sequence_number_; // 记录从历史记录中移除的最大序列号
 
     const uint32_t sendBufferSize_;
 
@@ -468,11 +468,13 @@ private:
             const StatefulWriter&) = delete;
 
     //! The filter for the reader
-    fastdds::rtps::IReaderDataFilter* reader_data_filter_ = nullptr;
+    fastdds::rtps::IReaderDataFilter* reader_data_filter_ = nullptr;  // 用于在 StatefulWriter 中过滤发送给 ReaderProxy 的数据
+
     //! Vector containing all the active ReaderProxies for intraprocess delivery.
-    ResourceLimitedVector<ReaderProxy*> matched_local_readers_;
+    ResourceLimitedVector<ReaderProxy*> matched_local_readers_;    // 同一个进程内的
     //! Vector containing all the active ReaderProxies for datasharing delivery.
-    ResourceLimitedVector<ReaderProxy*> matched_datasharing_readers_;
+    ResourceLimitedVector<ReaderProxy*> matched_datasharing_readers_; // 存放 支持 DataSharing 的本地共享内存 Reader 的 ReaderProxy
+    
     bool there_are_datasharing_readers_ = false;
 };
 

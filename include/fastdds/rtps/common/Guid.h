@@ -39,9 +39,9 @@ struct InstanceHandle_t;
 struct RTPS_DllAPI GUID_t
 {
     //!Guid prefix
-    GuidPrefix_t guidPrefix;
+    GuidPrefix_t guidPrefix;  // 主机ID+进程ID+参与者ID
     //!Entity id
-    EntityId_t entityId;
+    EntityId_t entityId;  // 实体ID
 
     /*!
      * Default constructor. Contructs an unknown GUID.

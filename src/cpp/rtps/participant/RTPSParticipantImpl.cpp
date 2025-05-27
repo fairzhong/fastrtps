@@ -145,11 +145,14 @@ RTPSParticipantImpl::RTPSParticipantImpl(
     , is_intraprocess_only_(should_be_intraprocess_only(PParam))
     , has_shm_transport_(false)
 {
+    //* 可选，设置持久化 GUID
     if (c_GuidPrefix_Unknown != persistence_guid)
     {
         m_persistence_guid = GUID_t(persistence_guid, c_EntityId_RTPSParticipant);
     }
+
     // Builtin transports by default
+    //* 设置默认内建传输， udp、shm
     if (PParam.useBuiltinTransports)
     {
         UDPv4TransportDescriptor descriptor;
@@ -170,12 +173,12 @@ RTPSParticipantImpl::RTPSParticipantImpl(
 #endif // ifdef SHM_TRANSPORT_BUILTIN
     }
 
+    //* Server Discovery 相关
     // BACKUP servers guid is its persistence one
     if (PParam.builtin.discovery_config.discoveryProtocol == DiscoveryProtocol::BACKUP)
     {
         m_persistence_guid = m_guid;
     }
-
     // Client-server discovery protocol requires that every TCP transport has a listening port
     switch (PParam.builtin.discovery_config.discoveryProtocol)
     {
@@ -199,7 +202,7 @@ RTPSParticipantImpl::RTPSParticipantImpl(
     }
 
 
-    // User defined transports
+    //* 遍历用户自定义传输协议
     for (const auto& transportDescriptor : PParam.userTransports)
     {
         if (m_network_Factory.RegisterTransport(transportDescriptor.get()))
@@ -226,13 +229,17 @@ RTPSParticipantImpl::RTPSParticipantImpl(
     }
 
     mp_userParticipant->mp_impl = this;
-    mp_event_thr.init_thread();
 
+    //* 单线程事件循环模型，启动事件循环
+    mp_event_thr.init_thread();  
+
+    // 检查是否有transport注册
     if (!networkFactoryHasRegisteredTransports())
     {
         return;
     }
 
+    // 流控相关
     // Throughput controller, if the descriptor has valid values
     if (PParam.throughputController.bytesPerPeriod != UINT32_MAX && PParam.throughputController.periodMillisecs != 0)
     {
@@ -243,23 +250,28 @@ RTPSParticipantImpl::RTPSParticipantImpl(
     /* If metatrafficMulticastLocatorList is empty, add mandatory default Locators
        Else -> Take them */
 
-    // Creation of metatraffic locator and receiver resources
+    //* 创建metatraffic locator
+    // 计算metatraffic_multicast_port : 7400 + 250 * domainId + 0
     uint32_t metatraffic_multicast_port = m_att.port.getMulticastPort(domain_id_);
+    // 计算metatraffic_unicast_port : 7400 + 250 * domainId + 10 + 2 * participantId
     uint32_t metatraffic_unicast_port = m_att.port.getUnicastPort(domain_id_,
                     static_cast<uint32_t>(m_att.participantID));
     uint32_t meta_multicast_port_for_check = metatraffic_multicast_port;
 
-    /* INSERT DEFAULT MANDATORY MULTICAST LOCATORS HERE */
+    // 未手动配置元流量定位器，则需要为它们设置默认值。
     if (m_att.builtin.metatrafficMulticastLocatorList.empty() && m_att.builtin.metatrafficUnicastLocatorList.empty())
     {
+        // 生成默认的组播定位器列表。
         m_network_Factory.getDefaultMetatrafficMulticastLocators(m_att.builtin.metatrafficMulticastLocatorList,
                 metatraffic_multicast_port);
+        // 有效性检查
         m_network_Factory.NormalizeLocators(m_att.builtin.metatrafficMulticastLocatorList);
 
         m_network_Factory.getDefaultMetatrafficUnicastLocators(m_att.builtin.metatrafficUnicastLocatorList,
                 metatraffic_unicast_port);
         m_network_Factory.NormalizeLocators(m_att.builtin.metatrafficUnicastLocatorList);
     }
+    // 自定义定位器处理
     else
     {
         if (0 < m_att.builtin.metatrafficMulticastLocatorList.size() &&
@@ -282,7 +294,7 @@ RTPSParticipantImpl::RTPSParticipantImpl(
         m_network_Factory.NormalizeLocators(m_att.builtin.metatrafficUnicastLocatorList);
     }
 
-    // Initial peers
+    //* Initial peers
     if (m_att.builtin.initialPeersList.empty())
     {
         m_att.builtin.initialPeersList = m_att.builtin.metatrafficMulticastLocatorList;
@@ -299,15 +311,9 @@ RTPSParticipantImpl::RTPSParticipantImpl(
                 });
     }
 
-    // Creation of user locator and receiver resources
-    bool hasLocatorsDefined = true;
-    //If no default locators are defined we define some.
-    /* The reasoning here is the following.
-       If the parameters of the RTPS Participant don't hold default listening locators for the creation
-       of Endpoints, we make some for Unicast only.
-       If there is at least one listen locator of any kind, we do not create any default ones.
-       If there are no sending locators defined, we create default ones for the transports we implement.
-     */
+    //* 创建user locator
+    bool hasLocatorsDefined = true; // 标志位
+    // 如果没有手动配置默认的通信定位器，则根据参与者的属性生成默认的单播定位器。
     if (m_att.defaultUnicastLocatorList.empty() && m_att.defaultMulticastLocatorList.empty())
     {
         //Default Unicast Locators in case they have not been provided
@@ -316,6 +322,7 @@ RTPSParticipantImpl::RTPSParticipantImpl(
 
         m_network_Factory.getDefaultUnicastLocators(domain_id_, m_att.defaultUnicastLocatorList, m_att);
     }
+    // 如果已有配置，则填充缺失的参数（如端口），并标准化格式以确保其有效性。
     else
     {
         // Locator with port 0, calculate port.
@@ -330,13 +337,12 @@ RTPSParticipantImpl::RTPSParticipantImpl(
                 {
                     m_network_Factory.fill_default_locator_port(domain_id_, loc, m_att, true);
                 });
-
     }
 
     // Normalize unicast locators.
     m_network_Factory.NormalizeLocators(m_att.defaultUnicastLocatorList);
 
-    if (!hasLocatorsDefined)
+    if (!hasLocatorsDefined)  // 未手动配置
     {
         logInfo(RTPS_PARTICIPANT, m_att.getName() << " Created with NO default Unicast Locator List, adding Locators:"
                                                   << m_att.defaultUnicastLocatorList);
@@ -354,6 +360,7 @@ RTPSParticipantImpl::RTPSParticipantImpl(
     }
 #endif // if HAVE_SECURITY
 
+    // 当参与者配置为仅限进程内通信
     if (is_intraprocess_only())
     {
         m_att.builtin.metatrafficUnicastLocatorList.clear();
@@ -361,6 +368,7 @@ RTPSParticipantImpl::RTPSParticipantImpl(
         m_att.defaultMulticastLocatorList.clear();
     }
 
+    //* 创建接收器资源
     createReceiverResources(m_att.builtin.metatrafficMulticastLocatorList, true, false);
     createReceiverResources(m_att.builtin.metatrafficUnicastLocatorList, true, false);
     createReceiverResources(m_att.defaultUnicastLocatorList, true, false);
@@ -375,8 +383,9 @@ RTPSParticipantImpl::RTPSParticipantImpl(
                 " It may is opened by another application. Discovery may fail.");
     }
 
-    bool allow_growing_buffers = m_att.allocation.send_buffers.dynamic;
-    size_t num_send_buffers = m_att.allocation.send_buffers.preallocated_number;
+    //* 配置和初始化发送缓冲区管理器
+    bool allow_growing_buffers = m_att.allocation.send_buffers.dynamic; //表示是否允许发送缓冲区动态增长。
+    size_t num_send_buffers = m_att.allocation.send_buffers.preallocated_number; //获取预分配的发送缓冲区数量。
     if (num_send_buffers == 0)
     {
         // Three buffers (user, events and async writer threads)
@@ -384,7 +393,6 @@ RTPSParticipantImpl::RTPSParticipantImpl(
         // Add one buffer per reception thread
         num_send_buffers += m_receiverResourcelist.size();
     }
-
     // Create buffer pool
     send_buffers_.reset(new SendBuffersManager(num_send_buffers, allow_growing_buffers));
     send_buffers_->init(this);
@@ -402,6 +410,7 @@ RTPSParticipantImpl::RTPSParticipantImpl(
     }
 #endif // if HAVE_SECURITY
 
+    //*  创建内建协议，用于discovery、wlp
     mp_builtinProtocols = new BuiltinProtocols();
 
     if (c_GuidPrefix_Unknown != persistence_guid)
@@ -744,6 +753,7 @@ bool RTPSParticipantImpl::create_reader(
 {
     std::string type = (param.endpoint.reliabilityKind == RELIABLE) ? "RELIABLE" : "BEST_EFFORT";
     logInfo(RTPS_PARTICIPANT, "Creating reader of type " << type);
+    // 检查定位器列表是否有效，如果未指定 entity_id，则根据 topicKind（是否有键）生成一个新的 EntityId_t。
     EntityId_t entId;
     if (!preprocess_endpoint_attributes<READER, 0x04, 0x07>(entity_id, param.endpoint, entId))
     {
@@ -751,6 +761,7 @@ bool RTPSParticipantImpl::create_reader(
     }
 
     // Special case for DiscoveryProtocol::BACKUP, which abuses persistence guid
+    // 如果没有设置持久化 GUID，并且参与者有持久化 GUID，则基于参与者的 GUID 和实体 ID 生成一个新的持久化 GUID。
     GUID_t former_persistence_guid = param.endpoint.persistence_guid;
     if (param.endpoint.persistence_guid == c_Guid_Unknown)
     {
@@ -764,6 +775,7 @@ bool RTPSParticipantImpl::create_reader(
     }
 
     // Get persistence service
+    // 根据端点的持久性要求，获取对应的持久化服务实例
     IPersistenceService* persistence = nullptr;
     if (!get_persistence_service(is_builtin, param.endpoint, persistence))
     {
@@ -779,13 +791,16 @@ bool RTPSParticipantImpl::create_reader(
         return false;
     }
 
+    // 填充默认端口并标准化定位器格式（确保其有效性）
     normalize_endpoint_locators(param.endpoint);
 
+    // 使用回调创建读端点，
     RTPSReader* SReader = nullptr;
     GUID_t guid(m_guid.guidPrefix, entId);
     SReader = callback(guid, param, persistence, param.endpoint.reliabilityKind == RELIABLE);
 
     // restore attributes
+    // 恢复持久化 GUID 属性
     param.endpoint.persistence_guid = former_persistence_guid;
 
     if (SReader == nullptr)
@@ -815,16 +830,19 @@ bool RTPSParticipantImpl::create_reader(
     }
 #endif // if HAVE_SECURITY
 
+    // 对于可靠的读端点，调用 createSendResources 创建发送资源（用于 ACK/NACK 应答）
     if (param.endpoint.reliabilityKind == RELIABLE)
     {
         createSendResources(SReader);
     }
 
+    // 如果是内置读端点（如 SPDP、SEDP），为其设置信任的写端点（用于发现机制）
     if (is_builtin)
     {
         SReader->setTrustedWriter(TrustedWriter(SReader->getGuid().entityId));
     }
 
+    // 为读端点创建并绑定接收资源（定位器、端口）
     if (enable)
     {
         if (!createAndAssociateReceiverswithEndpoint(SReader, request_unique_flows, initial_port, final_port))
@@ -834,6 +852,7 @@ bool RTPSParticipantImpl::create_reader(
         }
     }
 
+    // 将读端点加入列表
     std::lock_guard<std::recursive_mutex> guard(*mp_mutex);
     m_allReaderList.push_back(SReader);
     if (!is_builtin)
@@ -1307,6 +1326,7 @@ bool RTPSParticipantImpl::createSendResources(
     return true;
 }
 
+// 用于为给定的定位器列表创建接收资源，负责监听来自其他实体（如发布者或订阅者）的消息。
 bool RTPSParticipantImpl::createReceiverResources(
         LocatorList_t& Locator_list,
         bool ApplyMutation,
@@ -1326,20 +1346,22 @@ bool RTPSParticipantImpl::createReceiverResources(
 
     for (auto it_loc = Locator_list.begin(); it_loc != Locator_list.end(); ++it_loc)
     {
+        // 构建接收资源
         bool ret = m_network_Factory.BuildReceiverResources(*it_loc, newItemsBuffer, max_receiver_buffer_size);
+        // 失败处理 + 变异机制
         if (!ret && ApplyMutation)
         {
             uint32_t tries = 0;
             while (!ret && (tries < m_att.builtin.mutation_tries))
             {
                 tries++;
-                *it_loc = applyLocatorAdaptRule(*it_loc);
+                *it_loc = applyLocatorAdaptRule(*it_loc); // 调整定位器的端口号
                 ret = m_network_Factory.BuildReceiverResources(*it_loc, newItemsBuffer, max_receiver_buffer_size);
             }
         }
 
         ret_val |= !newItemsBuffer.empty();
-
+        // 存储新资源 注册接收器
         for (auto it_buffer = newItemsBuffer.begin(); it_buffer != newItemsBuffer.end(); ++it_buffer)
         {
             std::lock_guard<std::mutex> lock(m_receiverResourcelistMutex);

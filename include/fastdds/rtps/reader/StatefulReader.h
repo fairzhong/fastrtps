@@ -345,13 +345,13 @@ private:
     //! NACKFRAG Count
     uint32_t nackfrag_count_;
     //!ReaderTimes of the StatefulReader.
-    ReaderTimes times_;
+    ReaderTimes times_;  //* ack 时间参数
     //! Vector containing pointers to all the active WriterProxies.
-    ResourceLimitedVector<WriterProxy*> matched_writers_;
+    ResourceLimitedVector<WriterProxy*> matched_writers_; //* 维护与 Reader 匹配的远程 active Writer 的状态
     //! Vector containing pointers to all the inactive, ready for reuse, WriterProxies.
-    ResourceLimitedVector<WriterProxy*> matched_writers_pool_;
+    ResourceLimitedVector<WriterProxy*> matched_writers_pool_; //* 存放已停用但可复用的 inactive WriterProxy 实例指针
     //!
-    ResourceLimitedContainerConfig proxy_changes_config_;
+    ResourceLimitedContainerConfig proxy_changes_config_;  //* 控制 WriterProxy 中用于存储变更（change）信息的数据结构的资源使用上限。
     //! True to disable positive ACKs
     bool disable_positive_acks_;
     //! False when being destroyed

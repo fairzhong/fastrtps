@@ -460,10 +460,11 @@ protected:
 
     TimedConditionVariable new_notification_cv_;
 
+
     //! The liveliness kind of this reader
-    LivelinessQosPolicyKind liveliness_kind_;
+    LivelinessQosPolicyKind liveliness_kind_; //* 定义 Reader 的活跃性类型，即如何判断远程 Writer 是否“活跃”。
     //! The liveliness lease duration of this reader
-    Duration_t liveliness_lease_duration_;
+    Duration_t liveliness_lease_duration_; //* 定义 活跃性租约的持续时间，即 Writer 必须在多长时间内发送心跳消息以证明其活跃性。
 
     //! Whether the writer is datasharing compatible or not
     bool is_datasharing_compatible_ = false;

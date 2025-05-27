@@ -30,6 +30,7 @@ namespace rtps {
  * - non_blocking_send: do not block on send operations. When it is set to true, send operations will return
  * immediately if the buffer is full, but no error will be returned to the upper layer. This means that the
  * application will behave as if the datagram is sent and lost.
+ * 它是一个描述符类，用于配置和描述与 UDP 传输相关的参数。
  *
  * @ingroup TRANSPORT_MODULE
  */
@@ -54,7 +55,7 @@ struct UDPTransportDescriptor : public SocketTransportDescriptor
             const UDPTransportDescriptor& t) const;
 
     //! Source port to use for outgoing datagrams
-    uint16_t m_output_udp_socket;
+    uint16_t m_output_udp_socket; //本机在发送 UDP 数据包时使用的本地端口
 
     /**
      * Whether to use non-blocking calls to send_to().
@@ -67,6 +68,7 @@ struct UDPTransportDescriptor : public SocketTransportDescriptor
      * When set to false, calls to send_to() will block until the network buffer has space for the
      * datagram. This may hinder performance on high-frequency writers.
      */
+    //是否使用非阻塞模式进行 send_to() 调用。true: 立即返回，丢弃无法发送的数据 ，false: 阻塞直到发送成功。
     bool non_blocking_send = false;
 };
 

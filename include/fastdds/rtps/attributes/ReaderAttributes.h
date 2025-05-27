@@ -58,9 +58,9 @@ public:
     }
 
     //!Initial AckNack delay. Default value 70ms.
-    Duration_t initialAcknackDelay;
+    Duration_t initialAcknackDelay; //* 设置初始 ACK/NACK 延迟时间，数据首次接收后的确认延迟
     //!Delay to be applied when a HEARTBEAT message is received, default value 5ms.
-    Duration_t heartbeatResponseDelay;
+    Duration_t heartbeatResponseDelay; //* 设置 对 HEARTBEAT 消息响应前的延迟时间，收到心跳后发送 ACK/NACK 前的延迟
 };
 
 /**

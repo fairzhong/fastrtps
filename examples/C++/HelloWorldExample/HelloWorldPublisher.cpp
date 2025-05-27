@@ -52,8 +52,8 @@ bool HelloWorldPublisher::init()
     {
         return false;
     }
+    
     //REGISTER THE TYPE
-
     Domain::registerType(mp_participant, &m_type);
 
     //CREATE THE PUBLISHER

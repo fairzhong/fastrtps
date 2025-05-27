@@ -356,10 +356,12 @@ private:
 
     //! Pointer to associated StatefulReader.
     StatefulReader* reader_;
+
     //!Timed event to postpone the heartbeatResponse.
-    TimedEvent* heartbeat_response_;
+    TimedEvent* heartbeat_response_; //* 用于 延迟发送心跳响应
     //! Timed event to send initial acknack.
-    TimedEvent* initial_acknack_;
+    TimedEvent* initial_acknack_;    //* 用于 延迟发送初始 ACK/NACK
+
     //! Last Heartbeatcount.
     uint32_t last_heartbeat_count_;
     //!Indicates if the heartbeat has the final flag set.
@@ -372,18 +374,27 @@ private:
 
     //! Memory pool allocator for changes_received_
     pool_allocator_t changes_pool_;
+
     //! Vector containing the sequence number of the received ChangeFromWriter_t objects.
+    //* 记录从对应远程 Writer 接收到的数据变更的序列号
+    //* 作用: 
+    //* 1、避免重复处理同一个 Change；
+    //* 2、在发送 ACK/NACK 消息给 Writer 时，需要知道哪些 Change 已经收到。
+    //* 3、结合 max_sequence_number_ 和 changes_received_，可以判断哪些 Change 是缺失的（missing）或丢失的（lost）。
     foonathan::memory::set<SequenceNumber_t, pool_allocator_t> changes_received_;
+
     //! Sequence number of the highest available change
     SequenceNumber_t changes_from_writer_low_mark_;
     //! Highest sequence number informed by writer
     SequenceNumber_t max_sequence_number_;
     //! Store last ChacheChange_t notified.
     SequenceNumber_t last_notified_;
+
     //!To fool RTPSMessageGroup when using this proxy as single destination
     ResourceLimitedVector<GUID_t> guid_as_vector_;
     //!To fool RTPSMessageGroup when using this proxy as single destination
     ResourceLimitedVector<GuidPrefix_t> guid_prefix_as_vector_;
+
     //! Is the writer on the same process
     bool is_on_same_process_;
     //! Taken from QoS
@@ -392,8 +403,11 @@ private:
     LivelinessQosPolicyKind liveliness_kind_;
     //! Taken from proxy data
     GUID_t persistence_guid_;
+
     //! Taken from proxy data
+    //* 用于 存储与远程 Writer 相关的网络定位信息（Locators），用于确定如何通过网络与远程 Writer 通信。
     LocatorSelectorEntry locators_entry_;
+
     //! Is the writer datasharing
     bool is_datasharing_writer_;
 

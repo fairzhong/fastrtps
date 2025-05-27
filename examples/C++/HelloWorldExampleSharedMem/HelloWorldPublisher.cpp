@@ -43,6 +43,7 @@ bool HelloWorldPublisher::init()
     m_Hello = std::make_shared<HelloWorld>();
     m_Hello->index(0);
     m_Hello->message("HelloWorld");
+    
     ParticipantAttributes PParam;
     PParam.rtps.builtin.discovery_config.discoveryProtocol = DiscoveryProtocol_t::SIMPLE;
     PParam.rtps.builtin.discovery_config.use_SIMPLE_EndpointDiscoveryProtocol = true;

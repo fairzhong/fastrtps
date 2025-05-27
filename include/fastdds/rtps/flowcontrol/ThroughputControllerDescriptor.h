@@ -30,9 +30,9 @@ namespace rtps{
 struct ThroughputControllerDescriptor
 {
     //! Packet size in bytes that this controller will allow in a given period.
-    uint32_t bytesPerPeriod;
+    uint32_t bytesPerPeriod; // 表示在指定的时间窗口内允许传输的数据量（以字节为单位）
     //! Window of time in which no more than 'bytesPerPeriod' bytes are allowed.
-    uint32_t periodMillisecs;
+    uint32_t periodMillisecs; // 表示时间窗口的大小（以毫秒为单位）
 
     RTPS_DllAPI ThroughputControllerDescriptor();
     RTPS_DllAPI ThroughputControllerDescriptor(uint32_t size, uint32_t time);

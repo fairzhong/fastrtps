@@ -107,6 +107,7 @@ RTPSParticipant* RTPSDomain::createParticipant(
         return nullptr;
     }
 
+    // 为新创建的 RTPS 参与者（RTPSParticipant）分配一个唯一的 ID
     uint32_t ID;
     {
         std::lock_guard<std::mutex> guard(m_mutex);
@@ -130,6 +131,7 @@ RTPSParticipant* RTPSDomain::createParticipant(
         }
     }
 
+    // 验证默认LocatorList是否有效
     if (!PParam.defaultUnicastLocatorList.isValid())
     {
         logError(RTPS_PARTICIPANT, "Default Unicast Locator List contains invalid Locator");
@@ -141,22 +143,25 @@ RTPSParticipant* RTPSDomain::createParticipant(
         return nullptr;
     }
 
+    // 设置participantID
     PParam.participantID = ID;
 
-    // Generate a new GuidPrefix_t
+    // 根据设置participantID 生成 GuidPrefix_t
     GuidPrefix_t guidP;
     guid_prefix_create(ID, guidP);
 
+
+    // 创建RTPSParticipant
     RTPSParticipant* p = new RTPSParticipant(nullptr);
     RTPSParticipantImpl* pimpl = nullptr;
 
     // If we force the participant to have a specific prefix we must define a different persistence GuidPrefix_t that
     // would ensure builtin endpoints are able to differentiate between a communication loss and a participant recovery
-    if (PParam.prefix != c_GuidPrefix_Unknown)
+    if (PParam.prefix != c_GuidPrefix_Unknown) // 若用户指定了自定义的 GUID 前缀
     {
         pimpl = new RTPSParticipantImpl(domain_id, PParam, PParam.prefix, guidP, p, listen);
     }
-    else
+    else  // 否则使用系统生成的 GUID 前缀 guidP 创建
     {
         pimpl = new RTPSParticipantImpl(domain_id, PParam, guidP, p, listen);
     }
@@ -164,6 +169,7 @@ RTPSParticipant* RTPSDomain::createParticipant(
     // Above constructors create the sender resources. If a given listening port cannot be allocated an iterative
     // mechanism will allocate another by default. Change the default listening port is unacceptable for server
     // discovery.
+    // 用于处理在创建 RTPSParticipant 时，监听端口分配失败的情况，
     if ((PParam.builtin.discovery_config.discoveryProtocol == DiscoveryProtocol_t::SERVER
             || PParam.builtin.discovery_config.discoveryProtocol == DiscoveryProtocol_t::BACKUP)
             && pimpl->did_mutation_took_place_on_meta(
@@ -177,6 +183,7 @@ RTPSParticipant* RTPSDomain::createParticipant(
     }
 
     // Check there is at least one transport registered.
+    // 检查是否有transport
     if (!pimpl->networkFactoryHasRegisteredTransports())
     {
         logError(RTPS_PARTICIPANT, "Cannot create participant, because there is any transport");
@@ -199,9 +206,9 @@ RTPSParticipant* RTPSDomain::createParticipant(
         m_RTPSParticipants.push_back(t_p_RTPSParticipant(p, pimpl));
     }
 
+    // 开始服务发现
     if (enabled)
     {
-        // Start protocols
         pimpl->enable();
     }
     return p;
